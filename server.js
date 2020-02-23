@@ -24,9 +24,12 @@ mongoose
   .then(() => console.log('MongoDB Connected'))
   .catch(err => console.log(err))
 
-var Users = require('./routes/Users')
-
-app.use('/users', Users)
+var Admin = require('./routes/Admin');
+var Users = require('./routes/Users');
+var BuildSetting= require('./routes/BuildRoutes');
+app.use('/users', Admin);
+app.use('/userskul',Users);
+app.use('/builds',BuildSetting);
 
 app.use(express.static(path.join(__dirname,'public')))
 app.listen(port, function() {

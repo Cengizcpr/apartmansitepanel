@@ -8,6 +8,8 @@ export const register = newUser => {
       email: newUser.email,
       password: newUser.password,
       phone_no:newUser.phone_no,
+      company_name:newUser.company_name,
+      adress:newUser.adress,
       
     })
     .then(response => {
@@ -26,11 +28,8 @@ export const login = user => {
    
     localStorage.setItem('usertoken', response.data)
     
-    if(response.data==="[object Object]"){return false}
+    if(response.data=="[object Object]"){return false}
     else{return true}
-
-    
- 
     })
     .catch(err => {
       
@@ -41,7 +40,7 @@ export const login = user => {
 export const getProfile = user => {
   return axios
   
-    .get('users/profile')
+    .get('users/adminprofile')
     .then(response => {
       return response.data
     })

@@ -1,40 +1,44 @@
 const express = require('express')
 const users = express.Router()
 const cors = require('cors')
-const User = require('../models/UsersModel')
 const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt')
 
+const User = require('../models/AdminModel')
 users.use(cors())
 
-users.post('/useradd', (req, res) => {
-  const date = new Date(); 
-  today= parseInt(date.getMonth()+1)+"/"+date.getDate() +"/"+date.getFullYear();
+process.env.SECRET_KEY = 'secret'
+
+users.post('/register', (req, res) => {
+  const today = new Date()
   const userData = {
     first_name: req.body.first_name,
     last_name: req.body.last_name,
-    passwordkul:req.body.passwordkul,
-    emailkul:req.body.emailkul,
-    phone_no: req.body.phone_no,
-    adress: req.body.adress,
-    date: today
+    email: req.body.email,
+    password: req.body.password,
+    created: today,
+    adress:req.body.adress,
+    phone_no:req.body.phone_no,
+    company_name:req.body.company_name
   }
 
   User.findOne({
-    phone_no: req.body.phone_no
+    email: req.body.email
   })
     .then(user => {
       if (!user) {
-       
+        bcrypt.hash(req.body.password, 10, (err, hash) => {
+          userData.password = hash
           User.create(userData)
             .then(user => {
-             res.json({ status: user.first_name + 'Registered!' })
+             res.json({ status: user.email + 'Registered!' })
            res.json({ message: "false"})
             })
             .catch(err => {
               res.json({ message: "true"})
                
             })
-       
+        })
       } else {
         res.json({ error: 'User already exists' })
       }
@@ -43,19 +47,20 @@ users.post('/useradd', (req, res) => {
       res.send('error: ' + err)
     })
 })
-users.post('/userlogin', (req, res) => {
+
+users.post('/login', (req, res) => {
   User.findOne({
-    emailkul: req.body.emailkul
+    email: req.body.email
   })
     .then(user => {
       if (user) {
-        if (req.body.passwordkul== user.passwordkul) {
-         
+        if (bcrypt.compareSync(req.body.password, user.password)) {
+          // Passwords match
           const payload = {
             _id: user._id,
             first_name: user.first_name,
             last_name: user.last_name,
-            /* emailkul: user.emailkul */
+            email: user.email
           }
         let token = jwt.sign(payload, process.env.SECRET_KEY, {
             expiresIn: 1440
@@ -74,7 +79,8 @@ users.post('/userlogin', (req, res) => {
       res.send('error: ' + err)
     })
 })
-users.get('/userprofile', (req, res) => {
+
+users.get('/adminprofile', (req, res) => {
 
   User.find({},function(err,objs){
     var dbs=objs[0];
@@ -86,7 +92,7 @@ users.get('/userprofile', (req, res) => {
        
         res.json(user)
       } else {
-        res.json({ error: 'User already exists' })
+        res.json({ error: 'Admin already exists' })
       }
     })
     .catch(err => {

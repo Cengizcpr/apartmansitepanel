@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
 import jwt_decode from 'jwt-decode'
-import Header from "./Header"
-import Menu from "./Menu"
-import {getProfile} from '../component/UserFunctions'
- 
+import Header from "../Home/Header"
+import Menu from "../Home/UsersMenu"
+import axios from "axios" 
  class Profile extends Component {
   constructor() {
     super()
@@ -23,27 +22,27 @@ import {getProfile} from '../component/UserFunctions'
 
     jwt_decode(token);
     const decoded = jwt_decode(token)
-    
-    getProfile().then(res =>{
-    for(var i=0;i<res.length;i++){
-    if(decoded.first_name===res[i].first_name)
-    {this.setState({
-        first_name:res[i].first_name,
-        last_name:res[i].last_name,
-        phone_no:res[i].phone_no,
-        email:res[i].email
-      })
-    }
-    }
+    axios.get('userskul/userprofile')
+    .then(res => {
+      var response=res.data;
+      for(var i=0;i<response.length;i++){
+        if(decoded.first_name===response[i].first_name)
+        {this.setState({
+            first_name:response[i].first_name,
+            last_name:response[i].last_name,
+            phone_no:response[i].phone_no,
+            email:response[i].emailkul
+          })
+        }
+        }
+    })
+    .catch(err => {
+      window.location.replace('/')
     })
 
-
-
-   
-
-  }catch(error){
-window.location.replace('/')
-  }
+    }catch(error){
+    window.location.replace('/')
+    }
   
   }
   

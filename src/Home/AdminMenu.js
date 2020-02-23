@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import {Link} from 'react-router-dom'
-export default class Menu extends Component {
+export default class AdminMenu extends Component {
   render() {
     return (
       <div className="content-wrapper">
@@ -22,7 +22,7 @@ export default class Menu extends Component {
               <img src="dist/img/user2-160x160.jpg" className="img-circle elevation-2" alt="UserImage" />
             </div>
             <div className="info">
-              <Link to='/profile' className="d-block">Profil</Link>
+              <Link to='/adminprofile' className="d-block">Sn. Yönetici</Link>
             </div>
           </div>
          
@@ -39,8 +39,34 @@ export default class Menu extends Component {
                 </Link>
                
               </li>
-             
-            
+              <li className="nav-item ">
+                <Link to="/users" className="nav-link ">
+                  <i className="nav-icon fas fa-copy" />
+                  <p>
+                    Kullanıcı Ekle
+                  
+                    </p>
+                </Link>
+               
+              </li>
+
+              <li className="nav-item ">
+                <Link to="/buildsetting" className="nav-link ">
+                  <i className="nav-icon fas fa-edit" />
+                  <p>
+                 Site Ayarları             
+                  </p>
+                </Link>
+              </li>
+
+              <li className="nav-item ">
+                <Link to="/blocksetting" className="nav-link ">
+                  <i className="nav-icon fas fa-edit" />
+                  <p>
+                 Blok Ayarları             
+                  </p>
+                </Link>
+              </li>
               
              
                

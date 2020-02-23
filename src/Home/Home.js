@@ -1,6 +1,6 @@
   import React, { Component } from 'react'
   import Header from "./Header"
-  import Menu from "./Menu"
+  import Menu from "./AdminMenu"
   import jwt_decode from 'jwt-decode'
 
 
@@ -17,7 +17,7 @@
 
     }catch(error){
   window.location.replace('/')
-    }
+     }
     
     }
     render() {
@@ -28,7 +28,7 @@
         <div className="content-wrapper">
           
         <div className="content-header">  
-
+        Sn.Admin
         </div>
         </div>
       

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-// Kullanıcı Şema Oluşturuldu.
+// Admin Şema Oluşturuldu.
 const UserSchema = new Schema({
   first_name: {
     type: String
@@ -9,15 +9,19 @@ const UserSchema = new Schema({
   last_name: {
     type: String
   },
-  email: {
+  emailkul: {
     type: String,
     required: true
   },
-  password: {
+  passwordkul: {
     type: String,
     required: true
   },
   phone_no: {
+    type: String,
+    required: true
+  },
+  adress: {
     type: String,
     required: true
   },

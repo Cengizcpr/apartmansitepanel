@@ -1,4 +1,4 @@
-# Apartman ve Site Yönetim Paneli
+# Other Apartman Yonetim System
 
 ## Used Architecture
 |İsim            |Teknoloji                      |Port                         |

@@ -24,11 +24,9 @@ mongoose
   .then(() => console.log('MongoDB Connected'))
   .catch(err => console.log(err))
 
-var Admin = require('./routes/Admin');
-var Users = require('./routes/Users');
+var User = require('./routes/Admin');
 var BuildSetting= require('./routes/BuildRoutes');
-app.use('/users', Admin);
-app.use('/userskul',Users);
+app.use('/users', User);
 app.use('/builds',BuildSetting);
 
 app.use(express.static(path.join(__dirname,'public')))

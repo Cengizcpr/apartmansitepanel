@@ -1,6 +1,6 @@
   import React, { Component } from 'react'
   import Header from "./Header"
-  import Menu from "./AdminMenu"
+  import Menu from "./Menu"
   import jwt_decode from 'jwt-decode'
 
 
@@ -28,7 +28,7 @@
         <div className="content-wrapper">
           
         <div className="content-header">  
-        Sn.Admin
+        Sn.Kullanıcı Hoşgeldiniz
         </div>
         </div>
       

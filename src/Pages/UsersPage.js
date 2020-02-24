@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Header from "../Home/Header"
-import Menu from "../Home/AdminMenu"
+import Menu from "../Home/Menu"
 import axios from 'axios'
 import jwt_decode from 'jwt-decode'
 
@@ -28,13 +28,12 @@ import jwt_decode from 'jwt-decode'
     const newUsers = {
         first_name: this.state.first_name,
         last_name: this.state.last_name,
-        passwordkul: this.state.passwordkul,
-        emailkul: this.state.emailkul,
-        phone_no: this.state.phone_no,
-        adress:this.state.adress
+        password: this.state.password,
+        email: this.state.email,
+        phone_no: this.state.phone_no
     }
 
-    axios.post('userskul/useradd', newUsers)
+    axios.post('users/useradd', newUsers)
     .then((response) => {
         window.location.replace('/home')
     }).catch((error) => { 
@@ -61,12 +60,11 @@ import jwt_decode from 'jwt-decode'
       <Header/>
       <Menu/>
       <div className="content-wrapper"> 
-      <div className='card'><div className="card-body"></div>
+      <div className='card'>
       <div  className="container ">  
       <section className='content '>
   <div className='row justify-content-center'>
           <div className="col-md-6">
-  {/* general form elements */}
   <div className="card card-primary">
     <div className="card-header">
       <h3 className="card-title">Kullanıcı Ekle</h3>
@@ -85,26 +83,16 @@ import jwt_decode from 'jwt-decode'
         </div>
         <div className="form-group">
           <label htmlFor="exampleInputEmail1">Kullanıcı Email</label>
-          <input type="text"  className="form-control" placeholder="Kullanıcı Email:"  name="emailkul"  value={this.state.emailkul}  onChange={this.onChange} required /><br/>
+          <input type="text"  className="form-control" placeholder="Kullanıcı Email:"  name="email"  value={this.state.email}  onChange={this.onChange} required /><br/>
         </div>
         <div className="form-group">
           <label htmlFor="exampleInputEmail1">Kullanıcı Şifresi</label>
-          <input type="password"  className="form-control" placeholder="Kullanıcı Şifresi:"  name="passwordkul"  value={this.state.passwordkul}  onChange={this.onChange} required /><br/>
+          <input type="password"  className="form-control" placeholder="Kullanıcı Şifresi:"  name="password"  value={this.state.password}  onChange={this.onChange} required /><br/>
         </div>
         <div className="form-group">
           <label htmlFor="exampleInputPassword1">Kullanıcı Telefon No</label>
           <input type="tel"  className="form-control" placeholder="Kullanıcı Telefon No:"  name="phone_no"  value={this.state.phone_no}  onChange={this.onChange} max={9999} required /><br/>
         </div>
-        <div className="form-group">
-          <label htmlFor="exampleInputFile">Kullanıcı Adresi</label>
-          <div className="input-group">
-          <input type="text" maxLength={11} className="form-control" placeholder="Kullanıcı Adresi:"  name="adress"  value={this.state.adress}  onChange={this.onChange} required /><br/>
-
-            
-          </div>
-        </div>
-        
-     
       </div>
      
       <div className="card-footer">

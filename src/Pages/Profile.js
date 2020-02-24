@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import jwt_decode from 'jwt-decode'
 import Header from "../Home/Header"
-import Menu from "../Home/UsersMenu"
+import Menu from "../Home/Menu"
 import axios from "axios" 
  class Profile extends Component {
   constructor() {
@@ -22,7 +22,7 @@ import axios from "axios"
 
     jwt_decode(token);
     const decoded = jwt_decode(token)
-    axios.get('userskul/userprofile')
+    axios.get('users/adminprofile')
     .then(res => {
       var response=res.data;
       for(var i=0;i<response.length;i++){
@@ -31,7 +31,7 @@ import axios from "axios"
             first_name:response[i].first_name,
             last_name:response[i].last_name,
             phone_no:response[i].phone_no,
-            email:response[i].emailkul
+            email:response[i].email
           })
         }
         }
@@ -39,10 +39,15 @@ import axios from "axios"
     .catch(err => {
       window.location.replace('/')
     })
+    
 
-    }catch(error){
-    window.location.replace('/')
-    }
+
+
+   
+
+  }catch(error){
+window.location.replace('/')
+  }
   
   }
   

@@ -17,9 +17,8 @@ users.post('/register', (req, res) => {
     email: req.body.email,
     password: req.body.password,
     created: today,
-    adress:req.body.adress,
     phone_no:req.body.phone_no,
-    company_name:req.body.company_name
+    status:true
   }
 
   User.findOne({
@@ -47,7 +46,44 @@ users.post('/register', (req, res) => {
       res.send('error: ' + err)
     })
 })
+users.post('/useradd', (req, res) => {
+  const date = new Date(); 
+  today= parseInt(date.getMonth()+1)+"/"+date.getDate() +"/"+date.getFullYear();
+  const userData = {
+    first_name: req.body.first_name,
+    last_name: req.body.last_name,
+    password:req.body.password,
+    email:req.body.email,
+    phone_no: req.body.phone_no,
+    date: today,
+    status:false
+  }
 
+  User.findOne({
+    phone_no: req.body.phone_no
+  })
+  .then(user => {
+    if (!user) {
+      bcrypt.hash(req.body.password, 10, (err, hash) => {
+        userData.password = hash
+        User.create(userData)
+          .then(user => {
+           res.json({ status: user.email + 'Registered!' })
+         res.json({ message: "false"})
+          })
+          .catch(err => {
+            res.json({ message: "true"})
+             
+          })
+      })
+    } else {
+      res.json({ error: 'User already exists' })
+    }
+  })
+  .catch(err => {
+    res.send('error: ' + err)
+  })
+})
 users.post('/login', (req, res) => {
   User.findOne({
     email: req.body.email

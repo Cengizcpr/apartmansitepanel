@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import {Link} from 'react-router-dom'
-export default class AdminMenu extends Component {
+export default class Menu extends Component {
   render() {
     return (
       <div className="content-wrapper">
@@ -22,7 +22,7 @@ export default class AdminMenu extends Component {
               <img src="dist/img/user2-160x160.jpg" className="img-circle elevation-2" alt="UserImage" />
             </div>
             <div className="info">
-              <Link to='/adminprofile' className="d-block">Sn. Yönetici</Link>
+              <Link to='/adminprofile' className="d-block">Profil</Link>
             </div>
           </div>
          

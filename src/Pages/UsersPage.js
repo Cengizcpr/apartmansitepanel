@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Header from "../Home/Header"
 import Menu from "../Home/Menu"
 import axios from 'axios'
+import {Link} from 'react-router-dom'
 import jwt_decode from 'jwt-decode'
 
  class UsersPage extends Component {
@@ -15,7 +16,9 @@ import jwt_decode from 'jwt-decode'
         phone_no: '',
         adress: '',
         password: '',
-        email:''
+        email:'',
+        showMe:true,
+        showUser:false
       }
       this.onChange = this.onChange.bind(this);
       this.onSubmit = this.onSubmit.bind(this);
@@ -47,6 +50,23 @@ import jwt_decode from 'jwt-decode'
     const token = localStorage.usertoken
     try{
         jwt_decode(token)
+        const decoded = jwt_decode(token)
+        axios.get('users/adminprofile')
+        .then(res => {
+          var response=res.data;
+          for(var i=0;i<response.length;i++){
+            if(decoded.email===response[i].email)
+            {
+              if(response[i].status==false)
+              {
+                this.setState({
+                  showMe:false,
+                  showUser:true
+                })
+              }    
+            }
+            }
+        })
     }catch(error){
         window.location.replace('/')
     }
@@ -64,7 +84,7 @@ import jwt_decode from 'jwt-decode'
       <div  className="container ">  
       <section className='content '>
   <div className='row justify-content-center'>
-          <div className="col-md-6">
+          <div className="col-md-6">{this.state.showMe? 
   <div className="card card-primary">
     <div className="card-header">
       <h3 className="card-title">Kullanıcı Ekle</h3>
@@ -100,6 +120,7 @@ import jwt_decode from 'jwt-decode'
       </div>
     </form>
   </div>
+:null}
 
 </div>
 
@@ -111,6 +132,18 @@ import jwt_decode from 'jwt-decode'
   </div>
   </div>
   </div>
+  {this.state.showUser? 
+  <div className="error-page">
+  <h2 className="headline text-warning"> 404</h2>
+  <div className="error-content">
+    <h3><i className="fas fa-exclamation-triangle text-warning" /> Oops! Yetki alanı dışındasınız.</h3>
+    <p>
+   
+    Sayın kullanıcı,<Link to='/home'>Anasayfaya </Link> bu buton üzerinden dönebilirsiniz.
+    </p>
+  </div>
+</div>
+  :null}
 </div>
 
 

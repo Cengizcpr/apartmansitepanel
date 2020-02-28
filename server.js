@@ -26,8 +26,11 @@ mongoose
 
 var User = require('./routes/Admin');
 var BuildSetting= require('./routes/BuildRoutes');
+var BlockSetting=require('./routes/BlockRoutes');
+
 app.use('/users', User);
 app.use('/builds',BuildSetting);
+app.use('/blocks',BlockSetting);
 
 app.use(express.static(path.join(__dirname,'public')))
 app.listen(port, function() {

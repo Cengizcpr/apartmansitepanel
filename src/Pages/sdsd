@@ -1,0 +1,82 @@
+import React, { Component } from 'react'
+import Header from "../Home/Header"
+import Menu from "../Home/Menu"
+import axios from 'axios'
+import jwt_decode from 'jwt-decode'
+import {Link} from "react-router-dom"
+-
+ class BlockSetting extends Component {
+  constructor() {
+    super()
+    this.state = {
+        locations:[]
+    }
+  }
+
+  
+  
+
+  componentDidMount(e) {
+    const token = localStorage.usertoken
+    try{
+        jwt_decode(token);
+        const res =[];
+        axios.get('builds/buildslist')
+        .then((response) => {
+            const numbers=response.data[0].blocknumbers
+            for(var i=1;i<=numbers;i++){
+                res[i]="Blok "+i;
+            }
+            this.setState({
+                locations:res
+            })
+        }).catch((error) => { 
+            console.log('Kullanıcı eklenmedi.');
+        });   
+       
+        
+            
+    }catch(error){
+        window.location.replace('/')
+    }
+  
+  }
+  
+  render() { 
+    
+    
+
+    const blocknumbers=this.state.locations.map(data => (
+       
+            <div className="col-lg-3 col-6" key={data}>
+                    <div className="small-box bg-info">
+                        <div className="inner">
+                          
+                        <p>   <h3>{data} </h3></p>
+                        </div>
+                        <Link to='/failureslist' className="small-box-footer">Daha fazla bilgi
+                        <i className="fas fa-arrow-circle-right" /></Link>
+                    </div>
+                </div>
+      ));
+     
+
+    return (
+
+    <div>
+      <Header/>
+      <Menu/>
+      <div className="content-wrapper">  
+        <div className="content-header">  
+            <div className="row">
+            {blocknumbers}
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+    )
+  }
+}
+export default BlockSetting

@@ -28,7 +28,7 @@
         <div className="content-wrapper">
           
         <div className="content-header">  
-        Sn.Kullanıcı Hoşgeldiniz
+        Hoşgeldiniz
         </div>
         </div>
       

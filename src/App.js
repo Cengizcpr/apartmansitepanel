@@ -8,6 +8,7 @@ import Notfound from "./component/Notfound"
 import Users from "./Pages/UsersPage"
 import BuildSetting from "./Pages/BuildSetting"
 import BlockSetting from "./Pages/BlockSetting"
+import UsersList from "./Pages/UsersList"
 class App extends Component {
   render() {
     return (
@@ -19,6 +20,7 @@ class App extends Component {
           <Route exact path="/adminprofile" component={Profile}/>
           <Route exact path="/home" component={Home}/>
           <Route exact path="/users" component={Users}/>
+          <Route exact path="/userslist" component={UsersList}/>
           <Route exact path="/buildsetting" component={BuildSetting}/>
           <Route exact path="/blocksetting" component={BlockSetting}/>
           <Route exact  component={Notfound}/> 

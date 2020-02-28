@@ -3,6 +3,7 @@ import Header from "../Home/Header"
 import Menu from "../Home/Menu"
 import axios from 'axios'
 import jwt_decode from 'jwt-decode'
+import {Link} from 'react-router-dom'
 
  class BuildSetting extends Component {
   constructor() {
@@ -13,7 +14,10 @@ import jwt_decode from 'jwt-decode'
         build_name: '',
         phone_no: '',
         adress: '',
-        blocknumbers:''
+        blocknumbers:'',
+        locations:[],
+        showMe:true,
+        showUser:false
       }
       
       this.onChange = this.onChange.bind(this);
@@ -28,7 +32,7 @@ import jwt_decode from 'jwt-decode'
     this.setState({
     blocknumbers:e.nativeEvent.target[index].text
     })
-    }
+  }
 
   onSubmit(e){
     e.preventDefault();
@@ -38,21 +42,67 @@ import jwt_decode from 'jwt-decode'
         adress:this.state.adress,
         blocknumbers:this.state.blocknumbers
     }
+   
+
 
     axios.post('builds/buildsetting', newBuilds)
     .then((response) => {
-        window.location.replace('/home')
+  
+      const alf=["","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","R","S","T","U"]
+      for(var i=1;i<=this.state.blocknumbers;i++){
+       
+      }const newBlocks=[]
+      for(var i=1;i<=this.state.blocknumbers;i++){
+         newBlocks[i] = {
+          block_name:alf[i],
+          circlenumber:"Girilmedi",
+          storenumber:"Girilmedi"
+        }
+      }
+        for(var i=1;i<=this.state.blocknumbers;i++){
+
+        console.log(newBlocks.block_name)
+         axios.post('blocks/blocksetting', newBlocks[i])
+          .then((response) => {
+            console.log(' eklendi.');
+          }).catch((error) => { 
+            console.log('Blok bilgileri eklenmedi.');
+        }); 
+        
+      }
+      this.props.history.push('/home')
     }).catch((error) => { 
-        console.log('Kullanıcı eklenmedi.');
+        console.log('Site bilgileri eklenmedi.');
     });   
   }  
-
-  
-
   componentDidMount(e) {
     const token = localStorage.usertoken
     try{
-        jwt_decode(token);
+        jwt_decode(token)
+        const res =[];
+        for(var i=1;i<=20;i++){
+          res[i]=i;
+        }
+        this.setState({
+          locations:res,
+        })
+        const decoded = jwt_decode(token)
+        axios.get('users/adminprofile')
+        .then(res => {
+          var response=res.data;
+          for(var i=0;i<response.length;i++){
+            if(decoded.email===response[i].email)
+            {
+              if(response[i].status==false)
+              {
+                this.setState({
+                  showMe:false,
+                  showUser:true
+                })
+              }    
+            }
+            }
+        })
     }catch(error){
         window.location.replace('/')
     }
@@ -60,18 +110,23 @@ import jwt_decode from 'jwt-decode'
   }
   
   render() { 
-    
+    const blocknumbers=this.state.locations.map(data => (
+       
+      <option key={data}>{data}</option>
+
+    ));
     return (
 
       <div>
       <Header/>
       <Menu/>
       <div className="content-wrapper"> 
-      <div className='card'><div className="card-body"></div>
+      <div className='card'>
       <div  className="container ">  
       <section className='content '>
       <div className='row justify-content-center'>
         <div className="col-md-6">
+        {this.state.showMe? 
         <div className="card card-primary">
         <div className="card-header">
       <h3 className="card-title">Site Bilgileri Ekle</h3>
@@ -90,7 +145,7 @@ import jwt_decode from 'jwt-decode'
     <div className="form-group">
         <label htmlFor="exampleInputFile">Site Adresi</label>
         <div className="input-group">
-          <input type="text" maxLength={11} className="form-control" placeholder="Site Adresi:"  name="adress"  value={this.state.adress}  onChange={this.onChange} required />
+          <input type="text" className="form-control" placeholder="Site Adresi:"  name="adress"  value={this.state.adress}  onChange={this.onChange} required />
         </div>
     </div>
 
@@ -98,14 +153,7 @@ import jwt_decode from 'jwt-decode'
         <label htmlFor="exampleInputPassword1">Blok Sayısı</label>
         <select className="form-control"  onChange={this.handleChangeBlockNumbers} >
             <option>Blok Sayısı Seçiniz.. </option>
-            <option>1</option><option>2</option>
-            <option>3</option><option>4</option>
-            <option>5</option><option>6</option>
-            <option>7</option><option>8</option>
-            <option>9</option><option>10</option>
-            <option>11</option><option>12</option>
-            <option>13</option><option>14</option>
-            <option>15</option><option>16</option>
+            {blocknumbers}
         </select>
     </div>
         
@@ -116,7 +164,10 @@ import jwt_decode from 'jwt-decode'
         <button type="submit" className="btn btn-primary" onClick={this.onSubmit}>Kaydet</button>
       </div>
     </form>
+    
   </div>
+    :null}
+   
 
 </div>
 
@@ -128,6 +179,18 @@ import jwt_decode from 'jwt-decode'
   </div>
   </div>
   </div>
+  {this.state.showUser? 
+  <div className="error-page">
+  <h2 className="headline text-warning"> 404</h2>
+  <div className="error-content">
+    <h3><i className="fas fa-exclamation-triangle text-warning" /> Oops! Yetki alanı dışındasınız.</h3>
+    <p>
+   
+    Sayın kullanıcı,<Link to='/home'>Anasayfaya </Link> bu buton üzerinden dönebilirsiniz.
+    </p>
+  </div>
+</div>
+  :null}
 </div>
 
 

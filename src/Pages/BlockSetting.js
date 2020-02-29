@@ -129,15 +129,19 @@ import {Link} from "react-router-dom"
   
     const blocknumbers=this.state.locations.map(data => (
        
-            <div className="col-lg-3 col-6" key={data._id}>
-                    <div className="small-box bg-info">
-                        <div className="inner">               
-                        <p>   <h3>{data.block_name} Blok </h3></p>
-                        </div> 
-                        <Link  onClick={()=>this.onVisibleİnfo(data)} className="small-box-footer ">Daha fazla bilgi
-                        <i className="fas fa-arrow-circle-right"  /></Link>
-                    </div>
-                </div>
+      <div className="col-lg-3 col-6" key={data._id}>
+        <div className="small-box bg-info">
+          <div className="inner">               
+            <p><h4>{data.block_name} Blok </h4>
+              <h7>Daire Sayısı : {data.circlenumber}</h7><br/>
+              <h7>Dükkan Sayısı : {data.storenumber}</h7>   
+            </p>
+          </div> 
+          <Link  onClick={()=>this.onVisibleİnfo(data)} className="small-box-footer ">Daha fazla bilgi
+            <i className="fas fa-arrow-circle-right"  />
+          </Link>
+        </div>
+      </div>
     ));
 
     const circlenumbers=this.state.locationscircle.map(data => (

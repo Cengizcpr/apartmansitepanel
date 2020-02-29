@@ -27,11 +27,11 @@ mongoose
 var User = require('./routes/Admin');
 var BuildSetting= require('./routes/BuildRoutes');
 var BlockSetting=require('./routes/BlockRoutes');
-
+var PersonalSetting=require('./routes/PersonalRoutes');
 app.use('/users', User);
 app.use('/builds',BuildSetting);
 app.use('/blocks',BlockSetting);
-
+app.use('/personals',PersonalSetting);
 app.use(express.static(path.join(__dirname,'public')))
 app.listen(port, function() {
   console.log('Server is running on port: ' + port)

@@ -140,7 +140,7 @@ import {Link} from 'react-router-dom'
         </div>
         <div className="form-group">
           <label htmlFor="exampleInputPassword1">Site Telefon No</label>
-          <input type="tel"  className="form-control" placeholder="Site Telefon No:"  name="phone_no"  value={this.state.phone_no}  onChange={this.onChange} max={9999} required />
+          <input type="tel"  className="form-control" placeholder="Site Telefon No:"  name="phone_no"  value={this.state.phone_no}  onChange={this.onChange}  required />
         </div>
     <div className="form-group">
         <label htmlFor="exampleInputFile">Site Adresi</label>

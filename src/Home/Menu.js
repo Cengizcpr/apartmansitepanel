@@ -77,11 +77,19 @@ window.location.replace('/')
                   
                     </p>
                 </Link>
-               
-              </li>
+              </li>  
+              <li className="nav-item ">
+                <Link to="/buildsetting" className="nav-link ">
+                  <i className="nav-icon far fa-plus-square" />
+                  <p>
+                 Site Ayarları             
+                  </p>
+                </Link>
+              </li> 
+              
               <li className="nav-item ">
                 <Link to="/users" className="nav-link ">
-                  <i className="nav-icon fas fa-copy" />
+                  <i className="nav-icon fas fa-edit" />
                   <p>
                     Kullanıcı Ekle
                   
@@ -99,17 +107,25 @@ window.location.replace('/')
                 </Link>
                
               </li>
-
-
               <li className="nav-item ">
-                <Link to="/buildsetting" className="nav-link ">
-                  <i className="nav-icon fas fa-edit" />
+                <Link to="/personaladd" className="nav-link ">
+                  <i className="nav-icon fas fa-edit " />
                   <p>
-                 Site Ayarları             
-                  </p>
+                    Personel Ekle
+                    </p>
                 </Link>
+               
               </li>
-
+              <li className="nav-item ">
+                <Link to="/personallist" className="nav-link ">
+                  <i className="nav-icon fas fa-copy" />
+                  <p>
+                    Personelleri Listele
+                  
+                    </p>
+                </Link>
+               
+              </li>
               <li className="nav-item ">
                 <Link to="/blocksetting" className="nav-link ">
                   <i className="nav-icon fas fa-edit" />

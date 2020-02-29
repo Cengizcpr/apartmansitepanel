@@ -3,9 +3,8 @@ const Schema = mongoose.Schema
 
 // Site Şema Oluşturuldu.
 const BlockSchema = new Schema({
-    block_name: {
-    type: String,
-    
+  block_name: {
+    type: String
   },
   circlenumber: {
     type: String

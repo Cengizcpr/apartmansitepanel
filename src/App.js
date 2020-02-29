@@ -8,6 +8,8 @@ import Notfound from "./component/Notfound"
 import Users from "./Pages/UsersPage"
 import BuildSetting from "./Pages/BuildSetting"
 import BlockSetting from "./Pages/BlockSetting"
+import PersonalSetting from "./Pages/PersonalSetting"
+import PersonalList from "./Pages/PersonalList"
 import UsersList from "./Pages/UsersList"
 class App extends Component {
   render() {
@@ -23,6 +25,8 @@ class App extends Component {
           <Route exact path="/userslist" component={UsersList}/>
           <Route exact path="/buildsetting" component={BuildSetting}/>
           <Route exact path="/blocksetting" component={BlockSetting}/>
+          <Route exact path="/personaladd" component={PersonalSetting}/>
+          <Route exact path="/personallist" component={PersonalList}/>
           <Route exact  component={Notfound}/> 
           </Switch>
       </Router>

@@ -14,10 +14,11 @@ import {Link} from 'react-router-dom'
         build_name: '',
         phone_no: '',
         adress: '',
-        blocknumbers:'',
+        blocknumbers:'Blok Sayısı Seçiniz..',
         locations:[],
         showMe:true,
-        showUser:false
+        showUser:false,
+        showSave:true
       }
       
       this.onChange = this.onChange.bind(this);
@@ -43,9 +44,10 @@ import {Link} from 'react-router-dom'
         blocknumbers:this.state.blocknumbers
     }
    
-
-
-    axios.post('builds/buildsetting', newBuilds)
+    axios.get('builds/buildslist')
+    .then((response)=>{
+      if(response.data[0]==undefined){
+      axios.post('builds/buildsetting', newBuilds)
     .then((response) => {
   
       const alf=["","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","R","S","T","U"]
@@ -74,11 +76,57 @@ import {Link} from 'react-router-dom'
     }).catch((error) => { 
         console.log('Site bilgileri eklenmedi.');
     });   
-  }  
+  }
+  else{
+  
+    axios.put('builds/buildsupdate', newBuilds)
+    .then((response) => {
+      this.props.history.push('/home')
+    }) 
+  }
+    })
+
+    
+  }
+/*   else{ 
+    const newBuilds = {
+      build_name: this.state.build_name,
+      phone_no: this.state.phone_no,
+      adress:this.state.adress,
+      blocknumbers:this.state.blocknumbers
+  }
+      console.log(newBuilds)
+     axios.put('builds/buildsupdate', newBuilds)
+    .then((response) => {
+      this.props.history.push('/home')
+    }) 
+  
+
+    
+  }   */
   componentDidMount(e) {
     const token = localStorage.usertoken
     try{
         jwt_decode(token)
+      axios.get('builds/buildslist')
+      .then(res=>{
+        
+        if(res.data[0]==undefined)
+        {
+          this.setState({blocknumbers:"Blok Sayısı Seçiniz.."})
+        }
+        else{
+          this.setState({
+            build_name:res.data[0].build_name,
+            phone_no:res.data[0].phone_no,
+            adress:res.data[0].adress,
+            blocknumbers:res.data[0].blocknumbers,
+            showSave:true
+          })
+        }
+      })
+
+
         const res =[];
         for(var i=1;i<=20;i++){
           res[i]=i;
@@ -97,7 +145,9 @@ import {Link} from 'react-router-dom'
               {
                 this.setState({
                   showMe:false,
-                  showUser:true
+                  showUser:true,
+                  blocknumbers:"Blok Sayısı Seçiniz.."
+                 
                 })
               }    
             }
@@ -129,7 +179,7 @@ import {Link} from 'react-router-dom'
         {this.state.showMe? 
         <div className="card card-primary">
         <div className="card-header">
-      <h3 className="card-title">Site Bilgileri Ekle</h3>
+      <h3 className="card-title">Site Bilgileri </h3>
     </div>
    
     <form noValidate onSubmit={this.onSubmit}> 
@@ -152,26 +202,21 @@ import {Link} from 'react-router-dom'
     <div className="form-group">
         <label htmlFor="exampleInputPassword1">Blok Sayısı</label>
         <select className="form-control"  onChange={this.handleChangeBlockNumbers} >
-            <option>Blok Sayısı Seçiniz.. </option>
+            <option> {this.state.blocknumbers} </option>
             {blocknumbers}
         </select>
     </div>
         
-     
-      </div>
-     
-      <div className="card-footer">
+  </div>{this.state.showSave? 
+    <div className="card-footer">
         <button type="submit" className="btn btn-primary" onClick={this.onSubmit}>Kaydet</button>
-      </div>
+    </div>:null}
     </form>
-    
   </div>
-    :null}
-   
+      :null}
+      </div>
 
-</div>
-
-</div> 
+    </div> 
  
   </section>
 

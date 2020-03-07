@@ -81,7 +81,6 @@ import {Link} from "react-router-dom"
            locationsstore:resstore,
          })
         //Blok Sayısı 
-        const res =[];
         axios.get('blocks/blockslist')
         .then((response) => {
            
@@ -111,9 +110,7 @@ import {Link} from "react-router-dom"
             }
             }
         })
-        
-            
-    }catch(error){
+      }catch(error){
         window.location.replace('/')
     }
   

@@ -4,23 +4,48 @@ import Menu from "../Home/Menu"
 import jwt_decode from 'jwt-decode'
 import axios from "axios"
 import {Link} from 'react-router-dom'
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
 
  class PersonalList extends Component {
-  constructor() {
-    super() 
+  constructor(props) {
+    super(props) 
     
     
     this.state = {
      
       locations:[],
       status:'',
+      phone_no:'',
       showMe:true,
       showUser:false
-
       };
   
   }
- 
+  
+deletePersonel  (data)  {
+  confirmAlert({
+    title: 'Personel Sil',
+    message: 'Personeli silmek istediğinize emin misiniz?',
+    buttons: [
+      {
+        label: 'Evet',
+        onClick: () => axios.post('personals/personaldelete',{phone_no:data.phone_no} )
+        .then(response=>{
+          this.setState({
+            phone_no:data.phone_no
+          })
+         window.location.replace('/personallist')
+        }) 
+      },
+      {
+        label: 'Hayır',
+        onClick: () => this.props.history.push('/personallist')
+      }
+    ]
+  })
+}
+
   
  
   componentDidMount(e) {
@@ -74,7 +99,9 @@ import {Link} from 'react-router-dom'
         <td>{data.last_name}</td> 
         <td>{data.adress}</td> 
         <td>{data.phone_no}</td> 
-        <td><input type="button" className="btn btn-primary btn-flat " value={'Güncelle'} onClick={()=>this.operation(data)}></input>&nbsp;&nbsp;&nbsp;<input type="button" className="btn btn-danger  btn-flat "  value="Sil"  onClick={()=>this.deletecustomer(data)}></input></td> 
+        <td><input type="button" className="btn btn-primary btn-flat " value={'Güncelle'} onClick={()=>this.operation(data)}></input>&nbsp;&nbsp;&nbsp; 
+        <button className="btn btn-danger btn-flat " onClick={()=>this.deletePersonel(data)}> Sil</button> 
+            </td> 
 
       </tr>
       
@@ -95,7 +122,7 @@ import {Link} from 'react-router-dom'
                                 <th><h6>Personel Soyadı</h6></th>
                                 <th><h6>Personel Adresi</h6></th>
                                 <th><h6>Telefon No</h6></th>
-                                <th><h6>Ayarlar</h6></th>
+                                <th><h6>Ayarlar </h6></th>
                             </tr>
                         </thead>
                         <tbody>

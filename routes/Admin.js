@@ -136,4 +136,18 @@ users.get('/adminprofile', (req, res) => {
     })
 })
 
+users.post('/userdelete', (req, res) => {
+
+ User.deleteOne({email:req.body.email})
+    .then(objs=> {
+       
+      res.json(objs)
+    })
+    .catch(err=>{
+      res.json({ error: 'User already exists' })
+    })
+ 
+
+})
+
 module.exports = users

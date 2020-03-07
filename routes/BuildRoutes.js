@@ -60,6 +60,22 @@ builds.get('/buildslist', (req, res) => {
         res.send('error: ' + err)
       })
   })
-
+  builds.put('/buildsupdate', (req, res) => {
+ 
+    const blocksData = {
+      build_name: req.body.build_name,
+      phone_no: req.body.phone_no,
+      adress: req.body.adress,
+      blocknumbers: req.body.blocknumbers
+     
+    }
+     Build.update({build_name:req.body.build_name},blocksData,function(err,objs){ })
+      .then(build => {
+        res.json({ status: build_name + 'Updated!' })
+      })
+      .catch(err => {
+        res.json({ message: "true"})   
+      })
+  })
 
 module.exports = builds

@@ -71,7 +71,7 @@ window.location.replace('/')
             
               <li className="nav-item ">
                 <Link to="/home" className="nav-link ">
-                  <i className="nav-icon fas fa-tachometer-alt" />
+                  <i className="nav-icon fas fa-home" />
                   <p>
                     Anasayfa
                   
@@ -80,9 +80,9 @@ window.location.replace('/')
               </li>  
               <li className="nav-item ">
                 <Link to="/buildsetting" className="nav-link ">
-                  <i className="nav-icon far fa-plus-square" />
+                  <i className="nav-icon fas fa-city" />
                   <p>
-                 Site Ayarları             
+                 Site Bilgileri             
                   </p>
                 </Link>
               </li> 
@@ -99,7 +99,7 @@ window.location.replace('/')
               </li>
               <li className="nav-item ">
                 <Link to="/userslist" className="nav-link ">
-                  <i className="nav-icon fas fa-copy" />
+                  <i className="nav-icon fas fa-address-card" />
                   <p>
                     Kullanıcıları Listele
                   
@@ -128,7 +128,7 @@ window.location.replace('/')
               </li>
               <li className="nav-item ">
                 <Link to="/blocksetting" className="nav-link ">
-                  <i className="nav-icon fas fa-edit" />
+                  <i className="nav-icon fas fa-building" />
                   <p>
                  Blok Ayarları             
                   </p>

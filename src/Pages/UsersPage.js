@@ -38,7 +38,7 @@ import jwt_decode from 'jwt-decode'
 
     axios.post('users/useradd', newUsers)
     .then((response) => {
-        window.location.replace('/home')
+        window.location.replace('/userslist')
     }).catch((error) => { 
         console.log('Kullanıcı eklenmedi.');
     });   

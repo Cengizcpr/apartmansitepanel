@@ -61,5 +61,17 @@ personals.get('/personallist', (req, res) => {
       res.send('error: ' + err)
     })
 })
+personals.post('/personaldelete', (req, res) => {
 
+  Personal.deleteOne({phone_no:req.body.phone_no})
+     .then(objs=> {
+        
+       res.json(objs)
+     })
+     .catch(err=>{
+       res.json({ error: 'Personal already exists' })
+     })
+  
+ 
+ })
 module.exports = personals

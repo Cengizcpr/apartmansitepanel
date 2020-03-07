@@ -4,6 +4,8 @@ import Menu from "../Home/Menu"
 import jwt_decode from 'jwt-decode'
 import axios from "axios"
 import {Link} from 'react-router-dom'
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css' 
 
  class UsersList extends Component {
   constructor() {
@@ -20,8 +22,28 @@ import {Link} from 'react-router-dom'
       };
   
   }
- 
+
+  deleteUser  (data)  {
+    confirmAlert({
+      title: 'Kullanıcı Sil',
+      message: 'Kullanıcıyı silmek istediğinize emin misiniz?',
+      buttons: [
+        {
+          label: 'Evet',
+          onClick: () => axios.post('users/userdelete',{email:data.email} )
+          .then(response=>{
+        window.location.replace('/userslist')
+        })  
+        },
+        {
+          label: 'Hayır',
+          onClick: () => this.props.history.push('/userslist')
+        }
+      ]
+    })
+  }
   
+
  
   componentDidMount(e) {
     
@@ -64,7 +86,7 @@ window.location.replace('/')
         <td>{data.last_name}</td> 
         <td>{data.email}</td> 
         <td>{data.phone_no}</td> 
-        <td><input type="button" className="btn btn-primary btn-flat " value={'Güncelle'} onClick={()=>this.operation(data)}></input>&nbsp;&nbsp;&nbsp;<input type="button" className="btn btn-danger  btn-flat "  value="Sil"  onClick={()=>this.deletecustomer(data)}></input></td> 
+        <td><input type="button" className="btn btn-primary btn-flat " value={'Güncelle'} onClick={()=>this.operation(data)}></input>&nbsp;&nbsp;&nbsp;<input type="button" className="btn btn-danger  btn-flat "  value="Sil"  onClick={()=>this.deleteUser(data)}></input></td> 
 
       </tr>
       

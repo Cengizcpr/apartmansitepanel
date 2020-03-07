@@ -1,6 +1,14 @@
 import React, { Component } from 'react'
 import {Link} from "react-router-dom"
 export default class Header extends Component {
+  constructor() {
+    super()
+  
+  }
+  componentDidMount(e) {
+  
+  
+  }
   logOut(e) {
     e.preventDefault()
     localStorage.removeItem('usertoken')

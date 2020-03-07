@@ -44,8 +44,8 @@ import jwt_decode from 'jwt-decode'
     }
     axios.post('personals/personaladd', newPersonal)
     .then((response) => {
-      console.log('ekledi')
-      this.props.history.push('/home');
+      
+      this.props.history.push('/personallist');
     }).catch((error) => { 
         console.log('Kullanıcı eklenmedi.');
     });   

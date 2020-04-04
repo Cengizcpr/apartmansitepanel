@@ -1,11 +1,10 @@
 import React, { Component } from "react";
 import Header from "./Header";
-import Menu from "./Menu";
 import UserMenu from "./UserMenu";
 import jwt_decode from "jwt-decode";
 import axios from "axios";
 
-export default class Home extends Component {
+export default class UserHome extends Component {
   constructor() {
     super();
 
@@ -24,7 +23,6 @@ export default class Home extends Component {
         for (var i = 0; i < response.length; i++) {
           if (decoded.email === response[i].email) {
             if (response[i].status == false) {
-              
               this.setState({
                 showMe: false,
                 showUser: true
@@ -41,12 +39,10 @@ export default class Home extends Component {
     return (
       <div>
         <Header />
-        {this.state.showMe ? <Menu /> : this.props.history.push("/userhome")}
-
+        <UserMenu />
         <div className="content-wrapper">
-          <div className="content-header">Hoşgeldiniz</div>
+          <div className="content-header">Hoşgeldiniz Kullanıcı</div>
         </div>
-        {this.state.showUser ? this.props.history.push("/statuserror") : null}
       </div>
     );
   }

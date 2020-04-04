@@ -134,6 +134,15 @@ window.location.replace('/')
                   </p>
                 </Link>
               </li>
+              <li className="nav-item ">
+                <Link to="/apartmentsetting" className="nav-link ">
+                  <i className="nav-icon fas fa-address-card" />
+                  <p>
+                    Daire Detayları
+                    </p>
+                </Link>
+               
+              </li>
               
              
                

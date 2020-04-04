@@ -1,11 +1,11 @@
 const express = require("express");
-const blocks = express.Router();
+const apartmens = express.Router();
 const cors = require("cors");
-const Block = require("../models/BlockModel");
+const Apartmen = require("../models/ApartmenModel");
 
-blocks.use(cors());
+apartmens.use(cors());
 
-blocks.post("/blocksetting", (req, res) => {
+apartmens.post("/apartmensetting", (req, res) => {
   const date = new Date();
   today =
     parseInt(date.getMonth() + 1) +
@@ -15,17 +15,12 @@ blocks.post("/blocksetting", (req, res) => {
     date.getFullYear();
   const blocksData = {
     block_name: req.body.block_name,
-    circlenumber: req.body.circlenumber,
-    storenumber: req.body.storenumber,
+    circlenumber:req.body.circlenumber,
     date: today
   };
 
-  Block.findOne({
-    block_name: req.body.block_name
-  })
-    .then(blocks => {
-      if (!blocks) {
-        Block.create(blocksData)
+
+        Apartmen.create(blocksData)
           .then(build => {
             res.json({ status: blocks.block_name + "Registered!" });
             res.json({ message: "false" });
@@ -33,15 +28,10 @@ blocks.post("/blocksetting", (req, res) => {
           .catch(err => {
             res.json({ message: "true" });
           });
-      } else {
-        res.json({ error: "Block already exists" });
-      }
-    })
-    .catch(err => {
-      res.send("error: " + err);
-    });
+     
+  
 });
-blocks.put("/blockupdate", (req, res) => {
+/* blocks.put("/blockupdate", (req, res) => {
   const blocksData = {
     block_name: req.body.block_name,
     circlenumber: req.body.circlenumber,
@@ -57,14 +47,14 @@ blocks.put("/blockupdate", (req, res) => {
     .catch(err => {
       res.json({ message: "true" });
     });
-});
-blocks.get("/blockslist", (req, res) => {
-  Block.find({}, function(err, objs) {
+});*/
+apartmens.post("/apartmenslist", (req, res) => {
+    Apartmen.find({ block_name:req.body.block_name  }, function(err, objs) {
     var dbs = objs[0];
 
     return dbs;
   })
-    .sort({ block_name: 1 }) //Alfabeye göre sıralama
+    .sort({}) //Alfabeye göre sıralama
     .then(build => {
       if (build) {
         res.json(build);
@@ -77,4 +67,4 @@ blocks.get("/blockslist", (req, res) => {
     });
 });
 
-module.exports = blocks;
+module.exports = apartmens;

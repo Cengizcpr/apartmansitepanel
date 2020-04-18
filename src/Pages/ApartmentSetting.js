@@ -16,17 +16,17 @@ class ApartmentSetting extends Component {
       locations: [],
       locationsApartment: [],
       block_name: "",
-      circlenumber:"",
+      circlenumber: "",
       visible: false,
-      showApartmentİnfo:false,
-      host_name:"",
-      host_surname:"",
-      host_state:"",
-      host_phoneno:""
+      showApartmentİnfo: false,
+      host_name: "",
+      host_surname: "",
+      host_state: "",
+      host_phoneno: "",
+      stylebox:"small-box bg-danger"
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
-    this.customOnSubmit=this.customOnSubmit.bind(this)
   }
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
@@ -46,9 +46,9 @@ class ApartmentSetting extends Component {
   onApartmentSetting(data) {
     this.setState({
       showMe: false,
-      showApartment:false,
-      showApartmentİnfo:true,
-      circlenumber:data.circlenumber
+      showApartment: false,
+      showApartmentİnfo: true,
+      circlenumber: data.circlenumber
     });
   }
   //daire göstermek için kullanılıyor
@@ -67,43 +67,42 @@ class ApartmentSetting extends Component {
         block_name: this.state.block_name
       })
       .then(response => {
-     
-          if (this.state.block_name == response.data[0].block_name) {
-            this.setState({
-              locationsApartment: response.data
-            });
-          } 
-     
-      })
-      .catch(error => {   this.openModal();});
-  }
-   handleChangeHostState = e => {
-    let index = e.nativeEvent.target.selectedIndex;
+        if (this.state.block_name == response.data[0].block_name) {
+          console.log(response.data.length)
+          for(var i=0;i<response.data.length;i++)
+          {
+            if(response.data[i].host_state=="Kiracı")
+            {
+              this.setState({
+                stylebox:"small-box bg-primary"
+              })
 
-    this.setState({
-      host_state: e.nativeEvent.target[index].text
-    });
-  };
-  customOnSubmit(e){
-    e.preventDefault()
-     const newApartmenİnfo = {
-       circlenumber:this.state.circlenumber,
-      host_name: this.state.host_name,
-      host_surname: this.state.host_surname,
-      host_phoneno: this.state.host_phoneno,
-      host_state: this.state.host_state
-    }; 
-     axios
-      .put("apartmens/apartmensupdate",newApartmenİnfo).then(response => 
-        {console.log("başarılı")}) 
+            }
+            
+            else  if(response.data[i].host_state=="Ev Sahibi")
+              {
+                this.setState({
+                  stylebox:"small-box bg-danger"
+                })
+              }
+          }
+          this.setState({
+            locationsApartment: response.data
+          });
+        }
+      })
+      .catch(error => {
+        this.openModal();
+      });
   }
+
   handleChangeBlockName = e => {
     let index = e.nativeEvent.target.selectedIndex;
 
     this.setState({
       block_name: e.nativeEvent.target[index].text
     });
-  }; 
+  };
   componentDidMount(e) {
     const token = localStorage.usertoken;
     try {
@@ -146,19 +145,27 @@ class ApartmentSetting extends Component {
     ));
     const aparmentnumbers = this.state.locationsApartment.map(data => (
       <div className="col-lg-3 col-6" key={data._id}>
-        <div className="small-box bg-danger">
+        <div className={data.style_box}>
           <div className="inner">
             <p>
-              <h5>Daire {data.circlenumber} </h5> 
+              <h5>Daire {data.circlenumber} </h5>
               <h6>Durum : {data.host_state}</h6>
-              <h6>Ev Sahibi : {data.host_name} {data.host_surname}</h6>
+              <h6>
+                Ev Sahibi : {data.host_name} {data.host_surname}
+              </h6>
               <h6>Ev Sahibi Telefon : {data.host_phoneno}</h6>
             </p>
           </div>
-          <Link to={{ pathname: '/apartmentregister', state: {foo: data} }}  className="small-box-footer ">  Ev Sahibi Ata 
-            <i className="fas fa-arrow-circle-right" /></Link>
+          <Link
+            to={{ pathname: "/apartmentregister", state: { foo: data } }}
+            className="small-box-footer "
+          >
+            {" "}
+            Ev Sahibi Ata
+            <i className="fas fa-arrow-circle-right" />
+          </Link>
 
-         {/*  <Link
+          {/*  <Link
    
              onClick={() => this.onApartmentSetting(data)} 
             className="small-box-footer "
@@ -174,41 +181,37 @@ class ApartmentSetting extends Component {
         <Header />
         <Menu />
         <div className="content-wrapper">
-           
-          <div className="card">        
-
+          <div className="card">
             <div className="container ">
               <section className="content ">
                 <div className="row justify-content-center">
                   <div className="col-md-6">
                     {this.state.showMe ? (
                       <div className="card card-primary">
-                              <section>
-                  {/*Blok Uyarı Mesajı*/}
-                  <Modal
-                    visible={this.state.visible}
-                    width="400"
-                    height="300"
-                    effect="fadeInUp"
-                    onClickAway={() => this.closeModal()}
-                  >
-                    <div className="card-body">
-                      <h3>Uyarı</h3>
-                      <hr />
-                      <p>Daire Sayısı Girilmemiştir.</p>
-                      <a
-                        className="btn btn-primary btn-flat "
-                        href="javascript:void(0);"
-                        onClick={() => this.closeModal()}
-                      >
-                        Kapat
-                      </a>
-                    </div>
-                  </Modal>
-                </section>
+                        <section>
+                          {/*Blok Uyarı Mesajı*/}
+                          <Modal
+                            visible={this.state.visible}
+                            width="400"
+                            height="300"
+                            effect="fadeInUp"
+                            onClickAway={() => this.closeModal()}
+                          >
+                            <div className="card-body">
+                              <h3>Uyarı</h3>
+                              <hr />
+                              <p>Daire Sayısı Girilmemiştir.</p>
+                              <a
+                                className="btn btn-primary btn-flat "
+                                href="javascript:void(0);"
+                                onClick={() => this.closeModal()}
+                              >
+                                Kapat
+                              </a>
+                            </div>
+                          </Modal>
+                        </section>
                         <div className="card-header">
-                        
-                           
                           <h3 className="card-title">Blok Seçiniz</h3>
                         </div>
 
@@ -229,125 +232,18 @@ class ApartmentSetting extends Component {
                             <button
                               type="submit"
                               className="btn btn-primary"
-                             // onClick={() => this.onApartmentİnfo()}
-                             onClick={this.onSubmit}
-                              >
+                              // onClick={() => this.onApartmentİnfo()}
+                              onClick={this.onSubmit}
+                            >
                               Göster
                             </button>
                           </div>
                         </form>
                       </div>
                     ) : null}
-           
                   </div>
                 </div>
               </section>
-              {this.state.showApartmentİnfo ? (
-            <div className="container">
-              <section className="content">
-                <div className="row justify-content-center">
-                  <div className="col-md-6">
-                    <div className="card card-primary">
-                      <div className="card-header">
-                        <h3 className="card-title">Daire Bilgileri</h3>
-                      </div>
-
-                      <form noValidate>
-                        <div className="card-body">
-                          <div className="form-group">
-                            <label htmlFor="exampleInputPassword1">
-                              Daire Adı
-                            </label>
-                            <input
-                              type="text"
-                              className="form-control"
-                              placeholder="Daire Adı:"
-                              name="circlenumber"
-                              value={this.state.circlenumber}
-                              onChange={this.onChange}
-                              required
-                            />
-                            
-                          </div>
-                          <div className="form-group">
-                            <label htmlFor="exampleInputPassword1">
-                              Daire Durumu
-                            </label>
-                            <select
-                                className="form-control"
-                                onChange={this.handleChangeHostState}
-                              >
-                                <option>Boş</option>
-                                <option> Ev Sahibi </option>
-                                <option> Kiracı </option>
-                              </select>
-                          </div>
-                          <div className="form-group">
-                            <label htmlFor="exampleInputFile">
-                              Ev Sahibi Adı
-                            </label>
-                            <div className="input-group">
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="Ev Sahibi Adı:"
-                                name="host_name"
-                                value={this.state.host_name}
-                                onChange={this.onChange}
-                                required
-                              />
-                            </div>
-                          </div>
-                          <div className="form-group">
-                            <label htmlFor="exampleInputFile">
-                              Ev Sahibi Soyadı
-                            </label>
-                            <div className="input-group">
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="Ev Sahibi Adı:"
-                                name="host_surname"
-                                value={this.state.host_surname}
-                                onChange={this.onChange}
-                                required
-                              />
-                            </div>
-                          </div>
-                          <div className="form-group">
-                            <label htmlFor="exampleInputFile">
-                              Ev Sahibi Telefon No
-                            </label>
-                            <div className="input-group">
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="Ev Sahibi Telefon No:"
-                                name="host_phoneno"
-                                value={this.state.host_phoneno}
-                                onChange={this.onChange}
-                                required
-                              />
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="card-footer">
-                          <button
-                            type="submit"
-                            className="btn btn-primary"
-                            onClick={this.customOnSubmit} 
-                          >
-                            Kaydet
-                          </button>
-                        </div>
-                      </form>
-                    </div>
-                  </div>
-                </div>
-              </section>
-            </div>
-          ) : null}
             </div>
             <div className="content-header">
               {this.state.showApartment ? (

@@ -20,7 +20,8 @@ apartmens.post("/apartmensetting", (req, res) => {
     host_state:"Boş",
     host_name:"",
     host_surname:"",
-    host_phoneno:""
+    host_phoneno:"",
+    style_box:"small-box bg-danger"
   };
 
 
@@ -41,7 +42,8 @@ apartmens.post("/apartmensetting", (req, res) => {
     host_state:req.body.host_state,
     host_name:req.body.host_name,
     host_surname:req.body.host_surname,
-    host_phoneno:req.body.host_phoneno
+    host_phoneno:req.body.host_phoneno,
+    style_box:req.body.style_box
     
   };
   Apartmen.update({ circlenumber: req.body.circlenumber }, blocksData, function(

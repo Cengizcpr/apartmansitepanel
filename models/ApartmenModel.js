@@ -21,6 +21,9 @@ const ApartmenSchema = new Schema({
    host_phoneno:{
     type:String
    },
+   style_box:{
+     type:String
+   },
   date: {
     type: Date,
     default: Date.now

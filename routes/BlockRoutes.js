@@ -2,6 +2,7 @@ const express = require("express");
 const blocks = express.Router();
 const cors = require("cors");
 const Block = require("../models/BlockModel");
+const Apartmen = require("../models/ApartmenModel");
 
 blocks.use(cors());
 
@@ -19,12 +20,21 @@ blocks.post("/blocksetting", (req, res) => {
     storenumber: req.body.storenumber,
     date: today
   };
-
+ /*    Block.remove()
+        .then(objs => {
+          res.json(objs);
+        })
+        .catch(err => {
+          res.json({ error: "Personal already exists" });
+        }); */
   Block.findOne({
     block_name: req.body.block_name
   })
     .then(blocks => {
       if (!blocks) {
+       
+      
+      
         Block.create(blocksData)
           .then(build => {
             res.json({ status: blocks.block_name + "Registered!" });
@@ -33,6 +43,7 @@ blocks.post("/blocksetting", (req, res) => {
           .catch(err => {
             res.json({ message: "true" });
           });
+      
       } else {
         res.json({ error: "Block already exists" });
       }
@@ -76,5 +87,18 @@ blocks.get("/blockslist", (req, res) => {
       res.send("error: " + err);
     });
 });
-
+blocks.delete("/blockdelete", (req, res) => {
+  Block.remove()
+    .then(objs => {
+      Apartmen.remove()
+      .then(obj=>
+        {
+          res.json(objs);
+        })
+      
+    })
+    .catch(err => {
+      res.json({ error: "Personal already exists" });
+    });
+});
 module.exports = blocks;

@@ -3,7 +3,7 @@ import Header from "../Home/Header";
 import Menu from "../Home/Menu";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
-import { Link } from "react-router-dom";
+import { confirmAlert } from "react-confirm-alert";
 
 class BuildSetting extends Component {
   constructor() {
@@ -44,84 +44,118 @@ class BuildSetting extends Component {
       adress: this.state.adress,
       blocknumbers: this.state.blocknumbers
     };
-
+    const alf = [
+      "",
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G",
+      "H",
+      "I",
+      "J",
+      "K",
+      "L",
+      "M",
+      "N",
+      "O",
+      "P",
+      "R",
+      "S",
+      "T",
+      "U"
+    ];
+    const newBlocks = [];
+    //site bilgileri getir
     axios.get("builds/buildslist").then(response => {
-      if (response.data[0] == undefined) {
+      if (response.data[0] != undefined) {
+        confirmAlert({
+          title: "Uyarı",
+          message:
+            "Blok sayısı güncellendiği takdirde tüm site detayları silinecektir.Yinede silmek istermisiniz?",
+          buttons: [
+            {
+              label: "Evet",
+              onClick: () =>
+                axios.put("builds/buildsupdate", newBuilds).then(response => {
+                  axios
+                    .post("builds/buildsetting", newBuilds)
+                    .then(response => {
+                      //site bilgileri güncellenınce blokları sıl
+                      axios.delete("blocks/blockdelete").then(res => {
+                        for (var i = 1; i <= this.state.blocknumbers; i++) {
+                          newBlocks[i] = {
+                            block_name: alf[i],
+                            circlenumber: "Girilmedi",
+                            storenumber: "Girilmedi"
+                          };
+                        }
+                        for (var i = 1; i <= this.state.blocknumbers; i++) {
+                          //blok bılgılerını ekle
+
+                          axios
+                            .post("blocks/blocksetting", newBlocks[i])
+                            .then(response => {
+                              console.log(" eklendi.");
+                            })
+                            .catch(error => {
+                              console.log("Blok bilgileri eklenmedi.");
+                            });
+                          // })
+                        }
+                        this.props.history.push("/blocksetting");
+                      });
+                    })
+                    .catch(error => {
+                      console.log("Site bilgileri eklenmedi.");
+                    });
+                })
+            },
+            {
+              label: "Hayır",
+              onClick: () => this.props.history.push("/buildsetting")
+            }
+          ]
+        });
+      } else {
         axios
           .post("builds/buildsetting", newBuilds)
           .then(response => {
-            const alf = [
-              "",
-              "A",
-              "B",
-              "C",
-              "D",
-              "E",
-              "F",
-              "G",
-              "H",
-              "I",
-              "J",
-              "K",
-              "L",
-              "M",
-              "N",
-              "O",
-              "P",
-              "R",
-              "S",
-              "T",
-              "U"
-            ];
-            const newBlocks = [];
-            for (var i = 1; i <= this.state.blocknumbers; i++) {
-              newBlocks[i] = {
-                block_name: alf[i],
-                circlenumber: "Girilmedi",
-                storenumber: "Girilmedi"
-              };
-            }
-            for (var i = 1; i <= this.state.blocknumbers; i++) {
-              console.log(newBlocks.block_name);
-              axios
-                .post("blocks/blocksetting", newBlocks[i])
-                .then(response => {
+            //site bilgileri güncellenınce blokları sıl
+            axios.delete("blocks/blockdelete").then(res => {
+              for (var i = 1; i <= this.state.blocknumbers; i++) {
+                newBlocks[i] = {
+                  block_name: alf[i],
+                  circlenumber: "Girilmedi",
+                  storenumber: "Girilmedi"
+                };
+              }
+              for (var i = 1; i <= this.state.blocknumbers; i++) {
+                //blok bılgılerını ekle
 
-                  
-                  console.log(" eklendi.");
-                })
-                .catch(error => {
-                  console.log("Blok bilgileri eklenmedi.");
-                });
-            }
-            this.props.history.push("/home");
+                axios
+                  .post("blocks/blocksetting", newBlocks[i])
+                  .then(response => {
+                    console.log(" eklendi.");
+                  })
+                  .catch(error => {
+                    console.log("Blok bilgileri eklenmedi.");
+                  });
+                // })
+              }
+              this.props.history.push("/blocksetting");
+            });
           })
           .catch(error => {
             console.log("Site bilgileri eklenmedi.");
           });
-      } else {
-        axios.put("builds/buildsupdate", newBuilds).then(response => {
-          this.props.history.push("/home");
-        });
       }
     });
+    //site sayısı sıfır ıse ekle
   }
-  /*   else{ 
-    const newBuilds = {
-      build_name: this.state.build_name,
-      phone_no: this.state.phone_no,
-      adress:this.state.adress,
-      blocknumbers:this.state.blocknumbers
-  }
-      console.log(newBuilds)
-     axios.put('builds/buildsupdate', newBuilds)
-    .then((response) => {
-      this.props.history.push('/home')
-    }) 
-  
 
-    
-  }   */
   componentDidMount(e) {
     const token = localStorage.usertoken;
     try {
@@ -247,18 +281,17 @@ class BuildSetting extends Component {
                               </select>
                             </div>
                           </div>
-                          {this.state.showSave ? (
-                            <div className="card-footer">
-                              <button
-                                type="submit"
-                                className="btn btn-primary"
-                                onClick={this.onSubmit}
-                              >
-                                Kaydet
-                              </button>
-                            </div>
-                          ) : null}
                         </form>
+                        {this.state.showSave ? (
+                          <div className="card-footer">
+                            <button
+                              className="btn btn-primary"
+                              onClick={this.onSubmit}
+                            >
+                              Kaydet
+                            </button>
+                          </div>
+                        ) : null}
                       </div>
                     ) : null}
                   </div>

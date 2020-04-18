@@ -3,6 +3,7 @@ const builds = express.Router();
 const cors = require("cors");
 const Build = require("../models/BuildModel");
 const jwt = require("jsonwebtoken");
+const Block = require("../models/BlockModel");
 
 builds.use(cors());
 
@@ -27,6 +28,7 @@ builds.post("/buildsetting", (req, res) => {
   })
     .then(build => {
       if (!build) {
+ 
         Build.create(buildsData)
           .then(build => {
             res.json({ status: builds.build_name + "Registered!" });
@@ -72,6 +74,13 @@ builds.put("/buildsupdate", (req, res) => {
     objs
   ) {})
     .then(build => {
+ /*      Block.remove()
+      .then(objs => {
+        res.json(objs);
+      })
+      .catch(err => {
+        res.json({ error: "Personal already exists" });
+      }); */
       res.json({ status: build_name + "Updated!" });
     })
     .catch(err => {

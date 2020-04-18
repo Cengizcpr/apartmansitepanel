@@ -109,7 +109,6 @@ class PersonalList extends Component {
             className="btn btn-danger btn-flat "
             onClick={() => this.deletePersonel(data)}
           >
-            {" "}
             Sil
           </button>
         </td>

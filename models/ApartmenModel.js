@@ -9,6 +9,18 @@ const ApartmenSchema = new Schema({
   circlenumber: {
     type: String
   },
+   host_state:{
+    type:String
+   },
+   host_name:{
+     type:String
+   },
+   host_surname:{
+    type:String
+   },
+   host_phoneno:{
+    type:String
+   },
   date: {
     type: Date,
     default: Date.now

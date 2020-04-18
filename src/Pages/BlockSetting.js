@@ -50,7 +50,7 @@ class BlockSetting extends Component {
     axios
       .put("blocks/blockupdate", newBlocks)
       .then(response => {
-        console.log(this.state.circlenumber)
+       
         const newApartmens = [];
         for (var i = 1; i <= this.state.circlenumber; i++) {
           newApartmens[i] = {

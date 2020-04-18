@@ -16,7 +16,11 @@ apartmens.post("/apartmensetting", (req, res) => {
   const blocksData = {
     block_name: req.body.block_name,
     circlenumber:req.body.circlenumber,
-    date: today
+    date: today,
+    host_state:"Boş",
+    host_name:"",
+    host_surname:"",
+    host_phoneno:""
   };
 
 
@@ -31,23 +35,26 @@ apartmens.post("/apartmensetting", (req, res) => {
      
   
 });
-/* blocks.put("/blockupdate", (req, res) => {
+ apartmens.put("/apartmensupdate", (req, res) => {
   const blocksData = {
-    block_name: req.body.block_name,
     circlenumber: req.body.circlenumber,
-    storenumber: req.body.storenumber
+    host_state:req.body.host_state,
+    host_name:req.body.host_name,
+    host_surname:req.body.host_surname,
+    host_phoneno:req.body.host_phoneno
+    
   };
-  Block.update({ block_name: req.body.block_name }, blocksData, function(
+  Apartmen.update({ circlenumber: req.body.circlenumber }, blocksData, function(
     err,
     objs
   ) {})
-    .then(build => {
-      res.json({ status: blocks.block_name + "Updated!" });
+    .then(apartmen => {
+      res.json({ status: apartmen.circlenumber + "Updated!" });
     })
     .catch(err => {
       res.json({ message: "true" });
     });
-});*/
+})
 apartmens.post("/apartmenslist", (req, res) => {
     Apartmen.find({ block_name:req.body.block_name  }, function(err, objs) {
     var dbs = objs[0];

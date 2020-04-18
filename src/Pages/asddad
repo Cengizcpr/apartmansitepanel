@@ -5,6 +5,7 @@ import jwt_decode from "jwt-decode";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import Modal from "react-awesome-modal";
+
 class ApartmentSetting extends Component {
   constructor(props) {
     super(props);
@@ -16,20 +17,11 @@ class ApartmentSetting extends Component {
       locations: [],
       locationsApartment: [],
       block_name: "",
-      circlenumber:"",
+      circle_name:"",
       visible: false,
-      showApartmentİnfo:false,
-      host_name:"",
-      host_surname:"",
-      host_state:"",
-      host_phoneno:""
+      showApartmentİnfo:false
     };
-    this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
-    this.customOnSubmit=this.customOnSubmit.bind(this)
-  }
-  onChange(e) {
-    this.setState({ [e.target.name]: e.target.value });
   }
   openModal() {
     this.setState({
@@ -48,7 +40,7 @@ class ApartmentSetting extends Component {
       showMe: false,
       showApartment:false,
       showApartmentİnfo:true,
-      circlenumber:data.circlenumber
+      circle_name:data.circlenumber
     });
   }
   //daire göstermek için kullanılıyor
@@ -77,33 +69,30 @@ class ApartmentSetting extends Component {
       })
       .catch(error => {   this.openModal();});
   }
-   handleChangeHostState = e => {
+  /* handleChangeHostState = e => {
     let index = e.nativeEvent.target.selectedIndex;
 
     this.setState({
-      host_state: e.nativeEvent.target[index].text
+      blocknumbers: e.nativeEvent.target[index].text
     });
   };
-  customOnSubmit(e){
-    e.preventDefault()
-     const newApartmenİnfo = {
-       circlenumber:this.state.circlenumber,
+  onApartmentİnfo(){
+    const newApartmenİnfo = {
       host_name: this.state.host_name,
       host_surname: this.state.host_surname,
       host_phoneno: this.state.host_phoneno,
       host_state: this.state.host_state
-    }; 
-     axios
-      .put("apartmens/apartmensupdate",newApartmenİnfo).then(response => 
-        {console.log("başarılı")}) 
+    };
+    axios
+      .put("apartmens/apartmenslist",newApartmenİnfo).then(response => {})
   }
   handleChangeBlockName = e => {
     let index = e.nativeEvent.target.selectedIndex;
 
     this.setState({
-      block_name: e.nativeEvent.target[index].text
+      host_state: e.nativeEvent.target[index].text
     });
-  }; 
+  }; */
   componentDidMount(e) {
     const token = localStorage.usertoken;
     try {
@@ -155,17 +144,13 @@ class ApartmentSetting extends Component {
               <h6>Ev Sahibi Telefon : {data.host_phoneno}</h6>
             </p>
           </div>
-          <Link to={{ pathname: '/apartmentregister', state: {foo: data} }}  className="small-box-footer ">  Ev Sahibi Ata 
-            <i className="fas fa-arrow-circle-right" /></Link>
-
-         {/*  <Link
-   
-             onClick={() => this.onApartmentSetting(data)} 
+          <Link
+            onClick={() => this.onApartmentSetting(data)}
             className="small-box-footer "
           >
             Ev Sahibi Ata 
             <i className="fas fa-arrow-circle-right" />
-          </Link> */}
+          </Link>
         </div>
       </div>
     ));
@@ -174,9 +159,7 @@ class ApartmentSetting extends Component {
         <Header />
         <Menu />
         <div className="content-wrapper">
-           
-          <div className="card">        
-
+          <div className="card">
             <div className="container ">
               <section className="content ">
                 <div className="row justify-content-center">
@@ -207,8 +190,6 @@ class ApartmentSetting extends Component {
                   </Modal>
                 </section>
                         <div className="card-header">
-                        
-                           
                           <h3 className="card-title">Blok Seçiniz</h3>
                         </div>
 
@@ -262,8 +243,8 @@ class ApartmentSetting extends Component {
                               type="text"
                               className="form-control"
                               placeholder="Daire Adı:"
-                              name="circlenumber"
-                              value={this.state.circlenumber}
+                              name="circle_name"
+                              value={this.state.circle_name}
                               onChange={this.onChange}
                               required
                             />
@@ -307,7 +288,7 @@ class ApartmentSetting extends Component {
                                 type="text"
                                 className="form-control"
                                 placeholder="Ev Sahibi Adı:"
-                                name="host_surname"
+                                name="host_name"
                                 value={this.state.host_surname}
                                 onChange={this.onChange}
                                 required
@@ -336,7 +317,7 @@ class ApartmentSetting extends Component {
                           <button
                             type="submit"
                             className="btn btn-primary"
-                            onClick={this.customOnSubmit} 
+                          /*   onClick={()=>this.onApartmentİnfo()} */
                           >
                             Kaydet
                           </button>

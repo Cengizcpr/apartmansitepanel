@@ -23,7 +23,7 @@ class UsersList extends Component {
       last_name: "",
       email: "",
       phone_no: "",
-      status: ""
+      status: "",
     };
   }
   operation(user) {
@@ -33,18 +33,18 @@ class UsersList extends Component {
       first_name: user.first_name,
       last_name: user.last_name,
       email: user.email,
-      phone_no: user.phone_no
+      phone_no: user.phone_no,
     });
   }
   openModal() {
     this.setState({
-      visible: true
+      visible: true,
     });
   }
 
   closeModal() {
     this.setState({
-      visible: false
+      visible: false,
     });
   }
   deleteUser(data) {
@@ -57,15 +57,15 @@ class UsersList extends Component {
           onClick: () =>
             axios
               .post("users/userdelete", { email: data.email })
-              .then(response => {
+              .then((response) => {
                 window.location.replace("/userslist");
-              })
+              }),
         },
         {
           label: "Hayır",
-          onClick: () => this.props.history.push("/userslist")
-        }
-      ]
+          onClick: () => this.props.history.push("/userslist"),
+        },
+      ],
     });
   }
 
@@ -74,7 +74,7 @@ class UsersList extends Component {
     try {
       jwt_decode(token);
       const decoded = jwt_decode(token);
-      axios.get("users/adminprofile").then(res => {
+      axios.get("users/adminprofile").then((res) => {
         var response = res.data;
 
         if (response.length == 0) {
@@ -83,13 +83,13 @@ class UsersList extends Component {
         for (var i = 0; i < response.length; i++) {
           if (decoded.email === response[i].email) {
             this.setState({
-              locations: response
+              locations: response,
             });
             if (response[i].status == false) {
               this.setState({
                 showMe: false,
                 showUser: true,
-                showUserUpdate: false
+                showUserUpdate: false,
               });
             }
           }
@@ -101,7 +101,7 @@ class UsersList extends Component {
   }
 
   render() {
-    const cities = this.state.locations.map(data => (
+    const cities = this.state.locations.map((data) => (
       <tr key={data._id}>
         <td>{data.status ? "Admin" : "Kullanıcı"}</td>
         <td>{data.first_name}</td>
@@ -164,22 +164,35 @@ class UsersList extends Component {
                 <section>
                   <Modal
                     visible={this.state.visible}
-                    width="400"
-                    height="300"
+                    width="600"
+                    height="200"
                     effect="fadeInUp"
                     onClickAway={() => this.closeModal()}
                   >
-                    <div className="card-body">
-                      <h1>Uyarı</h1>
-                      <hr />
+                    <div class="modal-header">
+                      {" "}
+                      <h5>Uyarı</h5>
+                      <button
+                        type="button"
+                        class="close"
+                        data-dismiss="modal"
+                        onClick={() => this.closeModal()}
+                      >
+                        &times;
+                      </button>
+                    </div>
+                    <div class="modal-body">
                       <p>Kullanıcı Kayıtları Boş.</p>
-                      <a
-                        className="btn btn-primary btn-flat "
-                        href="javascript:void(0);"
+                    </div>
+                    <div class="modal-footer">
+                      <button
+                        type="button"
+                        class="btn btn-default"
+                        data-dismiss="modal"
                         onClick={() => this.closeModal()}
                       >
                         Kapat
-                      </a>
+                      </button>
                     </div>
                   </Modal>
                 </section>

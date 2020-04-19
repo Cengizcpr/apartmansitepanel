@@ -191,25 +191,38 @@ class ApartmentSetting extends Component {
                         <section>
                           {/*Blok Uyarı Mesajı*/}
                           <Modal
-                            visible={this.state.visible}
-                            width="400"
-                            height="300"
-                            effect="fadeInUp"
-                            onClickAway={() => this.closeModal()}
-                          >
-                            <div className="card-body">
-                              <h3>Uyarı</h3>
-                              <hr />
-                              <p>Daire Sayısı Girilmemiştir.</p>
-                              <a
-                                className="btn btn-primary btn-flat "
-                                href="javascript:void(0);"
-                                onClick={() => this.closeModal()}
-                              >
-                                Kapat
-                              </a>
-                            </div>
-                          </Modal>
+                    visible={this.state.visible}
+                    width="600"
+                    height="200"
+                    effect="fadeInUp"
+                    onClickAway={() => this.closeModal()}
+                  >
+                    <div className="modal-header">
+                      {" "}
+                      <h5>Uyarı</h5>
+                      <button
+                        type="button"
+                        className="close"
+                        data-dismiss="modal"
+                        onClick={() => this.closeModal()}
+                      >
+                        &times;
+                      </button>
+                    </div>
+                    <div className="modal-body">
+                      <p>Daire Kayıtları Boş.</p>
+                    </div>
+                    <div className="modal-footer">
+                      <button
+                        type="button"
+                        className="btn btn-default"
+                        data-dismiss="modal"
+                        onClick={() => this.closeModal()}
+                      >
+                        Kapat
+                      </button>
+                    </div>
+                  </Modal>
                         </section>
                         <div className="card-header">
                           <h3 className="card-title">Blok Seçiniz</h3>

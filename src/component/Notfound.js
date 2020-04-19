@@ -8,7 +8,7 @@ export default class Notfound extends Component {
         <div className="error-content">
           <h3>
             <i className="fas fa-exclamation-triangle text-warning" /> Oops!
-            Page not found.
+            Böyle Bir sayfa Bulunamadı.
           </h3>
           <p>
             We could not find the page you were looking for. Meanwhile, you may{" "}

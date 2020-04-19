@@ -4,6 +4,7 @@ import Menu from "../Home/Menu";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import jwt_decode from "jwt-decode";
+import Modal from "react-awesome-modal";
 
 class ApartmentRegister extends Component {
   constructor(props) {
@@ -16,9 +17,11 @@ class ApartmentRegister extends Component {
       host_surname: foo.host_surname,
       host_phoneno: foo.host_phoneno,
       host_state: foo.host_state,
-      style_box:foo.style_box,
+      host_email: foo.host_email,
+      style_box: foo.style_box,
       showMe: true,
-      showUser: false
+      showUser: false,
+      visible: false
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -27,43 +30,61 @@ class ApartmentRegister extends Component {
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
+  openModal() {
+    this.setState({
+      visible: true,
+    });
+  }
+
+  closeModal() {
+    this.setState({
+      visible: false,
+    });
+    this.props.history.push('/apartmentsetting')
+  }
   onSubmit(e) {
     e.preventDefault();
-    console.log(this.state.host_state)
-    var a="small-box bg-danger"
-    if(this.state.host_state=="Ev Sahibi"){
+    var style_box = "small-box bg-danger";
+    if (this.state.host_state == "Ev Sahibi") {
+      style_box = "small-box bg-primary";
+    } else if (this.state.host_state == "Kiracı") {
+      style_box = "small-box bg-warning";
+    }
 
-   a="small-box bg-primary"
-   
-    
-     
-   }
-    else if(this.state.host_state=="Kiracı"){
-  a= "small-box bg-warning"
-    
-  
-   
-   
-   
+    const newApartmenİnfo = {
+      circlenumber: this.state.circlenumber,
+      host_name: this.state.host_name,
+      host_surname: this.state.host_surname,
+      host_phoneno: this.state.host_phoneno,
+      host_state: this.state.host_state,
+      style_box: style_box,
+      host_email: this.state.host_email,
+    };
+    axios.put("apartmens/apartmensupdate", newApartmenİnfo).then((response) => {
+      const newUsers = {
+        first_name: this.state.host_name,
+        last_name: this.state.host_surname,
+        password: this.state.host_phoneno,
+        email: this.state.host_email,
+        phone_no: this.state.host_phoneno,
+      };
+
+      axios
+        .post("users/useradd", newUsers)
+        .then((response) => {
+           this.openModal(); 
+        
+        })
+        .catch((error) => {
+          console.log("Kullanıcı eklenmedi.");
+        });
+    });
   }
-  console.log(a)
-  const newApartmenİnfo = {
-    circlenumber: this.state.circlenumber,
-    host_name: this.state.host_name,
-    host_surname: this.state.host_surname,
-    host_phoneno: this.state.host_phoneno,
-    host_state: this.state.host_state,
-    style_box:a
-  };
-  axios.put("apartmens/apartmensupdate", newApartmenİnfo).then(response => {
-    this.props.history.push("/home");
-  }); 
-}
-  handleChangeHostState = e => {
+  handleChangeHostState = (e) => {
     let index = e.nativeEvent.target.selectedIndex;
 
     this.setState({
-      host_state: e.nativeEvent.target[index].text
+      host_state: e.nativeEvent.target[index].text,
     });
   };
 
@@ -72,14 +93,14 @@ class ApartmentRegister extends Component {
     try {
       jwt_decode(token);
       const decoded = jwt_decode(token);
-      axios.get("users/adminprofile").then(res => {
+      axios.get("users/adminprofile").then((res) => {
         var response = res.data;
         for (var i = 0; i < response.length; i++) {
           if (decoded.email === response[i].email) {
             if (response[i].status == false) {
               this.setState({
                 showMe: false,
-                showUser: true
+                showUser: true,
               });
             }
           }
@@ -104,7 +125,7 @@ class ApartmentRegister extends Component {
                     {this.state.showMe ? (
                       <div className="card card-primary">
                         <div className="card-header">
-                          <h3 className="card-title" >Daire Bilgileri</h3>
+                          <h3 className="card-title">Daire Bilgileri</h3>
                         </div>
 
                         <form noValidate>
@@ -185,6 +206,22 @@ class ApartmentRegister extends Component {
                                 />
                               </div>
                             </div>
+                            <div className="form-group">
+                              <label htmlFor="exampleInputFile">
+                                Ev Sahibi Email Adresi
+                              </label>
+                              <div className="input-group">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  placeholder="Ev Sahibi Email Adresi:"
+                                  name="host_email"
+                                  value={this.state.host_email}
+                                  onChange={this.onChange}
+                                  required
+                                />
+                              </div>
+                            </div>
                           </div>
 
                           <div className="card-footer">
@@ -197,6 +234,43 @@ class ApartmentRegister extends Component {
                             </button>
                           </div>
                         </form>
+                        <section>
+                          <Modal
+                            visible={this.state.visible}
+                            width="600"
+                            height="300"
+                            effect="fadeInUp"
+                            onClickAway={() => this.closeModal()}
+                          >
+                            <div className="modal-header">
+                              {" "}
+                              <h5>Bilgilendirme</h5>
+                              <button
+                                type="button"
+                                className="close"
+                                data-dismiss="modal"
+                                onClick={() => this.closeModal()}
+                              >
+                                &times;
+                              </button>
+                            </div>
+                            <div className="modal-body">
+                              <p>Kullanıcı kayıt işlemi başarıyla oluşturulmuştur.</p>
+                              <p>Email : {this.state.host_email}</p>
+                              <p>Şifre : {this.state.host_phoneno}</p>
+                            </div>
+                            <div className="modal-footer">
+                              <button
+                                type="button"
+                                className="btn btn-default"
+                                data-dismiss="modal"
+                                onClick={() => this.closeModal()}
+                              >
+                                Kapat
+                              </button>
+                            </div>
+                          </Modal>
+                        </section>
                       </div>
                     ) : null}
                   </div>

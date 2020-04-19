@@ -16,9 +16,6 @@ import UserHome from "./Home/UserHome";
 import ApartmentSetting from "./Pages/ApartmentSetting";
 import ApartmentRegister from "./Pages/ApartmentRegister";
 
-import a from "./Pages/ResultList";
-import b from "./Pages/Filter";
-
 class App extends Component {
   render() {
     return (
@@ -37,9 +34,11 @@ class App extends Component {
           <Route exact path="/statuserror" component={StatusError} />
           <Route exact path="/userhome" component={UserHome} />
           <Route exact path="/apartmentsetting" component={ApartmentSetting} />
-          <Route exact path="/apartmentregister" component={ApartmentRegister} />
-          <Route exact path="/a" component={a} />
-          <Route exact path="/b" component={b} />
+          <Route
+            exact
+            path="/apartmentregister"
+            component={ApartmentRegister}
+          />
 
           <Route exact component={Notfound} />
         </Switch>

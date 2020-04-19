@@ -24,6 +24,9 @@ const ApartmenSchema = new Schema({
    style_box:{
      type:String
    },
+   host_email:{
+     type:String
+   },
   date: {
     type: Date,
     default: Date.now

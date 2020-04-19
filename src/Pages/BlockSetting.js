@@ -65,7 +65,7 @@ class BlockSetting extends Component {
            axios
             .post("apartmens/apartmensetting", newApartmens[i])
             .then(response => {
-              console.log(" eklendi.");
+             
             })
             .catch(error => {
               console.log("Blok bilgileri eklenmedi.");
@@ -197,22 +197,35 @@ class BlockSetting extends Component {
                   {/*Blok Uyarı Mesajı*/}
                   <Modal
                     visible={this.state.visible}
-                    width="400"
-                    height="300"
+                    width="600"
+                    height="200"
                     effect="fadeInUp"
                     onClickAway={() => this.closeModal()}
                   >
-                    <div className="card-body">
-                      <h3>Uyarı</h3>
-                      <hr />
+                    <div class="modal-header">
+                      {" "}
+                      <h5>Uyarı</h5>
+                      <button
+                        type="button"
+                        class="close"
+                        data-dismiss="modal"
+                        onClick={() => this.closeModal()}
+                      >
+                        &times;
+                      </button>
+                    </div>
+                    <div class="modal-body">
                       <p>Blok Kayıtları Boş.</p>
-                      <a
-                        className="btn btn-primary btn-flat "
-                        href="javascript:void(0);"
+                    </div>
+                    <div class="modal-footer">
+                      <button
+                        type="button"
+                        class="btn btn-default"
+                        data-dismiss="modal"
                         onClick={() => this.closeModal()}
                       >
                         Kapat
-                      </a>
+                      </button>
                     </div>
                   </Modal>
                 </section>

@@ -18,7 +18,7 @@ class PersonalList extends Component {
       phone_no: "",
       showMe: true,
       showUser: false,
-      visible: false
+      visible: false,
     };
   }
 
@@ -32,29 +32,29 @@ class PersonalList extends Component {
           onClick: () =>
             axios
               .post("personals/personaldelete", { phone_no: data.phone_no })
-              .then(response => {
+              .then((response) => {
                 this.setState({
-                  phone_no: data.phone_no
+                  phone_no: data.phone_no,
                 });
                 window.location.replace("/personallist");
-              })
+              }),
         },
         {
           label: "Hayır",
-          onClick: () => this.props.history.push("/personallist")
-        }
-      ]
+          onClick: () => this.props.history.push("/personallist"),
+        },
+      ],
     });
   }
   openModal() {
     this.setState({
-      visible: true
+      visible: true,
     });
   }
 
   closeModal() {
     this.setState({
-      visible: false
+      visible: false,
     });
   }
 
@@ -63,22 +63,22 @@ class PersonalList extends Component {
     try {
       jwt_decode(token);
       const decoded = jwt_decode(token);
-      axios.get("personals/personallist").then(response => {
+      axios.get("personals/personallist").then((response) => {
         if (response.data.length == 0) {
           this.openModal();
         }
         this.setState({
-          locations: response.data
+          locations: response.data,
         });
       });
-      axios.get("users/adminprofile").then(resstatus => {
+      axios.get("users/adminprofile").then((resstatus) => {
         var response = resstatus.data;
         for (var i = 0; i < response.length; i++) {
           if (decoded.email === response[i].email) {
             if (response[i].status == false) {
               this.setState({
                 showMe: false,
-                showUser: true
+                showUser: true,
               });
             }
           }
@@ -90,7 +90,7 @@ class PersonalList extends Component {
   }
 
   render() {
-    const cities = this.state.locations.map(data => (
+    const cities = this.state.locations.map((data) => (
       <tr key={data._id}>
         <td>{data.departmans}</td>
         <td>{data.first_name}</td>
@@ -155,22 +155,35 @@ class PersonalList extends Component {
               <section>
                 <Modal
                   visible={this.state.visible}
-                  width="400"
-                  height="300"
+                  width="600"
+                  height="200"
                   effect="fadeInUp"
                   onClickAway={() => this.closeModal()}
                 >
-                  <div className="card-body">
-                    <h1>Uyarı</h1>
-                    <hr />
+                  <div class="modal-header">
+                    {" "}
+                    <h5>Uyarı</h5>
+                    <button
+                      type="button"
+                      class="close"
+                      data-dismiss="modal"
+                      onClick={() => this.closeModal()}
+                    >
+                      &times;
+                    </button>
+                  </div>
+                  <div class="modal-body">
                     <p>Personel Kayıtları Boş.</p>
-                    <a
-                      className="btn btn-primary btn-flat "
-                      href="javascript:void(0);"
+                  </div>
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn btn-default"
+                      data-dismiss="modal"
                       onClick={() => this.closeModal()}
                     >
                       Kapat
-                    </a>
+                    </button>
                   </div>
                 </Modal>
               </section>

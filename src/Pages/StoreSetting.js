@@ -5,7 +5,7 @@ import jwt_decode from "jwt-decode";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import Modal from "react-awesome-modal";
-class ApartmentSetting extends Component {
+class StoreSetting extends Component {
   constructor(props) {
     super(props);
 
@@ -59,11 +59,11 @@ class ApartmentSetting extends Component {
       showMe: true,
       showUser: false,
       showApartment: true,
-      aparmentnumbers: ""
+      storenumbers: ""
     });
     //istenilen bloğa göre daitre bilgilerini getirir
     axios
-      .post("apartmens/apartmenslist", {
+      .post("stores/storelist", {
         block_name: this.state.block_name
       })
       .then(response => {
@@ -143,17 +143,17 @@ class ApartmentSetting extends Component {
     const blocknumbers = this.state.locations.map(data => (
       <option key={data._id}>{data.block_name}</option>
     ));
-    const aparmentnumbers = this.state.locationsApartment.map(data => (
+    const storenumbers = this.state.locationsApartment.map(data => (
       <div className="col-lg-3 col-6" key={data._id}>
         <div className={data.style_box}>
           <div className="inner">
             <p>
-              <h5>Daire {data.circlenumber} </h5>
-              <h6>Durum : {data.host_state}</h6>
+              <h5>Dükkan {data.storenumber} </h5>
+              <h6>Durum : {data.store_state}</h6>
               <h6>
-                Ev Sahibi : {data.host_name} {data.host_surname}
+                Ev Sahibi : {data.store_name} {data.store_surname}
               </h6>
-              <h6>Ev Sahibi Telefon : {data.host_phoneno}</h6>
+              <h6>Ev Sahibi Telefon : {data.store_phoneno}</h6>
             </p>
           </div>
           <Link
@@ -210,7 +210,7 @@ class ApartmentSetting extends Component {
                       </button>
                     </div>
                     <div className="modal-body">
-                      <p>Daire Kayıtları Boş.</p>
+                      <p>Dükkan Kayıtları Boş.</p>
                     </div>
                     <div className="modal-footer">
                       <button
@@ -225,7 +225,7 @@ class ApartmentSetting extends Component {
                   </Modal>
                         </section>
                         <div className="card-header">
-                          <h3 className="card-title">Blok(Daire) Seçiniz</h3>
+                          <h3 className="card-title">Blok(Dükkan) Seçiniz</h3>
                         </div>
 
                         <form noValidate onSubmit={this.onSubmit}>
@@ -260,7 +260,7 @@ class ApartmentSetting extends Component {
             </div>
             <div className="content-header">
               {this.state.showApartment ? (
-                <div className="row">{aparmentnumbers}</div>
+                <div className="row">{storenumbers}</div>
               ) : null}
             </div>
           </div>
@@ -270,4 +270,4 @@ class ApartmentSetting extends Component {
     );
   }
 }
-export default ApartmentSetting;
+export default StoreSetting;

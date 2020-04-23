@@ -1,30 +1,30 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-// Apartman Şema Oluşturuldu.
-const ApartmenSchema = new Schema({
+// Dükkan Şema Oluşturuldu.
+const StoreSchema = new Schema({
   block_name: {
     type: String
   },
-  circlenumber: {
+  storenumber: {
     type: String
   },
-   host_state:{
+  store_state:{
     type:String
    },
-   host_name:{
+   store_name:{
      type:String
    },
-   host_surname:{
+   store_surname:{
     type:String
    },
-   host_phoneno:{
+   store_phoneno:{
     type:String
    },
    style_box:{
      type:String
    },
-   host_email:{
+   store_email:{
      type:String
    },
   date: {
@@ -33,4 +33,4 @@ const ApartmenSchema = new Schema({
   }
 })
 
-module.exports = Apartmen = mongoose.model('apartmens', ApartmenSchema)
+module.exports = Apartmen = mongoose.model('stores', StoreSchema)

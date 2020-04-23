@@ -29,11 +29,13 @@ var BuildSetting= require('./routes/BuildRoutes');
 var BlockSetting=require('./routes/BlockRoutes');
 var PersonalSetting=require('./routes/PersonalRoutes');
 var ApartmenSetting=require('./routes/ApartmenRoutes');
+var StoreSetting=require('./routes/StoreRoutes');
 app.use('/users', User);
 app.use('/apartmens',ApartmenSetting);
 app.use('/builds',BuildSetting);
 app.use('/blocks',BlockSetting);
 app.use('/personals',PersonalSetting);
+app.use('/stores',StoreSetting);
 app.use(express.static(path.join(__dirname,'public')))
 app.listen(port, function() {
   console.log('Server is running on port: ' + port)

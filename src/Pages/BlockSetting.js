@@ -20,7 +20,7 @@ class BlockSetting extends Component {
       showUser: false,
       circlenumber: "",
       storenumber: "",
-      visible: false
+      visible: false,
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -30,66 +30,106 @@ class BlockSetting extends Component {
   }
   openModal() {
     this.setState({
-      visible: true
+      visible: true,
     });
   }
 
   closeModal() {
     this.setState({
-      visible: false
+      visible: false,
     });
+  }
+  //Daire ekle
+  apartmensRegister() {
+    const newApartmens = [];
+    for (var i = 1; i <= this.state.circlenumber; i++) {
+      newApartmens[i] = {
+        block_name: this.state.block_name,
+        circlenumber: this.state.block_name + i,
+      };
+    }
+    for (var i = 1; i <= this.state.circlenumber; i++) {
+      axios
+        .post("apartmens/apartmensetting", newApartmens[i])
+        .then((response) => {})
+        .catch((error) => {
+          console.log("Apartman bilgileri eklenmedi.");
+        });
+    }
+  }
+  //Dükkanı  ekle
+  storeRegister() {
+    const newStore = [];
+    for (var i = 1; i <= this.state.storenumber; i++) {
+      newStore[i] = {
+        block_name: this.state.block_name,
+        storenumber: this.state.block_name + i,
+      };
+    }
+    for (var i = 1; i <= this.state.storenumber; i++) {
+      axios
+        .post("stores/storesetting", newStore[i])
+        .then((response) => {})
+        .catch((error) => {
+          console.log("Dükkan bilgileri eklenmedi.");
+        });
+    }
   }
   onSubmit(e) {
     e.preventDefault();
     const newBlocks = {
       block_name: this.state.block_name,
       circlenumber: this.state.circlenumber,
-      storenumber: this.state.storenumber
+      storenumber: this.state.storenumber,
     };
-    
+
     axios
       .put("blocks/blockupdate", newBlocks)
-      .then(response => {
-       
-        const newApartmens = [];
-        for (var i = 1; i <= this.state.circlenumber; i++) {
-          newApartmens[i] = {
+      .then((response) => {
+        axios
+          .post("apartmens/apartmenslist", {
             block_name: this.state.block_name,
-            circlenumber: this.state.block_name+i,
-           
-          };
-        }
-        for (var i = 1; i <= this.state.circlenumber; i++) {
-         
-         
-           axios
-            .post("apartmens/apartmensetting", newApartmens[i])
-            .then(response => {
-             
-            })
-            .catch(error => {
-              console.log("Blok bilgileri eklenmedi.");
-            }); 
-        }
-        this.props.history.push("/home"); 
-     })
-      .catch(error => {
+          })
+          .then((res) => {
+            this.apartmensRegister();
+            this.storeRegister();
+            if (res.data.length != 0) {
+              axios
+                .post("stores/storesdelete", {
+                  block_name: this.state.block_name,
+                })
+                .then((res) => {
+                  this.storeRegister();
+                });
+
+              axios
+                .post("apartmens/apartmensdelete", {
+                  block_name: this.state.block_name,
+                })
+                .then((res) => {
+                  this.apartmensRegister();
+                });
+            }
+          });
+
+        this.props.history.push("/home");
+      })
+      .catch((error) => {
         console.log("Site bilgileri eklenmedi.");
       });
-
   }
-  handleChangeCircleNumbers = e => {
+  handleChangeCircleNumbers = (e) => {
     let index = e.nativeEvent.target.selectedIndex;
 
     this.setState({
-      circlenumber: e.nativeEvent.target[index].text
+      circlenumber: e.nativeEvent.target[index].text,
     });
   };
-  handleChangeStoreNumbers = e => {
+  handleChangeStoreNumbers = (e) => {
     let index = e.nativeEvent.target.selectedIndex;
 
     this.setState({
-      storenumber: e.nativeEvent.target[index].text
+      storenumber: e.nativeEvent.target[index].text,
     });
   };
 
@@ -103,41 +143,41 @@ class BlockSetting extends Component {
         rescircle[i] = i;
       }
       this.setState({
-        locationscircle: rescircle
+        locationscircle: rescircle,
       });
       //Dükkan Sayısı
       const resstore = [];
-      for (var i = 1; i <= 5; i++) {
+      for (var i = 0; i <= 5; i++) {
         resstore[i] = i;
       }
       this.setState({
-        locationsstore: resstore
+        locationsstore: resstore,
       });
       //Blok Sayısı
       axios
         .get("blocks/blockslist")
-        .then(response => {
+        .then((response) => {
           if (response.data.length == 0) {
             this.openModal();
           }
           this.setState({
             locations: response.data,
-            block_name: response.data[0].blok_name
+            block_name: response.data[0].blok_name,
           });
         })
-        .catch(error => {
+        .catch((error) => {
           console.log("Blok listelenemedi.");
         });
       //Yetki kontrol
       const decoded = jwt_decode(token);
-      axios.get("users/adminprofile").then(res => {
+      axios.get("users/adminprofile").then((res) => {
         var response = res.data;
         for (var i = 0; i < response.length; i++) {
           if (decoded.email === response[i].email) {
             if (response[i].status == false) {
               this.setState({
                 showMe: false,
-                showUser: true
+                showUser: true,
               });
             }
           }
@@ -151,11 +191,11 @@ class BlockSetting extends Component {
     this.setState({
       block_name: data.block_name,
       showMeBlock: false,
-      showMeBlockİnfo: true
+      showMeBlockİnfo: true,
     });
   }
   render() {
-    const blocknumbers = this.state.locations.map(data => (
+    const blocknumbers = this.state.locations.map((data) => (
       <div className="col-lg-3 col-6" key={data._id}>
         <div className="small-box bg-info">
           <div className="inner">
@@ -177,11 +217,11 @@ class BlockSetting extends Component {
       </div>
     ));
 
-    const circlenumbers = this.state.locationscircle.map(data => (
+    const circlenumbers = this.state.locationscircle.map((data) => (
       <option key={data}>{data}</option>
     ));
 
-    const storenumbers = this.state.locationsstore.map(data => (
+    const storenumbers = this.state.locationsstore.map((data) => (
       <option key={data}>{data}</option>
     ));
 

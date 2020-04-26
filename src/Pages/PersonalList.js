@@ -31,7 +31,7 @@ class PersonalList extends Component {
           label: "Evet",
           onClick: () =>
             axios
-              .post("personals/personaldelete", { phone_no: data.phone_no })
+              .post("personals/personaldelete", { _id: data._id })
               .then((response) => {
                 this.setState({
                   phone_no: data.phone_no,

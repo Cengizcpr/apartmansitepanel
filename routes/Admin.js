@@ -137,7 +137,7 @@ users.get("/adminprofile", (req, res) => {
 });
 
 users.post("/userdelete", (req, res) => {
-  User.deleteOne({ email: req.body.email })
+  User.deleteOne({ _id: req.body._id })
     .then(objs => {
       res.json(objs);
     })

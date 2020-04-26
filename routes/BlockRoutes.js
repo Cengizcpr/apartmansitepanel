@@ -58,7 +58,7 @@ blocks.put("/blockupdate", (req, res) => {
     circlenumber: req.body.circlenumber,
     storenumber: req.body.storenumber
   };
-  Block.update({ block_name: req.body.block_name }, blocksData, function(
+  Block.update({ _id: req.body._id }, blocksData, function(
     err,
     objs
   ) {})

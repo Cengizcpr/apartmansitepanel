@@ -76,6 +76,7 @@ apartmens.post("/apartmenslist", (req, res) => {
     });
 });
 apartmens.post("/apartmensdelete", (req, res) => {
+  console.log(req.body.block_name)
   Apartmen.remove({ block_name: req.body.block_name })
     .then((objs) => {
       res.json(objs);

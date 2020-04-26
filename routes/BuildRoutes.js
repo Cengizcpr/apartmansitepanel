@@ -63,13 +63,13 @@ builds.get("/buildslist", (req, res) => {
     });
 });
 builds.put("/buildsupdate", (req, res) => {
-  const blocksData = {
+  const buildsData = {
     build_name: req.body.build_name,
     phone_no: req.body.phone_no,
     adress: req.body.adress,
     blocknumbers: req.body.blocknumbers
   };
-  Build.update({ build_name: req.body.build_name }, blocksData, function(
+  Build.update({ _id: req.body._id }, buildsData, function(
     err,
     objs
   ) {})

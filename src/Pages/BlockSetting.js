@@ -16,6 +16,8 @@ class BlockSetting extends Component {
       showMeBlock: true,
       showMeBlockİnfo: false,
       block_name: "",
+      title_name: "",
+      _id: "",
       showMe: true,
       showUser: false,
       circlenumber: "",
@@ -81,6 +83,7 @@ class BlockSetting extends Component {
       block_name: this.state.block_name,
       circlenumber: this.state.circlenumber,
       storenumber: this.state.storenumber,
+      _id: this.state._id,
     };
 
     axios
@@ -88,28 +91,23 @@ class BlockSetting extends Component {
       .then((response) => {
         axios
           .post("apartmens/apartmenslist", {
-            block_name: this.state.block_name,
+            block_name: this.state.title_name,
           })
           .then((res) => {
-            this.apartmensRegister();
-            this.storeRegister();
-            if (res.data.length != 0) {
-              axios
-                .post("stores/storesdelete", {
-                  block_name: this.state.block_name,
-                })
-                .then((res) => {
-                  this.storeRegister();
-                });
-
-              axios
-                .post("apartmens/apartmensdelete", {
-                  block_name: this.state.block_name,
-                })
-                .then((res) => {
-                  this.apartmensRegister();
-                });
-            }
+            axios
+              .post("apartmens/apartmensdelete", {
+                block_name: this.state.title_name,
+              })
+              .then((res) => {
+                this.apartmensRegister();
+              }); //veritabanına daire sayıları kayıt
+            axios
+              .post("stores/storesdelete", {
+                block_name: this.state.title_name,
+              })
+              .then((res) => {
+                this.storeRegister();
+              }); //veritabanına dükkan sayıları kayıt
           });
 
         this.props.history.push("/home");
@@ -162,7 +160,7 @@ class BlockSetting extends Component {
           }
           this.setState({
             locations: response.data,
-            block_name: response.data[0].blok_name,
+            /* block_name: response.data[0].blok_name,  Anlamadım*/
           });
         })
         .catch((error) => {
@@ -192,7 +190,24 @@ class BlockSetting extends Component {
       block_name: data.block_name,
       showMeBlock: false,
       showMeBlockİnfo: true,
+      _id: data._id,
+      title_name: data.block_name,
+      circlenumber:data.circlenumber,
+      storenumber:data.storenumber
     });
+    if(data.circlenumber=="Girilmedi")
+    {
+      this.setState({
+        circlenumber:"Daire Sayısı Seçiniz..."
+      })
+    }
+    if(data.storenumber=="Girilmedi")
+    {
+      this.setState({
+        storenumber:"Dükkan Sayısı Seçiniz..."
+      })
+    }
+   
   }
   render() {
     const blocknumbers = this.state.locations.map((data) => (
@@ -281,7 +296,7 @@ class BlockSetting extends Component {
                         <div className="card card-primary">
                           <div className="card-header">
                             <h3 className="card-title">
-                              {this.state.block_name} Blok Bilgileri
+                              {this.state.title_name} Blok Bilgileri
                             </h3>
                           </div>
                           <form noValidate onSubmit={this.onSubmit}>
@@ -307,7 +322,7 @@ class BlockSetting extends Component {
                                   className="form-control"
                                   onChange={this.handleChangeCircleNumbers}
                                 >
-                                  <option>Daire Sayısı Seçiniz.. </option>
+                                  <option>{this.state.circlenumber} </option>
                                   {circlenumbers}
                                 </select>
                               </div>
@@ -319,7 +334,7 @@ class BlockSetting extends Component {
                                   className="form-control"
                                   onChange={this.handleChangeStoreNumbers}
                                 >
-                                  <option>Dükkan Sayısı Seçiniz.. </option>
+                                  <option>{this.state.storenumber} </option>
                                   {storenumbers}
                                 </select>
                               </div>

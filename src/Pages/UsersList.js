@@ -24,8 +24,10 @@ class UsersList extends Component {
       email: "",
       phone_no: "",
       status: "",
+      _id:""
     };
   }
+  //güncelleme
   operation(user) {
     this.setState({
       showMe: false,
@@ -34,6 +36,7 @@ class UsersList extends Component {
       last_name: user.last_name,
       email: user.email,
       phone_no: user.phone_no,
+      _id:user._id
     });
   }
   openModal() {
@@ -56,7 +59,7 @@ class UsersList extends Component {
           label: "Evet",
           onClick: () =>
             axios
-              .post("users/userdelete", { email: data.email })
+              .post("users/userdelete", { _id: data._id })
               .then((response) => {
                 window.location.replace("/userslist");
               }),

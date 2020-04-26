@@ -38,12 +38,7 @@ class BuildSetting extends Component {
 
   onSubmit(e) {
     e.preventDefault();
-    const newBuilds = {
-      build_name: this.state.build_name,
-      phone_no: this.state.phone_no,
-      adress: this.state.adress,
-      blocknumbers: this.state.blocknumbers
-    };
+  
     const alf = [
       "",
       "A",
@@ -70,7 +65,15 @@ class BuildSetting extends Component {
     const newBlocks = [];
     //site bilgileri getir
     axios.get("builds/buildslist").then(response => {
+  
       if (response.data[0] != undefined) {
+        const updateBuilds = {
+          build_name: this.state.build_name,
+          phone_no: this.state.phone_no,
+          adress: this.state.adress,
+          blocknumbers: this.state.blocknumbers,
+          _id:response.data[0]._id
+        };
         confirmAlert({
           title: "Uyarı",
           message:
@@ -79,9 +82,9 @@ class BuildSetting extends Component {
             {
               label: "Evet",
               onClick: () =>
-                axios.put("builds/buildsupdate", newBuilds).then(response => {
+                axios.put("builds/buildsupdate", updateBuilds).then(response => {
                   axios
-                    .post("builds/buildsetting", newBuilds)
+                    .post("builds/buildsetting", updateBuilds)
                     .then(response => {
                       //site bilgileri güncellenınce blokları sıl
                       axios.delete("blocks/blockdelete").then(res => {
@@ -120,6 +123,13 @@ class BuildSetting extends Component {
           ]
         });
       } else {
+        const newBuilds = {
+          build_name: this.state.build_name,
+          phone_no: this.state.phone_no,
+          adress: this.state.adress,
+          blocknumbers: this.state.blocknumbers,
+          
+        };
         axios
           .post("builds/buildsetting", newBuilds)
           .then(response => {

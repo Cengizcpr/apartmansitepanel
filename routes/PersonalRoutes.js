@@ -63,7 +63,7 @@ personals.get("/personallist", (req, res) => {
     });
 });
 personals.post("/personaldelete", (req, res) => {
-  Personal.deleteOne({ phone_no: req.body.phone_no })
+  Personal.deleteOne({ _id: req.body._id })
     .then(objs => {
       res.json(objs);
     })

@@ -61,28 +61,28 @@ stores.post("/storelist", (req, res) => {
       res.send("error: " + err);
     });
 });
-/* stores.put("/apartmensupdate", (req, res) => {
+ stores.put("/storesupdate", (req, res) => {
   const blocksData = {
-    circlenumber: req.body.circlenumber,
-    host_state:req.body.host_state,
-    host_name:req.body.host_name,
-    host_surname:req.body.host_surname,
-    host_phoneno:req.body.host_phoneno,
+    storenumber: req.body.storenumber,
+    store_state:req.body.store_state,
+    store_name:req.body.store_name,
+    store_surname:req.body.store_surname,
+    store_phoneno:req.body.store_phoneno,
     style_box:req.body.style_box,
-    host_email:req.body.host_email
+    store_email:req.body.store_email
     
   };
-  Store.update({ circlenumber: req.body.circlenumber }, blocksData, function(
+  Store.update({ storenumber: req.body.title_name }, blocksData, function(
     err,
     objs
   ) {})
     .then(stores => {
-      res.json({ status: stores.circlenumber + "Updated!" });
+      res.json({ status: stores.storenumber + "Updated!" });
     })
     .catch(err => {
       res.json({ message: "true" });
     });
-})*/
+})
 /* stores.post("/storelist", (req, res) => {
     Store.find({ block_name:req.body.block_name }, function(err, objs) {
     var dbs = objs[0];

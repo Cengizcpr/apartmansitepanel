@@ -45,6 +45,26 @@ users.post("/register", (req, res) => {
       res.send("error: " + err);
     });
 });
+users.put("/userupdate", (req, res) => {
+  const userData = {
+  first_name:req.body.first_name,
+  last_name:req.body.last_name,
+  email:req.body.email,
+  phone_no:req.body.phone_no,
+  _id:req.body._id
+  };
+  User.update(
+    { _id: req.body._id },
+    userData,
+    function (err, objs) {}
+  )
+    .then((apartmen) => {
+       res.json({ status: apartmen.circlenumber + "Updated!" }); 
+    })
+    .catch((err) => {
+      res.json({ message: "true" });
+    });
+});
 users.post("/useradd", (req, res) => {
   const date = new Date();
   today =

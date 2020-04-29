@@ -2,27 +2,43 @@ import React, { Component } from "react";
 import Header from "../Home/Header";
 import Menu from "../Home/Menu";
 import axios from "axios";
-import { Link } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import Modal from "react-awesome-modal";
 
 class StoreRegister extends Component {
   constructor(props) {
     super(props);
-    const { foo } = this.props.location.state;
+    //storeregister kontrol
+    if (this.props.location.state != undefined) {
+      const { storeinfo } = this.props.location.state;
+      this.state = {
+        storenumber: storeinfo.storenumber,
+        store_name: storeinfo.store_name,
+        store_surname: storeinfo.store_surname,
+        store_phoneno: storeinfo.store_phoneno,
+        store_state: storeinfo.store_state,
+        store_email: storeinfo.store_email,
+        style_box: storeinfo.style_box,
+        title_name: storeinfo.storenumber,
+        showMe: true,
+        showUser: false,
+        visible: false,
+      };
+    } else {
+      this.state = {
+        storenumber: "",
+        store_name: "",
+        store_surname: "",
+        store_phoneno: "",
+        store_state: "Boş",
+        store_email: "",
+        title_name: "",
+        showMe: true,
+        showUser: false,
+        visible: false,
+      };
+    }
 
-    this.state = {
-      circlenumber: foo.circlenumber,
-      host_name: foo.host_name,
-      host_surname: foo.host_surname,
-      host_phoneno: foo.host_phoneno,
-      host_state: foo.host_state,
-      host_email: foo.host_email,
-      style_box: foo.style_box,
-      showMe: true,
-      showUser: false,
-      visible: false
-    };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
@@ -40,40 +56,40 @@ class StoreRegister extends Component {
     this.setState({
       visible: false,
     });
-    this.props.history.push('/apartmentsetting')
+    this.props.history.push("/apartmentsetting");
   }
   onSubmit(e) {
     e.preventDefault();
     var style_box = "small-box bg-danger";
-    if (this.state.host_state == "Ev Sahibi") {
+    if (this.state.store_state == "Ev Sahibi") {
       style_box = "small-box bg-primary";
-    } else if (this.state.host_state == "Kiracı") {
+    } else if (this.state.store_state == "Kiracı") {
       style_box = "small-box bg-warning";
     }
 
-    const newApartmenİnfo = {
-      circlenumber: this.state.circlenumber,
-      host_name: this.state.host_name,
-      host_surname: this.state.host_surname,
-      host_phoneno: this.state.host_phoneno,
-      host_state: this.state.host_state,
+    const newStoreİnfo = {
+      storenumber: this.state.storenumber,
+      store_name: this.state.store_name,
+      store_surname: this.state.store_surname,
+      store_phoneno: this.state.store_phoneno,
+      store_state: this.state.store_state,
       style_box: style_box,
-      host_email: this.state.host_email,
+      store_email: this.state.store_email,
+      title_name: this.state.title_name,
     };
-    axios.put("apartmens/apartmensupdate", newApartmenİnfo).then((response) => {
+    axios.put("stores/storesupdate", newStoreİnfo).then((response) => {
       const newUsers = {
-        first_name: this.state.host_name,
-        last_name: this.state.host_surname,
-        password: this.state.host_phoneno,
-        email: this.state.host_email,
-        phone_no: this.state.host_phoneno,
+        first_name: this.state.store_name,
+        last_name: this.state.store_surname,
+        password: this.state.store_phoneno,
+        email: this.state.store_email,
+        phone_no: this.state.store_phoneno,
       };
 
       axios
         .post("users/useradd", newUsers)
         .then((response) => {
-           this.openModal(); 
-        
+          this.openModal();
         })
         .catch((error) => {
           console.log("Kullanıcı eklenmedi.");
@@ -84,12 +100,13 @@ class StoreRegister extends Component {
     let index = e.nativeEvent.target.selectedIndex;
 
     this.setState({
-      host_state: e.nativeEvent.target[index].text,
+      store_state: e.nativeEvent.target[index].text,
     });
   };
 
   componentDidMount(e) {
     const token = localStorage.usertoken;
+
     try {
       jwt_decode(token);
       const decoded = jwt_decode(token);
@@ -125,34 +142,37 @@ class StoreRegister extends Component {
                     {this.state.showMe ? (
                       <div className="card card-primary">
                         <div className="card-header">
-                          <h3 className="card-title">DÜkkan Bilgileri</h3>
+                          <h3 className="card-title">
+                            {this.state.title_name} Dükkan Bilgileri
+                          </h3>
                         </div>
 
                         <form noValidate>
                           <div className="card-body">
+                       
                             <div className="form-group">
                               <label htmlFor="exampleInputPassword1">
-                                Daire Adı
+                                Dükkan Adı
                               </label>
                               <input
                                 type="text"
                                 className="form-control"
-                                placeholder="Daire Adı:"
-                                name="circlenumber"
-                                value={this.state.circlenumber}
+                                placeholder="Dükkan Adı:"
+                                name="storenumber"
+                                value={this.state.storenumber}
                                 onChange={this.onChange}
                                 required
                               ></input>
                             </div>
                             <div className="form-group">
                               <label htmlFor="exampleInputPassword1">
-                                Daire Durumu
+                                Dükkan Durumu
                               </label>
                               <select
                                 className="form-control"
                                 onChange={this.handleChangeHostState}
                               >
-                                <option>{this.state.host_state}</option>
+                                <option>{this.state.store_state}</option>
                                 <option>Boş</option>
                                 <option> Ev Sahibi </option>
                                 <option> Kiracı </option>
@@ -160,15 +180,15 @@ class StoreRegister extends Component {
                             </div>
                             <div className="form-group">
                               <label htmlFor="exampleInputFile">
-                                Ev Sahibi Adı
+                                Dükkan Sahibi Adı
                               </label>
                               <div className="input-group">
                                 <input
                                   type="text"
                                   className="form-control"
-                                  placeholder="Ev Sahibi Adı:"
-                                  name="host_name"
-                                  value={this.state.host_name}
+                                  placeholder="Dükkan Sahibi Adı:"
+                                  name="store_name"
+                                  value={this.state.store_name}
                                   onChange={this.onChange}
                                   required
                                 />
@@ -176,15 +196,15 @@ class StoreRegister extends Component {
                             </div>
                             <div className="form-group">
                               <label htmlFor="exampleInputFile">
-                                Ev Sahibi Soyadı
+                                Dükkan Sahibi Soyadı
                               </label>
                               <div className="input-group">
                                 <input
                                   type="text"
                                   className="form-control"
-                                  placeholder="Ev Sahibi Adı:"
-                                  name="host_surname"
-                                  value={this.state.host_surname}
+                                  placeholder="Dükkan Sahibi Soyadı:"
+                                  name="store_surname"
+                                  value={this.state.store_surname}
                                   onChange={this.onChange}
                                   required
                                 />
@@ -192,15 +212,15 @@ class StoreRegister extends Component {
                             </div>
                             <div className="form-group">
                               <label htmlFor="exampleInputFile">
-                                Ev Sahibi Telefon No
+                                Dükkan Telefon No
                               </label>
                               <div className="input-group">
                                 <input
                                   type="text"
                                   className="form-control"
-                                  placeholder="Ev Sahibi Telefon No:"
-                                  name="host_phoneno"
-                                  value={this.state.host_phoneno}
+                                  placeholder="Dükkan Telefon No:"
+                                  name="store_phoneno"
+                                  value={this.state.store_phoneno}
                                   onChange={this.onChange}
                                   required
                                 />
@@ -208,15 +228,15 @@ class StoreRegister extends Component {
                             </div>
                             <div className="form-group">
                               <label htmlFor="exampleInputFile">
-                                Ev Sahibi Email Adresi
+                                Dükkan Email Adresi
                               </label>
                               <div className="input-group">
                                 <input
                                   type="text"
                                   className="form-control"
-                                  placeholder="Ev Sahibi Email Adresi:"
-                                  name="host_email"
-                                  value={this.state.host_email}
+                                  placeholder="Dükkan Email Adresi:"
+                                  name="store_email"
+                                  value={this.state.store_email}
                                   onChange={this.onChange}
                                   required
                                 />
@@ -255,9 +275,12 @@ class StoreRegister extends Component {
                               </button>
                             </div>
                             <div className="modal-body">
-                              <p>Kullanıcı kayıt işlemi başarıyla oluşturulmuştur.</p>
-                              <p>Email : {this.state.host_email}</p>
-                              <p>Şifre : {this.state.host_phoneno}</p>
+                              <p>
+                                Kullanıcı kayıt işlemi başarıyla
+                                oluşturulmuştur.
+                              </p>
+                              <p>Email : {this.state.store_email}</p>
+                              <p>Şifre : {this.state.store_phoneno}</p>
                             </div>
                             <div className="modal-footer">
                               <button

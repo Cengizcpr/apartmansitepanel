@@ -11,11 +11,13 @@ import BlockSetting from "./Pages/BlockSetting";
 import PersonalSetting from "./Pages/PersonalSetting";
 import PersonalList from "./Pages/PersonalList";
 import UsersList from "./Pages/UsersList";
+import UserRegister from "./Pages/UserRegister";
 import StatusError from "./Pages/StatusError";
 import UserHome from "./Home/UserHome";
 import ApartmentSetting from "./Pages/ApartmentSetting";
 import ApartmentRegister from "./Pages/ApartmentRegister";
-import StoreSetting from "./Pages/StoreSetting"
+import StoreSetting from "./Pages/StoreSetting";
+import StoreRegister from "./Pages/StoreRegister";
 
 class App extends Component {
   render() {
@@ -27,6 +29,7 @@ class App extends Component {
           <Route exact path="/adminprofile" component={Profile} />
           <Route exact path="/home" component={Home} />
           <Route exact path="/users" component={Users} />
+          <Route exact path="/userupdate" component={UserRegister}/>
           <Route exact path="/userslist" component={UsersList} />
           <Route exact path="/buildsetting" component={BuildSetting} />
           <Route exact path="/blocksetting" component={BlockSetting} />
@@ -37,6 +40,7 @@ class App extends Component {
           <Route exact path="/apartmentsetting" component={ApartmentSetting} />
           <Route exact path="/apartmentregister" component={ApartmentRegister}  />
           <Route exact path="/storesetting" component={StoreSetting}/>
+          <Route export path="/storeregister" component={StoreRegister}/>
           <Route exact component={Notfound} />
         </Switch>
       </Router>

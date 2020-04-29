@@ -18,27 +18,15 @@ class UsersList extends Component {
       showMe: true,
       showUser: false,
       visible: false,
-      showUserUpdate: false,
       first_name: "",
       last_name: "",
       email: "",
       phone_no: "",
       status: "",
-      _id:""
+      _id: "",
     };
   }
-  //güncelleme
-  operation(user) {
-    this.setState({
-      showMe: false,
-      showUserUpdate: true,
-      first_name: user.first_name,
-      last_name: user.last_name,
-      email: user.email,
-      phone_no: user.phone_no,
-      _id:user._id
-    });
-  }
+
   openModal() {
     this.setState({
       visible: true,
@@ -92,7 +80,6 @@ class UsersList extends Component {
               this.setState({
                 showMe: false,
                 showUser: true,
-                showUserUpdate: false,
               });
             }
           }
@@ -112,12 +99,12 @@ class UsersList extends Component {
         <td>{data.email}</td>
         <td>{data.phone_no}</td>
         <td>
-          <input
-            type="button"
+          <Link
+            to={{ pathname: "/userupdate", state: { userupdate: data } }}
             className="btn btn-primary btn-flat "
-            value={"Güncelle"}
-            onClick={() => this.operation(data)}
-          ></input>
+          >
+            Güncelle
+          </Link>
           &nbsp;&nbsp;&nbsp;
           <input
             type="button"
@@ -202,98 +189,7 @@ class UsersList extends Component {
               </div>
             </div>
           ) : null}
-          {this.state.showUserUpdate ? (
-            <div className="container">
-              <section className="content">
-                <div className="row justify-content-center">
-                  <div className="col-md-6">
-                    <div className="card card-primary">
-                      <div className="card-header">
-                        <h3 className="card-title">Kullanıcı Güncelle</h3>
-                      </div>
-
-                      <form noValidate onSubmit={this.onSubmit}>
-                        <div className="card-body">
-                          <div className="form-group">
-                            <label htmlFor="exampleInputPassword1">
-                              Kullanıcı Adı
-                            </label>
-                            <input
-                              type="text"
-                              className="form-control"
-                              placeholder="Kullanıcı Adı:"
-                              name="first_name"
-                              value={this.state.first_name}
-                              onChange={this.onChange}
-                              required
-                            />
-                            <br />
-                          </div>
-                          <div className="form-group">
-                            <label htmlFor="exampleInputPassword1">
-                              Kullanıcı Soyadı
-                            </label>
-                            <input
-                              type="text"
-                              className="form-control"
-                              placeholder="Kullanıcı Soyadı:"
-                              name="last_name"
-                              value={this.state.last_name}
-                              onChange={this.onChange}
-                              required
-                            />
-                            <br />
-                          </div>
-                          <div className="form-group">
-                            <label htmlFor="exampleInputPassword1">
-                              Kullanıcı Email
-                            </label>
-                            <input
-                              type="text"
-                              className="form-control"
-                              placeholder="Kullanıcı Email:"
-                              name="email"
-                              value={this.state.email}
-                              onChange={this.onChange}
-                              required
-                            />
-                            <br />
-                          </div>
-                          <div className="form-group">
-                            <label htmlFor="exampleInputFile">
-                              Kullanıcı Telefon No
-                            </label>
-                            <div className="input-group">
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="Kullanıcı Telefon No:"
-                                name="phone_no"
-                                value={this.state.phone_no}
-                                onChange={this.onChange}
-                                required
-                              />
-                              <br />
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="card-footer">
-                          <button
-                            type="submit"
-                            className="btn btn-primary"
-                            onClick={this.onSubmit}
-                          >
-                            Kaydet
-                          </button>
-                        </div>
-                      </form>
-                    </div>
-                  </div>
-                </div>
-              </section>
-            </div>
-          ) : null}
+         
           {this.state.showUser ? this.props.history.push("/statuserror") : null}
         </div>
       </div>

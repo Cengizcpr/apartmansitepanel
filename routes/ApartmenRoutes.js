@@ -46,7 +46,7 @@ apartmens.put("/apartmensupdate", (req, res) => {
     host_email: req.body.host_email,
   };
   Apartmen.update(
-    { circlenumber: req.body.circlenumber },
+    { circlenumber: req.body.title_name },
     blocksData,
     function (err, objs) {}
   )

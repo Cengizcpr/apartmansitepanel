@@ -9,20 +9,36 @@ import Modal from "react-awesome-modal";
 class ApartmentRegister extends Component {
   constructor(props) {
     super(props);
+    if (this.props.location.state != undefined) {
+
     const { foo } = this.props.location.state;
 
     this.state = {
-      circlenumber: foo.circlenumber,
-      host_name: foo.host_name,
+       circlenumber: foo.circlenumber,
+       host_name: foo.host_name,
       host_surname: foo.host_surname,
       host_phoneno: foo.host_phoneno,
       host_state: foo.host_state,
       host_email: foo.host_email,
-      style_box: foo.style_box,
+      title_name:foo.circlenumber,
       showMe: true,
       showUser: false,
       visible: false
     };
+  }else
+  {
+    this.state = {
+      circlenumber: "",
+      host_name:"" ,
+      host_surname:"" ,
+      host_phoneno:"",
+      host_state:"Boş" ,
+      title_name:"",
+      showMe: true,
+      showUser: false,
+      visible: false
+    };
+  }
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
@@ -58,6 +74,7 @@ class ApartmentRegister extends Component {
       host_phoneno: this.state.host_phoneno,
       host_state: this.state.host_state,
       style_box: style_box,
+      title_name:this.state.title_name,
       host_email: this.state.host_email,
     };
     axios.put("apartmens/apartmensupdate", newApartmenİnfo).then((response) => {
@@ -125,7 +142,7 @@ class ApartmentRegister extends Component {
                     {this.state.showMe ? (
                       <div className="card card-primary">
                         <div className="card-header">
-                          <h3 className="card-title">Daire Bilgileri</h3>
+                          <h3 className="card-title">{this.state.title_name} Daire Bilgileri</h3>
                         </div>
 
                         <form noValidate>

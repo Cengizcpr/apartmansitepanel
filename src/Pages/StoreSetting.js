@@ -12,13 +12,12 @@ class StoreSetting extends Component {
     this.state = {
       showMe: true,
       showUser: false,
-      showApartment: false,
+      showStore: false,
       locations: [],
       locationsApartment: [],
       block_name: "",
       circlenumber: "",
       visible: false,
-      showApartmentİnfo: false,
       host_name: "",
       host_surname: "",
       host_state: "",
@@ -33,21 +32,21 @@ class StoreSetting extends Component {
   }
   openModal() {
     this.setState({
-      visible: true
+      visible: true,
+      showStore:false
     });
   }
 
   closeModal() {
     this.setState({
       visible: false,
-      showApartment: false
+      showStore: false
     });
   }
   onApartmentSetting(data) {
     this.setState({
       showMe: false,
-      showApartment: false,
-      showApartmentİnfo: true,
+      showStore: false,
       circlenumber: data.circlenumber
     });
   }
@@ -58,7 +57,7 @@ class StoreSetting extends Component {
     this.setState({
       showMe: true,
       showUser: false,
-      showApartment: true,
+      showStore: true,
       storenumbers: ""
     });
     //istenilen bloğa göre daitre bilgilerini getirir
@@ -157,7 +156,7 @@ class StoreSetting extends Component {
             </p>
           </div>
           <Link
-            to={{ pathname: "/apartmentregister", state: { foo: data } }}
+            to={{ pathname: "/storeregister" , state: { storeinfo: data }  }}
             className="small-box-footer "
           >
             {" "}
@@ -259,7 +258,7 @@ class StoreSetting extends Component {
               </section>
             </div>
             <div className="content-header">
-              {this.state.showApartment ? (
+              {this.state.showStore ? (
                 <div className="row">{storenumbers}</div>
               ) : null}
             </div>

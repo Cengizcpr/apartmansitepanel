@@ -18,12 +18,11 @@ class ApartmentSetting extends Component {
       block_name: "",
       circlenumber: "",
       visible: false,
-      showApartmentİnfo: false,
       host_name: "",
       host_surname: "",
       host_state: "",
       host_phoneno: "",
-      stylebox:"small-box bg-danger"
+      //  stylebox:"small-box bg-danger"
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -33,22 +32,22 @@ class ApartmentSetting extends Component {
   }
   openModal() {
     this.setState({
-      visible: true
+      visible: true,
+      showApartment:false
     });
   }
 
   closeModal() {
     this.setState({
       visible: false,
-      showApartment: false
+      showApartment: false,
     });
   }
   onApartmentSetting(data) {
     this.setState({
       showMe: false,
       showApartment: false,
-      showApartmentİnfo: true,
-      circlenumber: data.circlenumber
+      circlenumber: data.circlenumber,
     });
   }
   //daire göstermek için kullanılıyor
@@ -59,17 +58,16 @@ class ApartmentSetting extends Component {
       showMe: true,
       showUser: false,
       showApartment: true,
-      aparmentnumbers: ""
+      aparmentnumbers: "",
     });
     //istenilen bloğa göre daitre bilgilerini getirir
     axios
       .post("apartmens/apartmenslist", {
-        block_name: this.state.block_name
+        block_name: this.state.block_name,
       })
-      .then(response => {
+      .then((response) => {
         if (this.state.block_name == response.data[0].block_name) {
-          console.log(response.data.length)
-          for(var i=0;i<response.data.length;i++)
+          /*           for(var i=0;i<response.data.length;i++)
           {
             if(response.data[i].host_state=="Kiracı")
             {
@@ -85,22 +83,22 @@ class ApartmentSetting extends Component {
                   stylebox:"small-box bg-danger"
                 })
               }
-          }
+          } */
           this.setState({
-            locationsApartment: response.data
+            locationsApartment: response.data,
           });
         }
       })
-      .catch(error => {
+      .catch((error) => {
         this.openModal();
       });
   }
 
-  handleChangeBlockName = e => {
+  handleChangeBlockName = (e) => {
     let index = e.nativeEvent.target.selectedIndex;
 
     this.setState({
-      block_name: e.nativeEvent.target[index].text
+      block_name: e.nativeEvent.target[index].text,
     });
   };
   componentDidMount(e) {
@@ -108,14 +106,14 @@ class ApartmentSetting extends Component {
     try {
       jwt_decode(token);
       const decoded = jwt_decode(token);
-      axios.get("users/adminprofile").then(res => {
+      axios.get("users/adminprofile").then((res) => {
         var response = res.data;
         for (var i = 0; i < response.length; i++) {
           if (decoded.email === response[i].email) {
             if (response[i].status == false) {
               this.setState({
                 showMe: false,
-                showUser: true
+                showUser: true,
               });
             }
           }
@@ -124,15 +122,15 @@ class ApartmentSetting extends Component {
       //Blok Sayısı
       axios
         .get("blocks/blockslist")
-        .then(response => {
+        .then((response) => {
           if (response.data.length == 0) {
             this.openModal();
           }
           this.setState({
-            locations: response.data
+            locations: response.data,
           });
         })
-        .catch(error => {
+        .catch((error) => {
           console.log("Blok listelenemedi.");
         });
     } catch (error) {
@@ -140,10 +138,10 @@ class ApartmentSetting extends Component {
     }
   }
   render() {
-    const blocknumbers = this.state.locations.map(data => (
+    const blocknumbers = this.state.locations.map((data) => (
       <option key={data._id}>{data.block_name}</option>
     ));
-    const aparmentnumbers = this.state.locationsApartment.map(data => (
+    const aparmentnumbers = this.state.locationsApartment.map((data) => (
       <div className="col-lg-3 col-6" key={data._id}>
         <div className={data.style_box}>
           <div className="inner">
@@ -164,15 +162,6 @@ class ApartmentSetting extends Component {
             Ev Sahibi Ata
             <i className="fas fa-arrow-circle-right" />
           </Link>
-
-          {/*  <Link
-   
-             onClick={() => this.onApartmentSetting(data)} 
-            className="small-box-footer "
-          >
-            Ev Sahibi Ata 
-            <i className="fas fa-arrow-circle-right" />
-          </Link> */}
         </div>
       </div>
     ));
@@ -191,38 +180,38 @@ class ApartmentSetting extends Component {
                         <section>
                           {/*Blok Uyarı Mesajı*/}
                           <Modal
-                    visible={this.state.visible}
-                    width="600"
-                    height="200"
-                    effect="fadeInUp"
-                    onClickAway={() => this.closeModal()}
-                  >
-                    <div className="modal-header">
-                      {" "}
-                      <h5>Uyarı</h5>
-                      <button
-                        type="button"
-                        className="close"
-                        data-dismiss="modal"
-                        onClick={() => this.closeModal()}
-                      >
-                        &times;
-                      </button>
-                    </div>
-                    <div className="modal-body">
-                      <p>Daire Kayıtları Boş.</p>
-                    </div>
-                    <div className="modal-footer">
-                      <button
-                        type="button"
-                        className="btn btn-default"
-                        data-dismiss="modal"
-                        onClick={() => this.closeModal()}
-                      >
-                        Kapat
-                      </button>
-                    </div>
-                  </Modal>
+                            visible={this.state.visible}
+                            width="600"
+                            height="200"
+                            effect="fadeInUp"
+                            onClickAway={() => this.closeModal()}
+                          >
+                            <div className="modal-header">
+                              {" "}
+                              <h5>Uyarı</h5>
+                              <button
+                                type="button"
+                                className="close"
+                                data-dismiss="modal"
+                                onClick={() => this.closeModal()}
+                              >
+                                &times;
+                              </button>
+                            </div>
+                            <div className="modal-body">
+                              <p>Daire Kayıtları Boş.</p>
+                            </div>
+                            <div className="modal-footer">
+                              <button
+                                type="button"
+                                className="btn btn-default"
+                                data-dismiss="modal"
+                                onClick={() => this.closeModal()}
+                              >
+                                Kapat
+                              </button>
+                            </div>
+                          </Modal>
                         </section>
                         <div className="card-header">
                           <h3 className="card-title">Blok(Daire) Seçiniz</h3>

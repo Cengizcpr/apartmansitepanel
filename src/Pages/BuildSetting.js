@@ -261,22 +261,7 @@ class BuildSetting extends Component {
                                 required
                               />
                             </div>
-                            <div className="form-group">
-                              <label htmlFor="exampleInputFile">
-                                Site Adresi
-                              </label>
-                              <div className="input-group">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  placeholder="Site Adresi:"
-                                  name="adress"
-                                  value={this.state.adress}
-                                  onChange={this.onChange}
-                                  required
-                                />
-                              </div>
-                            </div>
+                        
 
                             <div className="form-group">
                               <label htmlFor="exampleInputPassword1">
@@ -289,6 +274,22 @@ class BuildSetting extends Component {
                                 <option> {this.state.blocknumbers} </option>
                                 {blocknumbers}
                               </select>
+                            </div>
+                            <div className="form-group">
+                              <label htmlFor="exampleInputFile">
+                                Site Adresi
+                              </label>
+                              <div className="input-group">
+                                <textarea
+                                  rows="3"
+                                  className="form-control"
+                                  placeholder="Site Adresi:"
+                                  name="adress"
+                                  value={this.state.adress}
+                                  onChange={this.onChange}
+                                  required
+                                />
+                              </div>
                             </div>
                           </div>
                         </form>

@@ -3,6 +3,8 @@ import Header from "../Home/Header";
 import Menu from "../Home/Menu";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
 import Modal from "react-awesome-modal";
 
 class UserRegister extends Component {
@@ -49,6 +51,13 @@ class UserRegister extends Component {
       phone_no: this.state.phone_no,
       _id: this.state._id,
     };
+    confirmAlert({
+      title: "Kullanıcı Güncelle",
+      message: "Kullanıcıyı güncellemek istediğinize emin misiniz?",
+      buttons: [
+        {
+          label: "Evet",
+          onClick: () =>
     axios
       .put("users/userupdate", updateUser)
       .then((response) => {
@@ -56,7 +65,14 @@ class UserRegister extends Component {
       })
       .catch((error) => {
         console.log(error);
-      });
+      }),
+    },
+    {
+      label: "Hayır",
+      onClick: () => this.props.history.push("/userupdate"),
+    },
+  ],
+});
   }
 
   componentDidMount(e) {
@@ -131,12 +147,12 @@ class UserRegister extends Component {
                             </div>
                             <div className="form-group">
                               <label htmlFor="exampleInputPassword1">
-                                Kullanıcı Email
+                                Kullanıcı Eposta
                               </label>
                               <input
                                 type="text"
                                 className="form-control"
-                                placeholder="Kullanıcı Email:"
+                                placeholder="Kullanıcı Eposta:"
                                 name="email"
                                 value={this.state.email}
                                 onChange={this.onChange}

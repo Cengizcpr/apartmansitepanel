@@ -10,8 +10,9 @@ import BuildSetting from "./Pages/BuildSetting";
 import BlockSetting from "./Pages/BlockSetting";
 import PersonalSetting from "./Pages/PersonalSetting";
 import PersonalList from "./Pages/PersonalList";
+import PersonalUpdate from "./Pages/PersonalUpdate";
 import UsersList from "./Pages/UsersList";
-import UserRegister from "./Pages/UserRegister";
+import UserRegister from "./Pages/UserUpdate";
 import StatusError from "./Pages/StatusError";
 import UserHome from "./Home/UserHome";
 import ApartmentSetting from "./Pages/ApartmentSetting";
@@ -35,6 +36,7 @@ class App extends Component {
           <Route exact path="/blocksetting" component={BlockSetting} />
           <Route exact path="/personaladd" component={PersonalSetting} />
           <Route exact path="/personallist" component={PersonalList} />
+          <Route exact path="/personalupdate" component={PersonalUpdate}/>
           <Route exact path="/statuserror" component={StatusError} />
           <Route exact path="/userhome" component={UserHome} />
           <Route exact path="/apartmentsetting" component={ApartmentSetting} />

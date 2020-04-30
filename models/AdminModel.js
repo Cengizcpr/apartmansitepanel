@@ -24,6 +24,7 @@ const AdminSchema = new Schema({
   status: {
     type: Boolean
   },
+  
   date: {
     type: Date,
     default: Date.now

@@ -120,12 +120,12 @@ class UsersPage extends Component {
                             </div>
                             <div className="form-group">
                               <label htmlFor="exampleInputEmail1">
-                                Kullanıcı Email
+                                Kullanıcı Eposta
                               </label>
                               <input
                                 type="text"
                                 className="form-control"
-                                placeholder="Kullanıcı Email:"
+                                placeholder="Kullanıcı Eposta:"
                                 name="email"
                                 value={this.state.email}
                                 onChange={this.onChange}

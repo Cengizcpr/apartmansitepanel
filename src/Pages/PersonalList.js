@@ -98,20 +98,26 @@ class PersonalList extends Component {
         <td>{data.adress}</td>
         <td>{data.phone_no}</td>
         <td>
-          <input
-            type="button"
-            className="btn btn-primary btn-flat "
-            value={"Güncelle"}
-            onClick={() => this.operation(data)}
-          ></input>
+          
+        <Link
+            to={{ pathname: "/personalupdate", state: { personalupdate: data } }}
+            className="btn btn-primary btn-md "
+          >
+             <i class="fas fa-pencil-alt">
+                              </i>
+            Güncelle
+          </Link>
           &nbsp;&nbsp;&nbsp;
           <button
-            className="btn btn-danger btn-flat "
+            className="btn btn-danger btn-md "
             onClick={() => this.deletePersonel(data)}
           >
+            <i class="fas fa-trash">
+                              </i>
             Sil
           </button>
         </td>
+    
       </tr>
     ));
     return (
@@ -160,25 +166,25 @@ class PersonalList extends Component {
                   effect="fadeInUp"
                   onClickAway={() => this.closeModal()}
                 >
-                  <div class="modal-header">
+                  <div className="modal-header">
                     {" "}
                     <h5>Uyarı</h5>
                     <button
                       type="button"
-                      class="close"
+                      className="close"
                       data-dismiss="modal"
                       onClick={() => this.closeModal()}
                     >
                       &times;
                     </button>
                   </div>
-                  <div class="modal-body">
+                  <div className="modal-body">
                     <p>Personel Kayıtları Boş.</p>
                   </div>
-                  <div class="modal-footer">
+                  <div className="modal-footer">
                     <button
                       type="button"
-                      class="btn btn-default"
+                      className="btn btn-default"
                       data-dismiss="modal"
                       onClick={() => this.closeModal()}
                     >

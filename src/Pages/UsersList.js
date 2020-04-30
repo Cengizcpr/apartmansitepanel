@@ -101,17 +101,18 @@ class UsersList extends Component {
         <td>
           <Link
             to={{ pathname: "/userupdate", state: { userupdate: data } }}
-            className="btn btn-primary btn-flat "
+            className="btn btn-primary btn-md "
           >
-            Güncelle
+            <i class="fas fa-pencil-alt"></i> Güncelle
           </Link>
           &nbsp;&nbsp;&nbsp;
-          <input
-            type="button"
-            className="btn btn-danger  btn-flat "
-            value="Sil"
+          <button
+            className="btn btn-danger  btn-md "
             onClick={() => this.deleteUser(data)}
-          ></input>
+          >
+            <i class="fas fa-trash"></i>
+            Sil
+          </button>
         </td>
       </tr>
     ));
@@ -139,13 +140,13 @@ class UsersList extends Component {
                         <h6>Kullanıcı Soyadı</h6>
                       </th>
                       <th>
-                        <h6>Kullanıcı Email</h6>
+                        <h6>Kullanıcı Eposta</h6>
                       </th>
                       <th>
                         <h6>Telefon No</h6>
                       </th>
                       <th>
-                        <h6></h6>
+                        <h6>Ayarlar</h6>
                       </th>
                     </tr>
                   </thead>
@@ -189,7 +190,7 @@ class UsersList extends Component {
               </div>
             </div>
           ) : null}
-         
+
           {this.state.showUser ? this.props.history.push("/statuserror") : null}
         </div>
       </div>

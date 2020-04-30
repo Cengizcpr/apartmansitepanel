@@ -71,4 +71,25 @@ personals.post("/personaldelete", (req, res) => {
       res.json({ error: "Personal already exists" });
     });
 });
+personals.put("/personalupdate", (req, res) => {
+  const personalData = {
+  first_name:req.body.first_name,
+  last_name:req.body.last_name,
+  adress:req.body.adress,
+  phone_no:req.body.phone_no,
+  departmans:req.body.departmans,
+  _id:req.body._id
+  };
+  Personal.update(
+    { _id: req.body._id },
+    personalData,
+    function (err, objs) {}
+  )
+    .then((apartmen) => {
+       res.json({ status: personals.first_name + "Updated!" }); 
+    })
+    .catch((err) => {
+      res.json({ message: "true" });
+    });
+});
 module.exports = personals;

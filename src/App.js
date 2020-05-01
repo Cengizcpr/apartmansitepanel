@@ -19,12 +19,13 @@ import ApartmentSetting from "./Pages/ApartmentSetting";
 import ApartmentRegister from "./Pages/ApartmentRegister";
 import StoreSetting from "./Pages/StoreSetting";
 import StoreRegister from "./Pages/StoreRegister";
-
+import Test from "./Pages/Test";
 class App extends Component {
   render() {
     return (
       <Router>
         <Switch>
+          <Route exact path="/test" component={Test}/>
           <Route exact path="/" component={login} />
           <Route exact path="/register" component={register} />
           <Route exact path="/adminprofile" component={Profile} />

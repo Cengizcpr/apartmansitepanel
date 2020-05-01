@@ -12,7 +12,7 @@ export const register = newUser => {
       adress: newUser.adress
     })
     .then(response => {
-      console.log("Registered");
+     // console.log("Registered");
     });
 };
 

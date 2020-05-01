@@ -5,13 +5,16 @@ import Menu from "../Home/Menu";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 class Profile extends Component {
   constructor() {
     super();
     this.state = {
       first_name: "",
       last_name: "",
+      new_password: "",
+      current_password: "",
+      replay_password: "",
+      system_pas: "",
       email: "",
       phone_no: "",
       message: "",
@@ -21,24 +24,63 @@ class Profile extends Component {
 
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
-    /*     this.onSubmitPassword = this.onSubmit.bind(this);
-     */
+   
   }
-
+  //Şifre değiştirme
+  passwordSubmit(e) {
+    e.preventDefault();
+    if (this.handleValidation()) {
+      if (this.state.new_password !== this.state.replay_password) {
+        toast.error("Şifreler Uyuşmuyor!");
+      } else {
+        const updatePassword = {
+          current_password: this.state.current_password,
+          _id: this.state._id,
+          new_password: this.state.new_password,
+          system_pas: this.state.system_pas,
+        };
+        axios.post("users/controlpassword", updatePassword).then((response) => {
+          if (response.request.response == "true") {
+            axios.put("users/newpassword", updatePassword).then((response) => {
+              if (response.request.response == "true") {
+                toast.success("Şifreniz Değiştirilmiştir!");
+              } else if (response.request.response == "false") {
+                toast.error("Hata!Şifreniz Değiştirilemedi!");
+              }
+            });
+          } else if (response.request.response == "false") {
+            toast.error("Mevcut şifre yanlış !");
+          }
+        });
+      }
+    }
+  }
+  //validation yapısı form
   handleValidation() {
     let first_name = this.state.first_name;
     let last_name = this.state.last_name;
     let email = this.state.email;
     let phone_no = this.state.phone_no;
+    let current_password = this.state.current_password;
+    let new_password = this.state.new_password;
+    let replay_password = this.state.replay_password;
     let formIsValid = true;
-    const partternname = /[a-zA-Z]/g;
-    const resultname = partternname.test(first_name);
-    const patternemail = /[a-zA-Z0-9]+[\.]?([a-zA-Z0-9]+)?[\@][a-z]{3,9}[\.][a-z]{2,5}/g;
-    const resultemail = patternemail.test(email);
-    const patternphone = /[0-9]{11}/g;
-    const resultphone =patternphone.test(phone_no)
+    let partternname = /[a-zA-Z]/g;
+    let resultname = partternname.test(first_name);
+    let patternemail = /[a-zA-Z0-9]+[\.]?([a-zA-Z0-9]+)?[\@][a-z]{3,9}[\.][a-z]{2,5}/g;
+    let resultemail = patternemail.test(email);
+    let patternphone = /[0-9]{11}/g;
+    let resultphone = patternphone.test(phone_no);
     //Boş mu kontrol?
-    if (!first_name || !last_name || !email ||!phone_no) {
+    if (
+      !first_name ||
+      !last_name ||
+      !email ||
+      !phone_no ||
+      !current_password ||
+      !new_password ||
+      !replay_password
+    ) {
       formIsValid = false;
       toast.error("Boş Bırakmayınız!");
     }
@@ -51,9 +93,8 @@ class Profile extends Component {
     else if (resultemail === false) {
       formIsValid = false;
       toast.error("Eposta Geçerli Değil!");
-    }
-    else if(resultphone===false){
-      formIsValid= false;
+    } else if (resultphone === false) {
+      formIsValid = false;
       toast.error("Telefon Numarası Geçerli Değil!");
     }
 
@@ -94,7 +135,6 @@ class Profile extends Component {
           var response = res.data;
           for (var i = 0; i < response.length; i++) {
             if (decoded.first_name === response[i].first_name) {
-              console.log(res.data[i].status);
               if (res.data[i].status) {
                 this.setState({
                   first_name: response[i].first_name,
@@ -102,6 +142,7 @@ class Profile extends Component {
                   phone_no: response[i].phone_no,
                   email: response[i].email,
                   _id: response[i]._id,
+                  system_pas: response[i].password,
                   status: "Yönetici",
                 });
               } else {
@@ -111,6 +152,7 @@ class Profile extends Component {
                   phone_no: response[i].phone_no,
                   email: response[i].email,
                   _id: response[i]._id,
+                  system_pas: response[i].password,
                   status: "Kullanıcı",
                 });
               }
@@ -194,7 +236,6 @@ class Profile extends Component {
                                 type="text"
                                 className="form-control"
                                 name="email"
-                               
                                 value={this.state.email}
                                 onChange={this.onChange}
                               />
@@ -205,12 +246,11 @@ class Profile extends Component {
                               Telefon
                             </label>
                             <div className="col-9">
-                 
                               <input
                                 type="text"
                                 className="form-control phone_no"
                                 name="phone_no"
-                                maxlength="11"
+                                maxLength="11"
                                 value={this.state.phone_no}
                                 onChange={this.onChange}
                               />
@@ -240,7 +280,10 @@ class Profile extends Component {
                       <div className="card-body">
                         <h4 className="card-title">Şifrenizi Değiştirin</h4>
                         <p className="card-description">.</p>
-                        <form className="forms-sample">
+                        <form
+                          className="forms-sample"
+                          onSubmit={this.passwordSubmit.bind(this)}
+                        >
                           <div className="form-group row">
                             <label className="col-sm-3 col-form-label">
                               Mevcut Şifre
@@ -249,9 +292,9 @@ class Profile extends Component {
                               <input
                                 type="password"
                                 className="form-control"
-                                name="current_password
-                                "
+                                name="current_password"
                                 onChange={this.onChange}
+                                value={this.state.current_password}
                               />
                             </div>
                           </div>
@@ -265,6 +308,7 @@ class Profile extends Component {
                                 className="form-control"
                                 name="new_password"
                                 onChange={this.onChange}
+                                value={this.state.new_password}
                               />
                             </div>
                           </div>
@@ -276,17 +320,17 @@ class Profile extends Component {
                               <input
                                 type="password"
                                 className="form-control"
-                                name="new_password"
+                                name="replay_password"
                                 onChange={this.onChange}
+                                value={this.state.replay_password}
                               />
                             </div>
                           </div>
                           <div className="form-group row">
                             <div className="col-sm-9">
                               <button
-                                type="submit"
                                 className="btn btn-primary mr-2"
-                                /* onClick={this.onSubmit} */
+                                onSubmit={this.passwordSubmit.bind(this)}
                               >
                                 Kaydet
                               </button>

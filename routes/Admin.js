@@ -3,7 +3,7 @@ const users = express.Router();
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-
+const passwords = "";
 const User = require("../models/AdminModel");
 users.use(cors());
 
@@ -18,22 +18,22 @@ users.post("/register", (req, res) => {
     password: req.body.password,
     created: today,
     phone_no: req.body.phone_no,
-    status: true
+    status: true,
   };
 
   User.findOne({
-    email: req.body.email
+    email: req.body.email,
   })
-    .then(user => {
+    .then((user) => {
       if (!user) {
         bcrypt.hash(req.body.password, 10, (err, hash) => {
           userData.password = hash;
           User.create(userData)
-            .then(user => {
+            .then((user) => {
               res.json({ status: user.email + "Registered!" });
               res.json({ message: "false" });
             })
-            .catch(err => {
+            .catch((err) => {
               res.json({ message: "true" });
             });
         });
@@ -41,25 +41,46 @@ users.post("/register", (req, res) => {
         res.json({ error: "User already exists" });
       }
     })
-    .catch(err => {
+    .catch((err) => {
       res.send("error: " + err);
     });
 });
+//şifre kontrol
+users.post("/controlpassword", (req, res) => {
+  if (bcrypt.compareSync(req.body.current_password, req.body.system_pas)) {
+    res.send("true");
+  } else {
+    res.send("false");
+  }
+});
+//şifre update
+users.put("/newpassword", (req, res) => {
+  const userData = {
+    password: req.body.new_password,
+  };
+  bcrypt.hash(req.body.new_password, 10, (err, hash) => {
+    userData.password = hash;
+
+    User.update({ _id: req.body._id }, userData, function (err, objs) {})
+      .then((user) => {
+        res.send("true");
+      })
+      .catch((err) => {
+        res.send("false");
+      });
+  });
+});
 users.put("/userupdate", (req, res) => {
   const userData = {
-  first_name:req.body.first_name,
-  last_name:req.body.last_name,
-  email:req.body.email,
-  phone_no:req.body.phone_no,
-  _id:req.body._id
+    first_name: req.body.first_name,
+    last_name: req.body.last_name,
+    email: req.body.email,
+    phone_no: req.body.phone_no,
+    _id: req.body._id,
   };
-  User.update(
-    { _id: req.body._id },
-    userData,
-    function (err, objs) {}
-  )
-    .then((apartmen) => {
-       res.json({ status: apartmen.circlenumber + "Updated!" }); 
+  User.update({ _id: req.body._id }, userData, function (err, objs) {})
+    .then((user) => {
+      res.json({ status: "Updated!" });
     })
     .catch((err) => {
       res.json({ message: "true" });
@@ -80,22 +101,21 @@ users.post("/useradd", (req, res) => {
     email: req.body.email,
     phone_no: req.body.phone_no,
     date: today,
-    status: false
+    status: false,
   };
 
   User.findOne({
-    email: req.body.email
+    email: req.body.email,
   })
-    .then(user => {
+    .then((user) => {
       if (!user) {
         bcrypt.hash(req.body.password, 10, (err, hash) => {
           userData.password = hash;
           User.create(userData)
-            .then(user => {
-              res.json({ status: user.email + "Registered!" });
+            .then((user) => {
               res.json({ message: "false" });
             })
-            .catch(err => {
+            .catch((err) => {
               res.json({ message: "true" });
             });
         });
@@ -103,15 +123,15 @@ users.post("/useradd", (req, res) => {
         res.json({ error: "User already exists" });
       }
     })
-    .catch(err => {
+    .catch((err) => {
       res.send("error: " + err);
     });
 });
 users.post("/login", (req, res) => {
   User.findOne({
-    email: req.body.email
+    email: req.body.email,
   })
-    .then(user => {
+    .then((user) => {
       if (user) {
         if (bcrypt.compareSync(req.body.password, user.password)) {
           // Passwords match
@@ -119,10 +139,10 @@ users.post("/login", (req, res) => {
             _id: user._id,
             first_name: user.first_name,
             last_name: user.last_name,
-            email: user.email
+            email: user.email,
           };
           let token = jwt.sign(payload, process.env.SECRET_KEY, {
-            expiresIn: 1440
+            expiresIn: 1440,
           });
           res.send(token);
         } else {
@@ -133,35 +153,35 @@ users.post("/login", (req, res) => {
         res.json({ error: "User does not exist" });
       }
     })
-    .catch(err => {
+    .catch((err) => {
       res.send("error: " + err);
     });
 });
 
 users.get("/adminprofile", (req, res) => {
-  User.find({}, function(err, objs) {
+  User.find({}, function (err, objs) {
     var dbs = objs[0];
     //console.log(dbs);
     return dbs;
   })
-    .then(user => {
+    .then((user) => {
       if (user) {
         res.json(user);
       } else {
         res.json({ error: "Admin already exists" });
       }
     })
-    .catch(err => {
+    .catch((err) => {
       res.send("error: " + err);
     });
 });
 
 users.post("/userdelete", (req, res) => {
   User.deleteOne({ _id: req.body._id })
-    .then(objs => {
+    .then((objs) => {
       res.json(objs);
     })
-    .catch(err => {
+    .catch((err) => {
       res.json({ error: "User already exists" });
     });
 });

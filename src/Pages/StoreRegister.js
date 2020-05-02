@@ -4,7 +4,8 @@ import Menu from "../Home/Menu";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 import Modal from "react-awesome-modal";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 class StoreRegister extends Component {
   constructor(props) {
     super(props);
@@ -56,10 +57,65 @@ class StoreRegister extends Component {
     this.setState({
       visible: false,
     });
-    this.props.history.push("/apartmentsetting");
+    this.props.history.push("/storesetting");
   }
+    //validation yapısı form
+    handleValidation() {
+      let store_phoneno = this.state.store_phoneno;
+      let storenumber = this.state.storenumber;
+      let store_name = this.state.store_name;
+      let store_surname = this.state.store_surname;
+      let store_email = this.state.store_email;
+      let formIsValid = true;
+     
+      let partternname = /[a-zA-Z0-9]/g;
+      let resultStorenumber = partternname.test(storenumber);
+      let partternstorename = /[a-zA-Z]/g;
+      let resultStorename = partternstorename.test(store_name);
+      let partternSurname = /[a-zA-Z0-9]/g;
+      let resultSurname = partternSurname.test(store_surname);
+      let patternemail = /[a-zA-Z0-9]+[\.]?([a-zA-Z0-9]+)?[\@][a-z]{3,9}[\.][a-z]{2,5}/g;
+      let resultemail = patternemail.test(store_email);
+      let patternphone = /[0-9]{11}/g;
+      let resultphone = patternphone.test(store_phoneno);
+  
+  
+      //Boş mu kontrol?
+      if (!storenumber || !store_name || !store_phoneno || !store_surname || !store_email ) {
+        formIsValid = false;
+        toast.error("Boş Bırakmayınız!");
+      }
+      //Dükkan yerı adı  için harf kontrol?
+      else if (resultStorenumber === false) {
+        formIsValid = false;
+        toast.warn("Sadece Harf veya Sayı Giriniz!");
+      } 
+          //Dükkan ev sahibi adı için harf kontrol?
+      else if (resultStorename === false) {
+        formIsValid = false;
+        toast.warn("Sadece Harf Giriniz!");
+      } 
+          //Dükkan sahibi soyadı için harf kontrol?
+      else if (resultSurname === false) {
+        formIsValid = false;
+        toast.warn("Sadece Harf Giriniz!");
+      } //Telefon no 
+      else if (resultphone === false) {
+        formIsValid = false;
+        toast.warn("Geçerli Telefon Numarası Değil!");
+      } 
+      //Email için uyumluluk kontrol?
+      else if (resultemail === false) {
+        formIsValid = false;
+        toast.error("Eposta Geçerli Değil!");
+      }
+     
+  
+      return formIsValid;
+    }
   onSubmit(e) {
     e.preventDefault();
+    if (this.handleValidation()) {
     var style_box = "small-box bg-danger";
     if (this.state.store_state == "Ev Sahibi") {
       style_box = "small-box bg-primary";
@@ -92,9 +148,11 @@ class StoreRegister extends Component {
           this.openModal();
         })
         .catch((error) => {
-          console.log("Kullanıcı eklenmedi.");
+          toast.error("Kullanıcı eklenmedi.");
+
         });
     });
+  }
   }
   handleChangeHostState = (e) => {
     let index = e.nativeEvent.target.selectedIndex;
@@ -294,6 +352,7 @@ class StoreRegister extends Component {
                             </div>
                           </Modal>
                         </section>
+                        <ToastContainer />
                       </div>
                     ) : null}
                   </div>

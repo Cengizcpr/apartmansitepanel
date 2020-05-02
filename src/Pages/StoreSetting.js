@@ -5,6 +5,8 @@ import jwt_decode from "jwt-decode";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import Modal from "react-awesome-modal";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 class StoreSetting extends Component {
   constructor(props) {
     super(props);
@@ -15,7 +17,7 @@ class StoreSetting extends Component {
       showStore: false,
       locations: [],
       locationsApartment: [],
-      block_name: "",
+      block_name: "Blok Seçiniz",
       circlenumber: "",
       visible: false,
       host_name: "",
@@ -53,7 +55,10 @@ class StoreSetting extends Component {
   //daire göstermek için kullanılıyor
   onSubmit(e) {
     e.preventDefault();
-
+    if (this.state.block_name == "Blok Seçiniz") {
+      toast.warn("Lütfen Blok Seçiniz!");
+    }
+    else{
     this.setState({
       showMe: true,
       showUser: false,
@@ -67,32 +72,16 @@ class StoreSetting extends Component {
       })
       .then(response => {
         if (this.state.block_name == response.data[0].block_name) {
-          console.log(response.data.length)
-          for(var i=0;i<response.data.length;i++)
-          {
-            if(response.data[i].host_state=="Kiracı")
-            {
-              this.setState({
-                stylebox:"small-box bg-primary"
-              })
-
-            }
-            
-            else  if(response.data[i].host_state=="Ev Sahibi")
-              {
-                this.setState({
-                  stylebox:"small-box bg-danger"
-                })
-              }
-          }
+          
           this.setState({
             locationsApartment: response.data
           });
         }
       })
       .catch(error => {
-        this.openModal();
+        toast.error("Dükkan Kayıtları Boş!")
       });
+    }
   }
 
   handleChangeBlockName = e => {
@@ -150,9 +139,9 @@ class StoreSetting extends Component {
               <h5>Dükkan {data.storenumber} </h5>
               <h6>Durum : {data.store_state}</h6>
               <h6>
-                Ev Sahibi : {data.store_name} {data.store_surname}
+                Dükkan Sahibi : {data.store_name} {data.store_surname}
               </h6>
-              <h6>Ev Sahibi Telefon : {data.store_phoneno}</h6>
+              <h6>Dükkan Telefon : {data.store_phoneno}</h6>
             </p>
           </div>
           <Link
@@ -160,18 +149,10 @@ class StoreSetting extends Component {
             className="small-box-footer "
           >
             {" "}
-            Ev Sahibi Ata
+            Dükkan Sahibi Ata
             <i className="fas fa-arrow-circle-right" />
           </Link>
 
-          {/*  <Link
-   
-             onClick={() => this.onApartmentSetting(data)} 
-            className="small-box-footer "
-          >
-            Ev Sahibi Ata 
-            <i className="fas fa-arrow-circle-right" />
-          </Link> */}
         </div>
       </div>
     ));
@@ -234,7 +215,7 @@ class StoreSetting extends Component {
                                 className="form-control"
                                 onChange={this.handleChangeBlockName}
                               >
-                                <option>Blok Seçiniz</option>
+                                  <option>{this.state.block_name}</option>
                                 {blocknumbers}
                               </select>
                             </div>
@@ -251,6 +232,7 @@ class StoreSetting extends Component {
                             </button>
                           </div>
                         </form>
+                        <ToastContainer />
                       </div>
                     ) : null}
                   </div>

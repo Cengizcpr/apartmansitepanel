@@ -5,8 +5,8 @@ import axios from "axios";
 import jwt_decode from "jwt-decode";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
-import Modal from "react-awesome-modal";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 class UserRegister extends Component {
   constructor(props) {
     super(props);
@@ -18,6 +18,7 @@ class UserRegister extends Component {
         last_name: userupdate.last_name,
         email: userupdate.email,
         phone_no: userupdate.phone_no,
+        emails:userupdate.email,
         showMe: true,
         showUser: false,
         visible: false,
@@ -27,6 +28,7 @@ class UserRegister extends Component {
         first_name: "",
         last_name: "",
         email: "",
+        emails:"",
         phone_no: "",
         showMe: true,
         showUser: false,
@@ -41,16 +43,66 @@ class UserRegister extends Component {
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
+  handleValidation() {
+    let first_name = this.state.first_name;
+    let last_name = this.state.last_name;
+    let email = this.state.email;
+    let phone_no = this.state.phone_no;
+   
+    let formIsValid = true;
+    let partternLastname = /[a-zA-Z]/g;
+    let resultLastname = partternLastname.test(last_name);
+    let partternname = /[a-zA-Z]/g;
+    let resultname = partternname.test(first_name);
+    let patternemail = /[a-zA-Z0-9]+[\.]?([a-zA-Z0-9]+)?[\@][a-z]{3,9}[\.][a-z]{2,5}/g;
+    let resultemail = patternemail.test(email);
+    let patternphone = /[0-9]{11}/g;
+    let resultphone = patternphone.test(phone_no);
 
+    //Boş mu kontrol?
+         if (
+      !first_name ||
+      !last_name ||
+      !email ||
+      !phone_no
+      
+    ) {
+      formIsValid = false;
+      toast.error("Boş Bırakmayınız!");
+    }  
+    //İsim için harf kontrol?
+    if (resultname === false) {
+      formIsValid = false;
+      toast.warn("Sadece Harf Giriniz!");
+    }
+    //Soyadı için harf kontrol
+    else if (resultLastname === false) {
+      formIsValid = false;
+      toast.warn("Sadece Harf Giriniz!");
+    }
+    //Email için uyumluluk kontrol?
+    else if (resultemail === false) {
+      formIsValid = false;
+      toast.error("Eposta Geçerli Değil!");
+    } else if (resultphone === false) {
+      formIsValid = false;
+      toast.error("Telefon Numarası Geçerli Değil!");
+    }
+
+    return formIsValid;
+  }
   onSubmit(e) {
     e.preventDefault();
-    const updateUser = {
+    if (this.handleValidation()) {
+      var updateUser={}
+    updateUser = {
       first_name: this.state.first_name,
       last_name: this.state.last_name,
       email: this.state.email,
       phone_no: this.state.phone_no,
       _id: this.state._id,
     };
+ 
     confirmAlert({
       title: "Kullanıcı Güncelle",
       message: "Kullanıcıyı güncellemek istediğinize emin misiniz?",
@@ -73,6 +125,7 @@ class UserRegister extends Component {
     },
   ],
 });
+    }
   }
 
   componentDidMount(e) {
@@ -164,15 +217,15 @@ class UserRegister extends Component {
                                 Kullanıcı Telefon No
                               </label>
                               <div className="input-group">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  placeholder="Kullanıcı Telefon No:"
-                                  name="phone_no"
-                                  value={this.state.phone_no}
-                                  onChange={this.onChange}
-                                  required
-                                />
+                              <input
+                                type="text"
+                                className="form-control phone_no"
+                                placeholder="Kullanıcı Telefon No:"
+                                name="phone_no"
+                                maxLength="11"
+                                value={this.state.phone_no}
+                                onChange={this.onChange}
+                              />
                               </div>
                             </div>
                           </div>
@@ -186,8 +239,10 @@ class UserRegister extends Component {
                               Kaydet
                             </button>
                           </div>
-                        </form>
+                        </form>  <ToastContainer />
                       </div>
+                   
+
                     ) : null}
                   </div>
                 </div>

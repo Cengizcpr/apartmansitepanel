@@ -29,17 +29,14 @@ personals.post("/personaladd", (req, res) => {
       if (!personals) {
         Personal.create(personalsData)
           .then(personals => {
-            res.json({ status: personals.phone_no + "Registered!" });
-            res.json({ message: "false" });
-            console.log(personals);
+            res.send("true")
           })
           .catch(err => {
-            res.json({ message: "true" });
-            console.log(err);
+            res.send("false")
+
           });
       } else {
-        res.json({ error: "Personals already exists" });
-      }
+        res.send("err")      }
     })
     .catch(err => {
       res.send("error: " + err);

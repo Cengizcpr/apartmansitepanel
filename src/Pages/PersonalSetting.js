@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import Header from "../Home/Header";
 import Menu from "../Home/Menu";
 import axios from "axios";
-import { Link } from "react-router-dom";
 import jwt_decode from "jwt-decode";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 class PersonalSetting extends Component {
   constructor() {
     super();
@@ -14,7 +14,7 @@ class PersonalSetting extends Component {
       last_name: "",
       phone_no: "",
       adress: "",
-      departmans: "",
+      departmans: "Departmanı Seçiniz..",
       showMe: true,
       showUser: false,
     };
@@ -33,24 +33,70 @@ class PersonalSetting extends Component {
       departmans: e.nativeEvent.target[index].text,
     });
   };
+  //validation yapısı form
+  handleValidation() {
+    let first_name = this.state.first_name;
+    let last_name = this.state.last_name;
+    let adress = this.state.adress;
+    let phone_no = this.state.phone_no;
+    let departmans = this.state.departmans;
+    let formIsValid = true;
+    let partternLastname = /[a-zA-Z]/g;
+    let resultLastname = partternLastname.test(last_name);
+    let partternname = /[a-zA-Z]/g;
+    let resultname = partternname.test(first_name);
+    let patternphone = /[0-9]{11}/g;
+    let resultphone = patternphone.test(phone_no);
 
+    //Boş mu kontrol?
+    if (!first_name || !last_name || !phone_no || !adress) {
+      formIsValid = false;
+      toast.error("Boş Bırakmayınız!");
+    } else if (departmans == "Departmanı Seçiniz..") {
+      toast.warn("Lütfen Departmanı Seçiniz..");
+      formIsValid = false;
+    }
+    //İsim için harf kontrol?
+    else if (resultname === false) {
+      formIsValid = false;
+      toast.warn("Sadece Harf Giriniz!");
+    }
+    //Soyadı için harf kontrol
+    else if (resultLastname === false) {
+      formIsValid = false;
+      toast.warn("Sadece Harf Giriniz!");
+    } else if (resultphone === false) {
+      formIsValid = false;
+      toast.error("Telefon Numarası Geçerli Değil!");
+    }
+
+    return formIsValid;
+  }
   onSubmit(e) {
     e.preventDefault();
-    const newPersonal = {
-      first_name: this.state.first_name,
-      last_name: this.state.last_name,
-      adress: this.state.adress,
-      phone_no: this.state.phone_no,
-      departmans: this.state.departmans,
-    };
-    axios
-      .post("personals/personaladd", newPersonal)
-      .then((response) => {
-        this.props.history.push("/personallist");
-      })
-      .catch((error) => {
-        console.log("Kullanıcı eklenmedi.");
-      });
+    if (this.handleValidation()) {
+      const newPersonal = {
+        first_name: this.state.first_name,
+        last_name: this.state.last_name,
+        adress: this.state.adress,
+        phone_no: this.state.phone_no,
+        departmans: this.state.departmans,
+      };
+      axios
+        .post("personals/personaladd", newPersonal)
+        .then((response) => {
+          if(response.request.response=="true")
+          {
+            toast.success("Kayıt Başarılı");
+          }
+          else if (response.request.response == "false") {
+            toast.error("Hata!Kayıt Başarısız! ");
+                    }else if (response.request.response == "err") {
+            toast.error("Hata! Telefon Numarası Sisteme Kayıtlı! ");
+          }
+        })
+       
+    }
   }
 
   componentDidMount(e) {
@@ -124,19 +170,19 @@ class PersonalSetting extends Component {
                                 required
                               />
                             </div>
-                        
+
                             <div className="form-group">
                               <label htmlFor="exampleInputPassword1">
                                 Personel Telefon No
                               </label>
                               <input
-                                type="tel"
-                                className="form-control"
-                                placeholder="Personel Telefon No:"
+                                type="text"
+                                className="form-control phone_no"
                                 name="phone_no"
+                                placeholder="Personel Telefon No:"
+                                maxLength="11"
                                 value={this.state.phone_no}
                                 onChange={this.onChange}
-                                required
                               />
                             </div>
                             <div className="form-group">
@@ -147,7 +193,7 @@ class PersonalSetting extends Component {
                                 className="form-control"
                                 onChange={this.handleChangePersonalDepartment}
                               >
-                                <option>Departmanı Seçiniz.. </option>
+                                <option>{this.state.departmans}</option>
                                 <option>Kapıcı </option>
                                 <option>Teknik Servis </option>
                                 <option>Güvenlik </option>
@@ -160,7 +206,7 @@ class PersonalSetting extends Component {
                                 Personel Adresi
                               </label>
                               <textarea
-                                  rows="3"
+                                rows="3"
                                 className="form-control"
                                 placeholder="Personel Adresi:"
                                 name="adress"
@@ -181,6 +227,7 @@ class PersonalSetting extends Component {
                             </button>
                           </div>
                         </form>
+                        <ToastContainer />
                       </div>
                     ) : null}
                   </div>

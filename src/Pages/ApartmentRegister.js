@@ -2,10 +2,10 @@ import React, { Component } from "react";
 import Header from "../Home/Header";
 import Menu from "../Home/Menu";
 import axios from "axios";
-import { Link } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import Modal from "react-awesome-modal";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 class ApartmentRegister extends Component {
   constructor(props) {
     super(props);
@@ -23,7 +23,8 @@ class ApartmentRegister extends Component {
       title_name:foo.circlenumber,
       showMe: true,
       showUser: false,
-      visible: false
+      visible: false,
+      status:false
     };
   }else
   {
@@ -58,8 +59,64 @@ class ApartmentRegister extends Component {
     });
     this.props.history.push('/apartmentsetting')
   }
+  //validation yapısı form
+  handleValidation() {
+    let host_phoneno = this.state.host_phoneno;
+    let circlenumber = this.state.circlenumber;
+    let host_name = this.state.host_name;
+    let host_surname = this.state.host_surname;
+    let host_email = this.state.host_email;
+    let formIsValid = true;
+   
+    let partternname = /[a-zA-Z0-9]/g;
+    let resultCirclename = partternname.test(circlenumber);
+    let partternhostname = /[a-zA-Z]/g;
+    let resultHostname = partternhostname.test(host_name);
+    let partternSurname = /[a-zA-Z0-9]/g;
+    let resultSurname = partternSurname.test(host_surname);
+    let patternemail = /[a-zA-Z0-9]+[\.]?([a-zA-Z0-9]+)?[\@][a-z]{3,9}[\.][a-z]{2,5}/g;
+    let resultemail = patternemail.test(host_email);
+    let patternphone = /[0-9]{11}/g;
+    let resultphone = patternphone.test(host_phoneno);
+
+
+    //Boş mu kontrol?
+    if (!circlenumber || !host_phoneno || !host_name || !host_surname || !host_email ) {
+      formIsValid = false;
+      toast.error("Boş Bırakmayınız!");
+    }
+    //Daire adı için harf kontrol?
+    else if (resultCirclename === false) {
+      formIsValid = false;
+      toast.warn("Sadece Harf veya Sayı Giriniz!");
+    } 
+        //Daire ev sahibi adı için harf kontrol?
+    else if (resultHostname === false) {
+      formIsValid = false;
+      toast.warn("Sadece Harf Giriniz!");
+    } 
+        //Daire ev sahibi soyadı için harf kontrol?
+    else if (resultSurname === false) {
+      formIsValid = false;
+      toast.warn("Sadece Harf Giriniz!");
+    } //Telefon no 
+    else if (resultphone === false) {
+      formIsValid = false;
+      toast.warn("Geçerli Telefon Numarası Değil!");
+    } 
+    //Email için uyumluluk kontrol?
+    else if (resultemail === false) {
+      formIsValid = false;
+      toast.error("Eposta Geçerli Değil!");
+    }
+   
+
+    return formIsValid;
+  }
   onSubmit(e) {
     e.preventDefault();
+    if (this.handleValidation()) {
+
     var style_box = "small-box bg-danger";
     if (this.state.host_state == "Ev Sahibi") {
       style_box = "small-box bg-primary";
@@ -84,18 +141,21 @@ class ApartmentRegister extends Component {
         password: this.state.host_phoneno,
         email: this.state.host_email,
         phone_no: this.state.host_phoneno,
+        status:this.state.status
       };
 
       axios
-        .post("users/useradd", newUsers)
+        .post("users/register", newUsers)
         .then((response) => {
            this.openModal(); 
         
         })
         .catch((error) => {
-          console.log("Kullanıcı eklenmedi.");
+          toast.error("Kullanıcı eklenmedi.");
+         
         });
     });
+  }
   }
   handleChangeHostState = (e) => {
     let index = e.nativeEvent.target.selectedIndex;
@@ -212,15 +272,15 @@ class ApartmentRegister extends Component {
                                 Ev Sahibi Telefon No
                               </label>
                               <div className="input-group">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  placeholder="Ev Sahibi Telefon No:"
-                                  name="host_phoneno"
-                                  value={this.state.host_phoneno}
-                                  onChange={this.onChange}
-                                  required
-                                />
+                              <input
+                                type="text"
+                                className="form-control phone_no"
+                                name="host_phoneno"
+                                placeholder="Ev Sahibi Telefon No:"
+                                maxLength="11"
+                                value={this.state.host_phoneno}
+                                onChange={this.onChange}
+                              />
                               </div>
                             </div>
                             <div className="form-group">
@@ -288,6 +348,8 @@ class ApartmentRegister extends Component {
                             </div>
                           </Modal>
                         </section>
+                        <ToastContainer />
+
                       </div>
                     ) : null}
                   </div>

@@ -4,7 +4,8 @@ import Menu from "../Home/Menu";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 import { confirmAlert } from "react-confirm-alert";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 class BuildSetting extends Component {
   constructor() {
     super();
@@ -35,10 +36,52 @@ class BuildSetting extends Component {
       blocknumbers: e.nativeEvent.target[index].text
     });
   };
-
+    //validation yapısı form
+    handleValidation() {
+      let build_name = this.state.build_name;
+      let phone_no = this.state.phone_no;
+      let adress = this.state.adress;
+      let blocknumbers = this.state.blocknumbers;
+      let formIsValid = true;
+      let partternBuildname = /[a-zA-Z0-9]/g;
+      let resultBuildname = partternBuildname.test(build_name);
+  
+      let patternphone = /[0-9]{11}/g;
+      let resultphone = patternphone.test(phone_no);
+     
+      //Boş mu kontrol?
+      if (
+        !build_name ||
+        !phone_no ||
+        !adress ||
+        !blocknumbers 
+        
+      ) {
+        formIsValid = false;
+        toast.error("Boş Bırakmayınız!");
+      }
+      //Site için harf kontrol?
+      else if (resultBuildname === false) {
+        formIsValid = false;
+        toast.warn("Sadece Harf ve Sayı Giriniz!");
+      }
+     
+      //Telefon için uyumluluk kontrol
+     else if (resultphone === false) {
+        formIsValid = false;
+        toast.error("Telefon Numarası Geçerli Değil!");
+      }
+      else if(blocknumbers=="Blok Sayısı Seçiniz.."){
+        formIsValid = false;
+        toast.error("Lütfen Blok Sayısı Seçiniz!");
+      }
+  
+      return formIsValid;
+    }
   onSubmit(e) {
     e.preventDefault();
-  
+    if (this.handleValidation()) {
+
     const alf = [
       "",
       "A",
@@ -101,18 +144,20 @@ class BuildSetting extends Component {
                           axios
                             .post("blocks/blocksetting", newBlocks[i])
                             .then(response => {
-                              console.log(" eklendi.");
+                              //Blok eklendi
                             })
                             .catch(error => {
-                              console.log("Blok bilgileri eklenmedi.");
+                              //blok eklenmedi
                             });
-                          // })
+                          
                         }
-                        this.props.history.push("/blocksetting");
+                        
+                      toast.success("Site Bilgileri Eklendi !");
+                    
                       });
                     })
                     .catch(error => {
-                      console.log("Site bilgileri eklenmedi.");
+                      toast.eror("Hata!Site Bilgileri Eklenmedi !");
                     });
                 })
             },
@@ -153,17 +198,17 @@ class BuildSetting extends Component {
                   .catch(error => {
                     console.log("Blok bilgileri eklenmedi.");
                   });
-                // })
+                
               }
-              this.props.history.push("/blocksetting");
+              toast.success("Site Bilgileri Eklendi !");
             });
           })
           .catch(error => {
-            console.log("Site bilgileri eklenmedi.");
+            toast.eror("Hata!Site Bilgileri Eklenmedi !");
           });
       }
     });
-    //site sayısı sıfır ıse ekle
+  }
   }
 
   componentDidMount(e) {
@@ -252,13 +297,13 @@ class BuildSetting extends Component {
                                 Site Telefon No
                               </label>
                               <input
-                                type="tel"
-                                className="form-control"
-                                placeholder="Site Telefon No:"
+                                type="text"
+                                className="form-control phone_no"
                                 name="phone_no"
+                                placeholder="Site Telefon No:"
+                                maxLength="11"
                                 value={this.state.phone_no}
                                 onChange={this.onChange}
-                                required
                               />
                             </div>
                         
@@ -301,6 +346,8 @@ class BuildSetting extends Component {
                             >
                               Kaydet
                             </button>
+                            <ToastContainer />
+
                           </div>
                         ) : null}
                       </div>

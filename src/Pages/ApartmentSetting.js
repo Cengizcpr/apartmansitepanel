@@ -5,6 +5,8 @@ import jwt_decode from "jwt-decode";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import Modal from "react-awesome-modal";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 class ApartmentSetting extends Component {
   constructor(props) {
     super(props);
@@ -15,14 +17,14 @@ class ApartmentSetting extends Component {
       showApartment: false,
       locations: [],
       locationsApartment: [],
-      block_name: "",
+      block_name: "Blok Seçiniz",
       circlenumber: "",
       visible: false,
       host_name: "",
       host_surname: "",
       host_state: "",
-      host_phoneno: "",
-      //  stylebox:"small-box bg-danger"
+      host_phoneno: ""
+      
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -33,7 +35,7 @@ class ApartmentSetting extends Component {
   openModal() {
     this.setState({
       visible: true,
-      showApartment:false
+      showApartment: false,
     });
   }
 
@@ -53,45 +55,34 @@ class ApartmentSetting extends Component {
   //daire göstermek için kullanılıyor
   onSubmit(e) {
     e.preventDefault();
-
-    this.setState({
-      showMe: true,
-      showUser: false,
-      showApartment: true,
-      aparmentnumbers: "",
-    });
-    //istenilen bloğa göre daitre bilgilerini getirir
-    axios
-      .post("apartmens/apartmenslist", {
-        block_name: this.state.block_name,
-      })
-      .then((response) => {
-        if (this.state.block_name == response.data[0].block_name) {
-          /*           for(var i=0;i<response.data.length;i++)
-          {
-            if(response.data[i].host_state=="Kiracı")
-            {
-              this.setState({
-                stylebox:"small-box bg-primary"
-              })
-
-            }
-            
-            else  if(response.data[i].host_state=="Ev Sahibi")
-              {
-                this.setState({
-                  stylebox:"small-box bg-danger"
-                })
-              }
-          } */
-          this.setState({
-            locationsApartment: response.data,
-          });
-        }
-      })
-      .catch((error) => {
-        this.openModal();
+    if (this.state.block_name == "Blok Seçiniz") {
+      toast.warn("Lütfen Blok Seçiniz!");
+    }
+    else{
+      this.setState({
+        showMe: true,
+        showUser: false,
+        showApartment: true,
+        aparmentnumbers: "",
       });
+      //istenilen bloğa göre daitre bilgilerini getirir
+      axios
+        .post("apartmens/apartmenslist", {
+          block_name: this.state.block_name,
+        })
+        .then((response) => {
+          if (this.state.block_name == response.data[0].block_name) {
+            this.setState({
+              locationsApartment: response.data,
+            });
+          }
+        })
+        .catch((error) => {
+  
+         toast.error("Daire Kayıtları Boş!")
+          
+        });
+      }
   }
 
   handleChangeBlockName = (e) => {
@@ -224,7 +215,7 @@ class ApartmentSetting extends Component {
                                 className="form-control"
                                 onChange={this.handleChangeBlockName}
                               >
-                                <option>Blok Seçiniz</option>
+                                <option>{this.state.block_name}</option>
                                 {blocknumbers}
                               </select>
                             </div>
@@ -241,6 +232,7 @@ class ApartmentSetting extends Component {
                             </button>
                           </div>
                         </form>
+                        <ToastContainer />
                       </div>
                     ) : null}
                   </div>

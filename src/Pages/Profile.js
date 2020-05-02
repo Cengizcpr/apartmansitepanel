@@ -29,8 +29,8 @@ class Profile extends Component {
   //Şifre değiştirme
   passwordSubmit(e) {
     e.preventDefault();
-    if (this.handleValidation()) {
-      if (this.state.new_password !== this.state.replay_password) {
+    if (this.handleValidationPassword()) {
+      if (this.state.new_password != this.state.replay_password) {
         toast.error("Şifreler Uyuşmuyor!");
       } else {
         const updatePassword = {
@@ -55,37 +55,57 @@ class Profile extends Component {
       }
     }
   }
+  //Şifre değiştirme validation
+  handleValidationPassword(){
+    let current_password = this.state.current_password;
+    let new_password = this.state.new_password;
+    let replay_password = this.state.replay_password;
+    let formIsValid = true;
+    
+    if(!current_password ||
+      !new_password ||
+      !replay_password)
+      {
+        formIsValid = false;
+        toast.error("Boş Bırakmayınız!");
+      }
+      return formIsValid;
+
+  }
   //validation yapısı form
   handleValidation() {
     let first_name = this.state.first_name;
     let last_name = this.state.last_name;
     let email = this.state.email;
     let phone_no = this.state.phone_no;
-    let current_password = this.state.current_password;
-    let new_password = this.state.new_password;
-    let replay_password = this.state.replay_password;
     let formIsValid = true;
+    let partternLastname = /[a-zA-Z]/g;
+    let resultLastname = partternLastname.test(last_name);
     let partternname = /[a-zA-Z]/g;
     let resultname = partternname.test(first_name);
     let patternemail = /[a-zA-Z0-9]+[\.]?([a-zA-Z0-9]+)?[\@][a-z]{3,9}[\.][a-z]{2,5}/g;
     let resultemail = patternemail.test(email);
     let patternphone = /[0-9]{11}/g;
     let resultphone = patternphone.test(phone_no);
+   
     //Boş mu kontrol?
     if (
       !first_name ||
       !last_name ||
       !email ||
-      !phone_no ||
-      !current_password ||
-      !new_password ||
-      !replay_password
+      !phone_no 
+      
     ) {
       formIsValid = false;
       toast.error("Boş Bırakmayınız!");
     }
     //İsim için harf kontrol?
     else if (resultname === false) {
+      formIsValid = false;
+      toast.warn("Sadece Harf Giriniz!");
+    }
+    //Soyadı için harf kontrol
+    else if (resultLastname === false) {
       formIsValid = false;
       toast.warn("Sadece Harf Giriniz!");
     }

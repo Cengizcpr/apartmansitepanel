@@ -5,7 +5,8 @@ import axios from "axios";
 import jwt_decode from "jwt-decode";
 import { Link } from "react-router-dom";
 import Modal from "react-awesome-modal";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 class BlockSetting extends Component {
   constructor(props) {
     super(props);
@@ -40,6 +41,39 @@ class BlockSetting extends Component {
     this.setState({
       visible: false,
     });
+  }
+  //validation yapısı form
+  handleValidation() {
+    let block_name = this.state.block_name;
+    let circlenumber = this.state.circlenumber;
+    let storenumber = this.state.storenumber;
+   
+    let formIsValid = true;
+   
+    let partternname = /[a-zA-Z0-9]/g;
+    let resultBlockname = partternname.test(block_name);
+ 
+
+    //Boş mu kontrol?
+    if (!block_name ) {
+      formIsValid = false;
+      toast.error("Blok Adını Boş Bırakmayınız!");
+    } else if (circlenumber == "Daire Sayısı Seçiniz...") {
+      toast.warn("Lütfen Daire Sayısı Seçiniz..");
+      formIsValid = false;
+    }
+    else if (storenumber == "Dükkan Sayısı Seçiniz...") {
+      toast.warn("Lütfen Dükkan Sayısı Seçiniz..");
+      formIsValid = false;
+    }
+    //İsim için harf kontrol?
+    else if (resultBlockname === false) {
+      formIsValid = false;
+      toast.warn("Sadece Harf Giriniz!");
+    }
+   
+
+    return formIsValid;
   }
   //Daire ekle
   apartmensRegister() {
@@ -79,6 +113,7 @@ class BlockSetting extends Component {
   }
   onSubmit(e) {
     e.preventDefault();
+    if (this.handleValidation()) {
     const newBlocks = {
       block_name: this.state.block_name,
       circlenumber: this.state.circlenumber,
@@ -110,11 +145,12 @@ class BlockSetting extends Component {
               }); //veritabanına dükkan sayıları kayıt
           });
 
-        this.props.history.push("/home");
+       toast.success("Blok Bilgileri Kaydedilmiştir!")
       })
       .catch((error) => {
         console.log("Site bilgileri eklenmedi.");
       });
+    }
   }
   handleChangeCircleNumbers = (e) => {
     let index = e.nativeEvent.target.selectedIndex;
@@ -257,25 +293,25 @@ class BlockSetting extends Component {
                     effect="fadeInUp"
                     onClickAway={() => this.closeModal()}
                   >
-                    <div class="modal-header">
+                    <div className="modal-header">
                       {" "}
                       <h5>Uyarı</h5>
                       <button
                         type="button"
-                        class="close"
+                        className="close"
                         data-dismiss="modal"
                         onClick={() => this.closeModal()}
                       >
                         &times;
                       </button>
                     </div>
-                    <div class="modal-body">
+                    <div className="modal-body">
                       <p>Blok Kayıtları Boş.</p>
                     </div>
-                    <div class="modal-footer">
+                    <div className="modal-footer">
                       <button
                         type="button"
-                        class="btn btn-default"
+                        className="btn btn-default"
                         data-dismiss="modal"
                         onClick={() => this.closeModal()}
                       >
@@ -354,7 +390,9 @@ class BlockSetting extends Component {
                     </div>
                   </section>
                 </div>
+                <ToastContainer />
               </div>
+
             ) : null}
           </div>
         ) : null}

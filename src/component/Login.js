@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 class Login extends Component {
   constructor() {
     super();
@@ -10,7 +11,7 @@ class Login extends Component {
       email: "",
       password: "",
       errors: {},
-      adminresponse: "Oturumunuzu başlatmak giriş yapın"
+      adminresponse: "Oturumunuzu başlatmak giriş yapın",
     };
 
     this.onChange = this.onChange.bind(this);
@@ -20,35 +21,58 @@ class Login extends Component {
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
+  //validation yapısı form
+  handleValidation() {
+    let email = this.state.email;
+    let password = this.state.password;
+    let formIsValid = true;
+    let patternemail = /[a-zA-Z0-9]+[\.]?([a-zA-Z0-9]+)?[\@][a-z]{3,9}[\.][a-z]{2,5}/g;
+    let resultemail = patternemail.test(email);
 
+    //Boş mu kontrol?
+    if (!email || !password) {
+      formIsValid = false;
+      toast.error("Boş Bırakmayınız!");
+    }
+    //İsim için harf kontrol?
+
+    //Email için uyumluluk kontrol?
+    else if (resultemail === false) {
+      formIsValid = false;
+      toast.error("Eposta Geçerli Değil!");
+    }
+
+    return formIsValid;
+  }
   onSubmit(e) {
     e.preventDefault();
+    if (this.handleValidation()) {
 
     const user = {
       email: this.state.email,
-      password: this.state.password
+      password: this.state.password,
     };
     axios
       .post("users/login", {
         email: user.email,
-        password: user.password
+        password: user.password,
       })
-      .then(response => {
+      .then((response) => {
         //token değerı yoksa email veya şifre yanlış
         localStorage.setItem("usertoken", response.data);
-      
+
         if (response.data == "[object Object]") {
           this.setState({
             email: "",
-            password: "",
-            adminresponse: "Email adresi veya Şifre yanlış"
+            password: ""
           });
+          toast.error("Hata!Email Adresi Veya Şifre Yanlış!")
         } else {
           //token değeri varsa üretilen toker değerinin statusune gore sayfalara yönlendirme
           const token = localStorage.usertoken;
           jwt_decode(token);
           const decoded = jwt_decode(token);
-          axios.get("users/adminprofile").then(res => {
+          axios.get("users/adminprofile").then((res) => {
             var response = res.data;
 
             for (var i = 0; i < response.length; i++) {
@@ -63,6 +87,7 @@ class Login extends Component {
           });
         }
       });
+    }
   }
 
   render() {
@@ -123,6 +148,8 @@ class Login extends Component {
             <Link to="/register" className="text-center">
               Yeni Üye Ol
             </Link>
+            <ToastContainer />
+
           </div>
         </div>
       </div>

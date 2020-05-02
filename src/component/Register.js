@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { register } from "./UserFunctions";
+import axios from "axios";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 class Register extends Component {
   constructor() {
     super();
@@ -11,7 +13,8 @@ class Register extends Component {
       phone_no: "",
       email: "",
       password: "",
-      errors: {}
+      replay_password: "",
+      status:true
     };
 
     this.onChange = this.onChange.bind(this);
@@ -21,20 +24,90 @@ class Register extends Component {
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
+  //validation yapısı form
+  handleValidation() {
+    let first_name = this.state.first_name;
+    let last_name = this.state.last_name;
+    let email = this.state.email;
+    let phone_no = this.state.phone_no;
+    let password = this.state.password;
+    let replay_password = this.state.replay_password;
+    let formIsValid = true;
+    let partternLastname = /[a-zA-Z]/g;
+    let resultLastname = partternLastname.test(last_name);
+    let partternname = /[a-zA-Z]/g;
+    let resultname = partternname.test(first_name);
+    let patternemail = /[a-zA-Z0-9]+[\.]?([a-zA-Z0-9]+)?[\@][a-z]{3,9}[\.][a-z]{2,5}/g;
+    let resultemail = patternemail.test(email);
+    let patternphone = /[0-9]{11}/g;
+    let resultphone = patternphone.test(phone_no);
+
+    //Boş mu kontrol?
+    if (
+      !first_name ||
+      !last_name ||
+      !email ||
+      !phone_no ||
+      !password ||
+      !replay_password
+    ) {
+      formIsValid = false;
+      toast.error("Boş Bırakmayınız!");
+    }
+    //İsim için harf kontrol?
+
+    if (resultname === false) {
+      formIsValid = false;
+      toast.warn("Sadece Harf Giriniz!");
+    }
+    //Soyadı için harf kontrol
+    else if (resultLastname === false) {
+      formIsValid = false;
+      toast.warn("Sadece Harf Giriniz!");
+    }
+    //Email için uyumluluk kontrol?
+    else if (resultemail === false) {
+      formIsValid = false;
+      toast.error("Eposta Geçerli Değil!");
+    } else if (resultphone === false) {
+      formIsValid = false;
+      toast.error("Telefon Numarası Geçerli Değil!");
+    }
+
+    return formIsValid;
+  }
   onSubmit(e) {
     e.preventDefault();
+    if (this.handleValidation()) {
+      if (this.state.password == this.state.replay_password) {
+        const newUser = {
+          first_name: this.state.first_name,
+          last_name: this.state.last_name,
+          email: this.state.email,
+          password: this.state.password,
+          phone_no: this.state.phone_no,
+          status:this.state.status
+        };
 
-    const newUser = {
-      first_name: this.state.first_name,
-      last_name: this.state.last_name,
-      email: this.state.email,
-      password: this.state.password,
-      phone_no: this.state.phone_no
-    };
-
-    register(newUser).then(res => {
-      this.props.history.push(`/`);
-    });
+        axios
+          .post("users/register", newUser
+           
+          )
+          .then((response) => {
+            if (response.request.response == "true") {
+              toast.success("Kayıt Başarılı! ");
+            } else if (response.request.response == "false") {
+              toast.error("Hata!Kayıt Başarısız! ");
+            }
+            else if (response.request.response == "err") {
+              toast.error("Hata! Eposta Sisteme Kayıtlı! ");
+            }
+          })
+         
+      } else {
+        toast.error("Hata!Şifreler Uyuşmuyor !");
+      }
+    }
   }
   render() {
     return (
@@ -110,10 +183,26 @@ class Register extends Component {
               </div>
               <div className="input-group mb-3">
                 <input
-                  type="number"
+                  type="password"
                   className="form-control"
-                  placeholder="Telefon No"
+                  placeholder="Şifre Tekrar"
+                  name="replay_password"
+                  value={this.state.replay_password}
+                  onChange={this.onChange}
+                />
+                <div className="input-group-append">
+                  <div className="input-group-text">
+                    <span className="fas fa-lock" />
+                  </div>
+                </div>
+              </div>
+              <div className="input-group mb-3">
+                <input
+                  type="text"
+                  className="form-control phone_no"
                   name="phone_no"
+                  maxLength="11"
+                  placeholder="Telefon No"
                   value={this.state.phone_no}
                   onChange={this.onChange}
                 />
@@ -138,6 +227,7 @@ class Register extends Component {
             <Link to="/" className="text-center">
               Bir hesabım var{" "}
             </Link>
+            <ToastContainer />
           </div>
         </div>
       </div>

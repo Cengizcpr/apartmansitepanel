@@ -5,8 +5,9 @@ import axios from "axios";
 import jwt_decode from "jwt-decode";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
-import Modal from "react-awesome-modal";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 class PersonalUpdate extends Component {
   constructor(props) {
     super(props);
@@ -51,10 +52,49 @@ class PersonalUpdate extends Component {
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
+  //validation yapısı form
+  handleValidation() {
+    let first_name = this.state.first_name;
+    let last_name = this.state.last_name;
+    let adress = this.state.adress;
+    let phone_no = this.state.phone_no;
+    let departmans = this.state.departmans;
+    let formIsValid = true;
+    let partternLastname = /[a-zA-Z]/g;
+    let resultLastname = partternLastname.test(last_name);
+    let partternname = /[a-zA-Z]/g;
+    let resultname = partternname.test(first_name);
+    let patternphone = /[0-9]{11}/g;
+    let resultphone = patternphone.test(phone_no);
 
+    //Boş mu kontrol?
+    if (!first_name || !last_name || !phone_no || !adress) {
+      formIsValid = false;
+      toast.error("Boş Bırakmayınız!");
+    } else if (departmans == "Departmanı Seçiniz..") {
+      toast.warn("Lütfen Departmanı Seçiniz..");
+      formIsValid = false;
+    }
+    //İsim için harf kontrol?
+    else if (resultname === false) {
+      formIsValid = false;
+      toast.warn("Sadece Harf Giriniz!");
+    }
+    //Soyadı için harf kontrol
+    else if (resultLastname === false) {
+      formIsValid = false;
+      toast.warn("Sadece Harf Giriniz!");
+    } else if (resultphone === false) {
+      formIsValid = false;
+      toast.error("Telefon Numarası Geçerli Değil!");
+    }
+
+    return formIsValid;
+  }
   onSubmit(e) {
       
     e.preventDefault();
+    if (this.handleValidation()) {
     const updatePersonal = {
       first_name: this.state.first_name,
       last_name: this.state.last_name,
@@ -85,6 +125,7 @@ class PersonalUpdate extends Component {
     },
   ],
 });
+    }
   }
 
   componentDidMount(e) {
@@ -164,14 +205,14 @@ class PersonalUpdate extends Component {
                               Personel Telefon No
                             </label>
                             <input
-                              type="tel"
-                              className="form-control"
-                              placeholder="Personel Telefon No:"
-                              name="phone_no"
-                              value={this.state.phone_no}
-                              onChange={this.onChange}
-                              required
-                            />
+                                type="text"
+                                className="form-control phone_no"
+                                name="phone_no"
+                                placeholder="Personel Telefon No:"
+                                maxLength="11"
+                                value={this.state.phone_no}
+                                onChange={this.onChange}
+                              />
                           </div>
                           <div className="form-group">
                             <label htmlFor="exampleInputPassword1">
@@ -215,6 +256,7 @@ class PersonalUpdate extends Component {
                           </button>
                         </div>
                       </form>
+                      <ToastContainer />
                     </div>
                     ) : null}
                   </div>

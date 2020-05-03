@@ -43,6 +43,18 @@ stores.post("/storesdelete", (req, res) => {
       res.json({ error: "Store already exists" });
     });
 });
+//dükkan adı kontrol
+stores.post("/findstore", (req, res) => {
+  Store.findOne({
+    storenumber: req.body.storenumber,
+  }).then((store) => {
+    if (!store) {
+      res.send("true");
+    } else {
+      res.send("false");
+    }
+  });
+});
 stores.post("/storelist", (req, res) => {
   Store.find({ block_name: req.body.block_name }, function (err, objs) {
     var dbs = objs[0];

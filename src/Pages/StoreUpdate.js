@@ -6,7 +6,7 @@ import jwt_decode from "jwt-decode";
 import Modal from "react-awesome-modal";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-class StoreRegister extends Component {
+class StoreUpdate extends Component {
   constructor(props) {
     super(props);
     //storeregister kontrol
@@ -14,6 +14,7 @@ class StoreRegister extends Component {
       const { storeinfo } = this.props.location.state;
       this.state = {
         storenumber: storeinfo.storenumber,
+        sys_storenumber: storeinfo.storenumber,
         store_name: storeinfo.store_name,
         store_surname: storeinfo.store_surname,
         store_phoneno: storeinfo.store_phoneno,
@@ -21,6 +22,7 @@ class StoreRegister extends Component {
         store_email: storeinfo.store_email,
         style_box: storeinfo.style_box,
         title_name: storeinfo.storenumber,
+        status: false,
         showMe: true,
         showUser: false,
         visible: false,
@@ -34,6 +36,7 @@ class StoreRegister extends Component {
         store_state: "Boş",
         store_email: "",
         title_name: "",
+        status: false,
         showMe: true,
         showUser: false,
         visible: false,
@@ -59,63 +62,65 @@ class StoreRegister extends Component {
     });
     this.props.history.push("/storesetting");
   }
-    //validation yapısı form
-    handleValidation() {
-      let store_phoneno = this.state.store_phoneno;
-      let storenumber = this.state.storenumber;
-      let store_name = this.state.store_name;
-      let store_surname = this.state.store_surname;
-      let store_email = this.state.store_email;
-      let formIsValid = true;
-     
-      let partternname = /[a-zA-Z0-9]/g;
-      let resultStorenumber = partternname.test(storenumber);
-      let partternstorename = /[a-zA-Z]/g;
-      let resultStorename = partternstorename.test(store_name);
-      let partternSurname = /[a-zA-Z0-9]/g;
-      let resultSurname = partternSurname.test(store_surname);
-      let patternemail = /[a-zA-Z0-9]+[\.]?([a-zA-Z0-9]+)?[\@][a-z]{3,9}[\.][a-z]{2,5}/g;
-      let resultemail = patternemail.test(store_email);
-      let patternphone = /[0-9]{11}/g;
-      let resultphone = patternphone.test(store_phoneno);
-  
-  
-      //Boş mu kontrol?
-      if (!storenumber || !store_name || !store_phoneno || !store_surname || !store_email ) {
-        formIsValid = false;
-        toast.error("Boş Bırakmayınız!");
-      }
-      //Dükkan yerı adı  için harf kontrol?
-      else if (resultStorenumber === false) {
-        formIsValid = false;
-        toast.warn("Sadece Harf veya Sayı Giriniz!");
-      } 
-          //Dükkan ev sahibi adı için harf kontrol?
-      else if (resultStorename === false) {
-        formIsValid = false;
-        toast.warn("Sadece Harf Giriniz!");
-      } 
-          //Dükkan sahibi soyadı için harf kontrol?
-      else if (resultSurname === false) {
-        formIsValid = false;
-        toast.warn("Sadece Harf Giriniz!");
-      } //Telefon no 
-      else if (resultphone === false) {
-        formIsValid = false;
-        toast.warn("Geçerli Telefon Numarası Değil!");
-      } 
-      //Email için uyumluluk kontrol?
-      else if (resultemail === false) {
-        formIsValid = false;
-        toast.error("Eposta Geçerli Değil!");
-      }
-     
-  
-      return formIsValid;
+  //validation yapısı form
+  handleValidation() {
+    let store_phoneno = this.state.store_phoneno;
+    let storenumber = this.state.storenumber;
+    let store_name = this.state.store_name;
+    let store_surname = this.state.store_surname;
+    let store_email = this.state.store_email;
+    let formIsValid = true;
+
+    let partternname = /[a-zA-Z0-9]/g;
+    let resultStorenumber = partternname.test(storenumber);
+    let partternstorename = /[a-zA-Z]/g;
+    let resultStorename = partternstorename.test(store_name);
+    let partternSurname = /[a-zA-Z0-9]/g;
+    let resultSurname = partternSurname.test(store_surname);
+    let patternemail = /[a-zA-Z0-9]+[\.]?([a-zA-Z0-9]+)?[\@][a-z]{3,9}[\.][a-z]{2,5}/g;
+    let resultemail = patternemail.test(store_email);
+    let patternphone = /[0-9]{11}/g;
+    let resultphone = patternphone.test(store_phoneno);
+
+    //Boş mu kontrol?
+    if (
+      !storenumber ||
+      !store_name ||
+      !store_phoneno ||
+      !store_surname ||
+      !store_email
+    ) {
+      formIsValid = false;
+      toast.error("Boş Bırakmayınız!");
     }
-  onSubmit(e) {
-    e.preventDefault();
-    if (this.handleValidation()) {
+    //Dükkan yerı adı  için harf kontrol?
+    else if (resultStorenumber === false) {
+      formIsValid = false;
+      toast.warn("Sadece Harf veya Sayı Giriniz!");
+    }
+    //Dükkan ev sahibi adı için harf kontrol?
+    else if (resultStorename === false) {
+      formIsValid = false;
+      toast.warn("Sadece Harf Giriniz!");
+    }
+    //Dükkan sahibi soyadı için harf kontrol?
+    else if (resultSurname === false) {
+      formIsValid = false;
+      toast.warn("Sadece Harf Giriniz!");
+    } //Telefon no
+    else if (resultphone === false) {
+      formIsValid = false;
+      toast.warn("Geçerli Telefon Numarası Değil!");
+    }
+    //Email için uyumluluk kontrol?
+    else if (resultemail === false) {
+      formIsValid = false;
+      toast.error("Eposta Geçerli Değil!");
+    }
+
+    return formIsValid;
+  }
+  updateStore() {
     var style_box = "small-box bg-danger";
     if (this.state.store_state == "Ev Sahibi") {
       style_box = "small-box bg-primary";
@@ -140,19 +145,40 @@ class StoreRegister extends Component {
         password: this.state.store_phoneno,
         email: this.state.store_email,
         phone_no: this.state.store_phoneno,
+        status: this.state.status,
       };
 
-      axios
-        .post("users/useradd", newUsers)
-        .then((response) => {
+      axios.post("users/register", newUsers).then((response) => {
+        if (response.request.response == "true") {
           this.openModal();
-        })
-        .catch((error) => {
-          toast.error("Kullanıcı eklenmedi.");
-
-        });
+        } else if (response.request.response == "false") {
+          toast.error("Hata!Kayıt Başarısız! ");
+        } else if (response.request.response == "err") {
+          toast.error("Hata! Eposta Sisteme Kayıtlı! ");
+        }
+      });
     });
   }
+  onSubmit(e) {
+    e.preventDefault();
+    if (this.handleValidation()) {
+      //vt aynı dükkan ile güncellemesin diye
+      if (this.state.storenumber != this.state.sys_storenumber) {
+        const sysStore = {
+          storenumber: this.state.storenumber,
+        };
+        // dükkan adı kontrolü
+        axios.post("stores/findstore", sysStore).then((res) => {
+          if (res.request.response == "true") {
+            this.updateStore();
+          } else if (res.request.response == "false") {
+            toast.error("Hata! Dükkan Adı Sisteme Kayıtlı!");
+          }
+        });
+      } else {
+        this.updateStore();
+      }
+    }
   }
   handleChangeHostState = (e) => {
     let index = e.nativeEvent.target.selectedIndex;
@@ -207,7 +233,6 @@ class StoreRegister extends Component {
 
                         <form noValidate>
                           <div className="card-body">
-                       
                             <div className="form-group">
                               <label htmlFor="exampleInputPassword1">
                                 Dükkan Adı
@@ -366,4 +391,4 @@ class StoreRegister extends Component {
     );
   }
 }
-export default StoreRegister;
+export default StoreUpdate;

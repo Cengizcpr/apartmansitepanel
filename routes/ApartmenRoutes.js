@@ -57,6 +57,18 @@ apartmens.put("/apartmensupdate", (req, res) => {
       res.json({ message: "true" });
     });
 });
+//daire adı kontrol
+apartmens.post("/findapartmens", (req, res) => {
+  Apartmen.findOne({
+    circlenumber: req.body.circlenumber,
+  }).then((apartmen) => {
+    if (!apartmen) {
+      res.send("true");
+    } else {
+      res.send("false");
+    }
+  });
+});
 apartmens.post("/apartmenslist", (req, res) => {
   Apartmen.find({ block_name: req.body.block_name }, function (err, objs) {
     var dbs = objs[0];

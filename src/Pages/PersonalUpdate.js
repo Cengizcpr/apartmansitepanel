@@ -20,6 +20,7 @@ class PersonalUpdate extends Component {
         adress: personalupdate.adress,
         phone_no: personalupdate.phone_no,
         departmans:personalupdate.departmans,
+        sys_phoneno:personalupdate.phone_no,
         showMe: true,
         showUser: false,
         visible: false,
@@ -91,11 +92,9 @@ class PersonalUpdate extends Component {
 
     return formIsValid;
   }
-  onSubmit(e) {
-      
-    e.preventDefault();
-    if (this.handleValidation()) {
-    const updatePersonal = {
+  updatePersonal()
+  {
+    const update_personal = {
       first_name: this.state.first_name,
       last_name: this.state.last_name,
       adress: this.state.adress,
@@ -111,7 +110,7 @@ class PersonalUpdate extends Component {
           label: "Evet",
           onClick: () =>
     axios
-      .put("personals/personalupdate", updatePersonal)
+      .put("personals/personalupdate", update_personal)
       .then((response) => {
         this.props.history.push("/personallist");
       })
@@ -125,6 +124,29 @@ class PersonalUpdate extends Component {
     },
   ],
 });
+  }
+  onSubmit(e) {
+      
+    e.preventDefault();
+    if (this.handleValidation()) {
+   
+    if(this.state.phone_no!=this.state.sys_phoneno){
+    const sysPhoneno ={
+      phone_no:this.state.phone_no
+    }
+    //telefon no kontrolü
+      axios.post("personals/findpersonal",sysPhoneno)
+      .then((res)=>{
+        if(res.request.response=="true"){
+         this.updatePersonal();
+        }
+       else if(res.request.response=="false"){toast.error("Hata! Telefon Numarası Sisteme Kayıtlı!")}
+      })
+    }
+    else{
+      this.updatePersonal();
+    }
+
     }
   }
 

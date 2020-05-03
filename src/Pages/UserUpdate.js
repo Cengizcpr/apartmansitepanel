@@ -18,7 +18,8 @@ class UserRegister extends Component {
         last_name: userupdate.last_name,
         email: userupdate.email,
         phone_no: userupdate.phone_no,
-        emails:userupdate.email,
+        emails: userupdate.email,
+        sys_email: userupdate.email,
         showMe: true,
         showUser: false,
         visible: false,
@@ -28,7 +29,7 @@ class UserRegister extends Component {
         first_name: "",
         last_name: "",
         email: "",
-        emails:"",
+        emails: "",
         phone_no: "",
         showMe: true,
         showUser: false,
@@ -48,7 +49,7 @@ class UserRegister extends Component {
     let last_name = this.state.last_name;
     let email = this.state.email;
     let phone_no = this.state.phone_no;
-   
+
     let formIsValid = true;
     let partternLastname = /[a-zA-Z]/g;
     let resultLastname = partternLastname.test(last_name);
@@ -60,16 +61,10 @@ class UserRegister extends Component {
     let resultphone = patternphone.test(phone_no);
 
     //Boş mu kontrol?
-         if (
-      !first_name ||
-      !last_name ||
-      !email ||
-      !phone_no
-      
-    ) {
+    if (!first_name || !last_name || !email || !phone_no) {
       formIsValid = false;
       toast.error("Boş Bırakmayınız!");
-    }  
+    }
     //İsim için harf kontrol?
     if (resultname === false) {
       formIsValid = false;
@@ -91,18 +86,15 @@ class UserRegister extends Component {
 
     return formIsValid;
   }
-  onSubmit(e) {
-    e.preventDefault();
-    if (this.handleValidation()) {
-      var updateUser={}
-    updateUser = {
+  updateUser() {
+    const updateUser = {
       first_name: this.state.first_name,
       last_name: this.state.last_name,
       email: this.state.email,
       phone_no: this.state.phone_no,
       _id: this.state._id,
     };
- 
+
     confirmAlert({
       title: "Kullanıcı Güncelle",
       message: "Kullanıcıyı güncellemek istediğinize emin misiniz?",
@@ -110,21 +102,41 @@ class UserRegister extends Component {
         {
           label: "Evet",
           onClick: () =>
-    axios
-      .put("users/userupdate", updateUser)
-      .then((response) => {
-        this.props.history.push("/userslist");
-      })
-      .catch((error) => {
-        console.log(error);
-      }),
-    },
-    {
-      label: "Hayır",
-      onClick: () => this.props.history.push("/userupdate"),
-    },
-  ],
-});
+            axios
+              .put("users/userupdate", updateUser)
+              .then((response) => {
+                this.props.history.push("/userslist");
+              })
+              .catch((error) => {
+                console.log(error);
+              }),
+        },
+        {
+          label: "Hayır",
+          onClick: () => this.props.history.push("/userupdate"),
+        },
+      ],
+    });
+  }
+  onSubmit(e) {
+    e.preventDefault();
+    if (this.handleValidation()) {
+      //vt aynı email ile güncellemesin diye
+      if (this.state.email != this.state.sys_email) {
+        const sysEmail = {
+          email: this.state.email
+        };
+        //telefon no kontrolü
+        axios.post("users/finduser", sysEmail).then((res) => {
+          if (res.request.response == "true") {
+            this.updateUser();
+          } else if (res.request.response == "false") {
+            toast.error("Hata! Eposta Sisteme Kayıtlı!");
+          }
+        });
+      } else {
+        this.updateUser();
+      }
     }
   }
 
@@ -167,7 +179,6 @@ class UserRegister extends Component {
                         <div className="card-header">
                           <h3 className="card-title">Kullanıcı Güncelle</h3>
                         </div>
-
                         <form noValidate onSubmit={this.onSubmit}>
                           <div className="card-body">
                             <div className="form-group">
@@ -217,15 +228,15 @@ class UserRegister extends Component {
                                 Kullanıcı Telefon No
                               </label>
                               <div className="input-group">
-                              <input
-                                type="text"
-                                className="form-control phone_no"
-                                placeholder="Kullanıcı Telefon No:"
-                                name="phone_no"
-                                maxLength="11"
-                                value={this.state.phone_no}
-                                onChange={this.onChange}
-                              />
+                                <input
+                                  type="text"
+                                  className="form-control phone_no"
+                                  placeholder="Kullanıcı Telefon No:"
+                                  name="phone_no"
+                                  maxLength="11"
+                                  value={this.state.phone_no}
+                                  onChange={this.onChange}
+                                />
                               </div>
                             </div>
                           </div>
@@ -239,10 +250,9 @@ class UserRegister extends Component {
                               Kaydet
                             </button>
                           </div>
-                        </form>  <ToastContainer />
+                        </form>{" "}
+                        <ToastContainer />
                       </div>
-                   
-
                     ) : null}
                   </div>
                 </div>

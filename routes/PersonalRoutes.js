@@ -19,71 +19,79 @@ personals.post("/personaladd", (req, res) => {
     adress: req.body.adress,
     phone_no: req.body.phone_no,
     departmans: req.body.departmans,
-    date: today
+    date: today,
   };
 
   Personal.findOne({
-    phone_no: req.body.phone_no
+    phone_no: req.body.phone_no,
   })
-    .then(personals => {
+    .then((personals) => {
       if (!personals) {
         Personal.create(personalsData)
-          .then(personals => {
-            res.send("true")
+          .then((personals) => {
+            res.send("true");
           })
-          .catch(err => {
-            res.send("false")
-
+          .catch((err) => {
+            res.send("false");
           });
       } else {
-        res.send("err")      }
+        res.send("err");
+      }
     })
-    .catch(err => {
+    .catch((err) => {
       res.send("error: " + err);
     });
 });
+
+personals.post("/findpersonal", (req, res) => {
+  Personal.findOne({
+    phone_no: req.body.phone_no,
+  }).then((personals) => {
+    if (!personals) {
+      res.send("true");
+    } else {
+      res.send("false");
+    }
+  });
+});
 personals.get("/personallist", (req, res) => {
-  Personal.find({}, function(err, objs) {
+  Personal.find({}, function (err, objs) {
     var dbs = objs[0];
 
     return dbs;
   })
-    .then(personals => {
+    .then((personals) => {
       if (personals) {
         res.json(personals);
       } else {
         res.json({ error: "personals already exists" });
       }
     })
-    .catch(err => {
+    .catch((err) => {
       res.send("error: " + err);
     });
 });
 personals.post("/personaldelete", (req, res) => {
   Personal.deleteOne({ _id: req.body._id })
-    .then(objs => {
+    .then((objs) => {
       res.json(objs);
     })
-    .catch(err => {
+    .catch((err) => {
       res.json({ error: "Personal already exists" });
     });
 });
 personals.put("/personalupdate", (req, res) => {
   const personalData = {
-  first_name:req.body.first_name,
-  last_name:req.body.last_name,
-  adress:req.body.adress,
-  phone_no:req.body.phone_no,
-  departmans:req.body.departmans,
-  _id:req.body._id
+    first_name: req.body.first_name,
+    last_name: req.body.last_name,
+    adress: req.body.adress,
+    phone_no: req.body.phone_no,
+    departmans: req.body.departmans,
+    _id: req.body._id,
   };
-  Personal.update(
-    { _id: req.body._id },
-    personalData,
-    function (err, objs) {}
-  )
+  Personal.update({ _id: req.body._id }, personalData, function (err, objs) {})
     .then((apartmen) => {
-       res.json({ status: personals.first_name + "Updated!" }); 
+      res.json({ status: personals.first_name + "Updated!" });
     })
     .catch((err) => {
       res.json({ message: "true" });

@@ -18,6 +18,7 @@ class BlockSetting extends Component {
       showMeBlockİnfo: false,
       block_name: "",
       title_name: "",
+      sys_blockname:"",
       _id: "",
       showMe: true,
       showUser: false,
@@ -111,10 +112,9 @@ class BlockSetting extends Component {
         });
     }
   }
-  onSubmit(e) {
-    e.preventDefault();
-    if (this.handleValidation()) {
-    const newBlocks = {
+  //update blok
+  updateBlock(){
+  const newBlocks = {
       block_name: this.state.block_name,
       circlenumber: this.state.circlenumber,
       storenumber: this.state.storenumber,
@@ -148,8 +148,30 @@ class BlockSetting extends Component {
        toast.success("Blok Bilgileri Kaydedilmiştir!")
       })
       .catch((error) => {
-        console.log("Site bilgileri eklenmedi.");
-      });
+    //Site bilgileri eklenmedi
+      }); 
+  }
+  //kontrol vt 
+  onSubmit(e) {
+    e.preventDefault();
+    if (this.handleValidation()) {
+      //vt aynı block ile güncellemesin diye
+      if (this.state.block_name != this.state.sys_blockname) {
+        const sysEmail = {
+          block_name: this.state.block_name
+        };
+        //telefon no kontrolü
+        axios.post("blocks/findblock", sysEmail).then((res) => {
+          if (res.request.response == "true") {
+            this.updateBlock();
+          } else if (res.request.response == "false") {
+            toast.error("Hata! Blok Adı Sisteme Kayıtlı!");
+          }
+        });
+      } else {
+        this.updateBlock();
+      }
+  
     }
   }
   handleChangeCircleNumbers = (e) => {
@@ -224,6 +246,7 @@ class BlockSetting extends Component {
   onVisibleİnfo(data) {
     this.setState({
       block_name: data.block_name,
+      sys_blockname:data.block_name,
       showMeBlock: false,
       showMeBlockİnfo: true,
       _id: data._id,

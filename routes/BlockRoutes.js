@@ -20,13 +20,7 @@ blocks.post("/blocksetting", (req, res) => {
     storenumber: req.body.storenumber,
     date: today
   };
- /*    Block.remove()
-        .then(objs => {
-          res.json(objs);
-        })
-        .catch(err => {
-          res.json({ error: "Personal already exists" });
-        }); */
+
   Block.findOne({
     block_name: req.body.block_name
   })
@@ -51,6 +45,18 @@ blocks.post("/blocksetting", (req, res) => {
     .catch(err => {
       res.send("error: " + err);
     });
+});
+//blok adı kontrol
+blocks.post("/findblock", (req, res) => {
+  Block.findOne({
+    block_name: req.body.block_name,
+  }).then((block) => {
+    if (!block) {
+      res.send("true");
+    } else {
+      res.send("false");
+    }
+  });
 });
 blocks.put("/blockupdate", (req, res) => {
   const blocksData = {

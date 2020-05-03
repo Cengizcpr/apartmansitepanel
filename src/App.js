@@ -16,9 +16,9 @@ import UserRegister from "./Pages/UserUpdate";
 import StatusError from "./Pages/StatusError";
 import UserHome from "./Home/UserHome";
 import ApartmentSetting from "./Pages/ApartmentSetting";
-import ApartmentRegister from "./Pages/ApartmentRegister";
+import ApartmentUpdate from "./Pages/ApartmentUpdate";
 import StoreSetting from "./Pages/StoreSetting";
-import StoreRegister from "./Pages/StoreRegister";
+import StoreUpdate from "./Pages/StoreUpdate";
 import Test from "./Pages/Test";
 class App extends Component {
   render() {
@@ -41,9 +41,9 @@ class App extends Component {
           <Route exact path="/statuserror" component={StatusError} />
           <Route exact path="/userhome" component={UserHome} />
           <Route exact path="/apartmentsetting" component={ApartmentSetting} />
-          <Route exact path="/apartmentregister" component={ApartmentRegister}  />
+          <Route exact path="/apartmentregister" component={ApartmentUpdate}  />
           <Route exact path="/storesetting" component={StoreSetting}/>
-          <Route export path="/storeregister" component={StoreRegister}/>
+          <Route export path="/storeregister" component={StoreUpdate}/>
           <Route exact component={Notfound} />
         </Switch>
       </Router>

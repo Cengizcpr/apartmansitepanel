@@ -17,7 +17,7 @@ users.post("/register", (req, res) => {
     password: req.body.password,
     created: today,
     phone_no: req.body.phone_no,
-    status: req.body.status
+    status: req.body.status,
   };
 
   User.findOne({
@@ -29,19 +29,19 @@ users.post("/register", (req, res) => {
           userData.password = hash;
           User.create(userData)
             .then((user) => {
-              res.send("true")
+              res.send("true");
             })
             .catch((err) => {
-              res.send("false")
+              res.send("false");
             });
         });
       } else {
-        res.send("err")
+        res.send("err");
       }
-    }).catch((err) => {
+    })
+    .catch((err) => {
       res.send(err);
     });
-    
 });
 //şifre kontrol
 users.post("/controlpassword", (req, res) => {
@@ -68,6 +68,18 @@ users.put("/newpassword", (req, res) => {
       });
   });
 });
+//eposta kontrol
+users.post("/finduser", (req, res) => {
+  User.findOne({
+    email: req.body.email,
+  }).then((users) => {
+    if (!users) {
+      res.send("true");
+    } else {
+      res.send("false");
+    }
+  });
+});
 users.put("/userupdate", (req, res) => {
   const userData = {
     first_name: req.body.first_name,
@@ -76,11 +88,7 @@ users.put("/userupdate", (req, res) => {
     phone_no: req.body.phone_no,
     _id: req.body._id,
   };
-  /* User.find({
-    email: { $ne: req.body.email },
-  })
-    .then((user) => {
-      if (user) { */
+
   User.update({ _id: req.body._id }, userData, function (err, objs) {})
     .then((user) => {
       res.json({ status: "Updated!" });
@@ -88,13 +96,6 @@ users.put("/userupdate", (req, res) => {
     .catch((err) => {
       res.json({ message: "true" });
     });
- // }
-/*     else {
-      res.send("err")
-    }
-  }).catch((err) => {
-    res.send(err);
-  }); */
 });
 users.post("/useradd", (req, res) => {
   const date = new Date();
@@ -114,7 +115,6 @@ users.post("/useradd", (req, res) => {
     status: false,
   };
 
-  
   User.findOne({
     email: req.body.email,
   })
@@ -124,10 +124,10 @@ users.post("/useradd", (req, res) => {
           userData.password = hash;
           User.create(userData)
             .then((user) => {
-              res.send("true")
+              res.send("true");
             })
             .catch((err) => {
-              res.send("false")
+              res.send("false");
             });
         });
       } else {

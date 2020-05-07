@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import Header from "../Home/Header";
-import Menu from "../Home/Menu";
+import Header from "../../Home/Header";
+import Menu from "../../Home/Menu";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 import Modal from "react-awesome-modal";
@@ -9,6 +9,8 @@ import "react-toastify/dist/ReactToastify.css";
 class ApartmentUpdate extends Component {
   constructor(props) {
     super(props);
+
+
     if (this.props.location.state != undefined) {
       const { foo } = this.props.location.state;
 
@@ -21,25 +23,33 @@ class ApartmentUpdate extends Component {
         host_email: foo.host_email,
         title_name: foo.circlenumber,
         sys_circlenumber: foo.circlenumber,
+        car_numbers:foo.car_numbers,
         showMe: true,
-        showUser: false,
-        visible: false,
-        status: false,
-      };
+      showUser: false,
+      visible: false,
+      status: false,
+      locations:[]
+        
+      }
     } else {
       this.state = {
         circlenumber: "",
         host_name: "",
         host_surname: "",
         host_phoneno: "",
-        host_state: "Boş",
+        host_state: "",
         title_name: "",
-        status: false,
+        car_numbers:"",
         showMe: true,
-        showUser: false,
-        visible: false,
-      };
+      showUser: false,
+      visible: false,
+      status: false,
+      locations:[]
+    
+      }
+      
     }
+   
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
@@ -67,7 +77,7 @@ class ApartmentUpdate extends Component {
     let host_surname = this.state.host_surname;
     let host_email = this.state.host_email;
     let formIsValid = true;
-
+    let host_state = this.state.host_state;
     let partternname = /[a-zA-Z0-9]/g;
     let resultCirclename = partternname.test(circlenumber);
     let partternhostname = /[a-zA-Z]/g;
@@ -89,6 +99,11 @@ class ApartmentUpdate extends Component {
     ) {
       formIsValid = false;
       toast.error("Boş Bırakmayınız!");
+    }
+    //Daire Durumu Kontrol
+    else if (host_state === "Boş") {
+      formIsValid = false;
+      toast.warn("Lütfen Daire Durumu Seçiniz!");
     }
     //Daire adı için harf kontrol?
     else if (resultCirclename === false) {
@@ -125,7 +140,7 @@ class ApartmentUpdate extends Component {
     } else if (this.state.host_state == "Kiracı") {
       style_box = "small-box bg-warning";
     }
-
+  
     const newApartmenİnfo = {
       circlenumber: this.state.circlenumber,
       host_name: this.state.host_name,
@@ -135,6 +150,7 @@ class ApartmentUpdate extends Component {
       style_box: style_box,
       title_name: this.state.title_name,
       host_email: this.state.host_email,
+      car_numbers:this.state.car_numbers
     };
     axios.put("apartmens/apartmensupdate", newApartmenİnfo).then((response) => {
       const newUsers = {
@@ -166,7 +182,7 @@ class ApartmentUpdate extends Component {
         const sysApartmen = {
           circlenumber: this.state.circlenumber,
         };
-        //telefon no kontrolü
+        //daire adı kontrolü
         axios.post("apartmens/findapartmens", sysApartmen).then((res) => {
           if (res.request.response == "true") {
             this.updateApartmen();
@@ -186,6 +202,14 @@ class ApartmentUpdate extends Component {
       host_state: e.nativeEvent.target[index].text,
     });
   };
+  handleChangeCar = (e) => {
+    let index = e.nativeEvent.target.selectedIndex;
+
+    this.setState({
+      car_numbers: e.nativeEvent.target[index].text,
+    });
+  };
+
 
   componentDidMount(e) {
     const token = localStorage.usertoken;
@@ -200,8 +224,21 @@ class ApartmentUpdate extends Component {
               this.setState({
                 showMe: false,
                 showUser: true,
+               
               });
             }
+            if(this.state.car_numbers==""){
+              this.setState({
+                car_numbers:"Araç Sayısı Seçiniz.."
+              })
+            }
+            const res = [];
+            for (var i = 1; i <= 5; i++) {
+              res[i] = i;
+            }
+            this.setState({
+              locations: res
+            });
           }
         }
       });
@@ -211,6 +248,9 @@ class ApartmentUpdate extends Component {
   }
 
   render() {
+    const carnumbers = this.state.locations.map(data => (
+      <option key={data}>{data}</option>
+    ));
     return (
       <div>
         <Header />
@@ -225,7 +265,7 @@ class ApartmentUpdate extends Component {
                       <div className="card card-primary">
                         <div className="card-header">
                           <h3 className="card-title">
-                            {this.state.title_name} Daire Bilgileri
+                            Daire  {this.state.title_name} Bilgileri
                           </h3>
                         </div>
 
@@ -322,6 +362,20 @@ class ApartmentUpdate extends Component {
                                   required
                                 />
                               </div>
+                            </div>
+                            <div className="form-group">
+                              <label htmlFor="exampleInputPassword1">
+                                Araç Sayısı
+                              </label>
+                              <select
+                                className="form-control"
+                                onChange={this.handleChangeCar}
+                               
+                              >
+                                <option  >{this.state.car_numbers}</option>
+                                <option>Araç Yok</option>
+                               {carnumbers}
+                              </select>
                             </div>
                           </div>
 

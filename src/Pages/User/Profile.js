@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import jwt_decode from "jwt-decode";
-import Header from "../Home/Header";
-import Menu from "../Home/Menu";
+import Header from "../../Home/Header";
+import Menu from "../../Home/Menu";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -17,7 +17,6 @@ class Profile extends Component {
       system_pas: "",
       email: "",
       phone_no: "",
-      message: "",
       _id: "",
       status: "",
     };
@@ -154,7 +153,7 @@ class Profile extends Component {
         .then((res) => {
           var response = res.data;
           for (var i = 0; i < response.length; i++) {
-            if (decoded.first_name === response[i].first_name) {
+            if (decoded._id === response[i]._id) {
               if (res.data[i].status) {
                 this.setState({
                   first_name: response[i].first_name,
@@ -201,7 +200,7 @@ class Profile extends Component {
                   <div>
                     <div className="d-flex align-items-center">
                       <h4 className="mb-0 font-weight-bold">
-                        Bilgilerim{this.state.message}
+                        Bilgilerim
                       </h4>
                     </div>
                   </div>

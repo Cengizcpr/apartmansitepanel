@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import Header from "../Home/Header";
-import Menu from "../Home/Menu";
+import Header from "../../Home/Header";
+import Menu from "../../Home/Menu";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 import { Link } from "react-router-dom";
@@ -82,7 +82,7 @@ class BlockSetting extends Component {
     for (var i = 1; i <= this.state.circlenumber; i++) {
       newApartmens[i] = {
         block_name: this.state.block_name,
-        circlenumber: this.state.block_name + i,
+        circlenumber:i,
       };
     }
     for (var i = 1; i <= this.state.circlenumber; i++) {

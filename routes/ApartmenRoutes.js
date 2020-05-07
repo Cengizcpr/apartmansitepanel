@@ -16,7 +16,7 @@ apartmens.post("/apartmensetting", (req, res) => {
   const blocksData = {
     block_name: req.body.block_name,
     circlenumber: req.body.circlenumber,
-
+    car_numbers:"",
     host_state: "Boş",
     host_email: "",
     host_name: "",
@@ -44,6 +44,7 @@ apartmens.put("/apartmensupdate", (req, res) => {
     host_phoneno: req.body.host_phoneno,
     style_box: req.body.style_box,
     host_email: req.body.host_email,
+    car_numbers:req.body.car_numbers
   };
   Apartmen.update(
     { circlenumber: req.body.title_name },
@@ -64,8 +65,10 @@ apartmens.post("/findapartmens", (req, res) => {
   }).then((apartmen) => {
     if (!apartmen) {
       res.send("true");
+      console.log(apartmen)
     } else {
       res.send("false");
+      
     }
   });
 });
@@ -75,20 +78,19 @@ apartmens.post("/apartmenslist", (req, res) => {
 
     return dbs;
   })
-    .sort() //Alfabeye göre sıralama
+    .sort({circlenumber:1}) //Alfabeye göre sıralama
     .then((build) => {
       if (build) {
-        res.json(build);
-      } else {
-        res.json({ error: "Build already exists" });
-      }
+        
+        res.json(build)
+        
+      } 
     })
     .catch((err) => {
-      res.send("error: " + err);
+  //daire kayıtları bos
     });
 });
 apartmens.post("/apartmensdelete", (req, res) => {
-  console.log(req.body.block_name)
   Apartmen.remove({ block_name: req.body.block_name })
     .then((objs) => {
       res.json(objs);

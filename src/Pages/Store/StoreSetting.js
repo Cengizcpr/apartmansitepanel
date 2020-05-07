@@ -1,20 +1,20 @@
 import React, { Component } from "react";
-import Header from "../Home/Header";
-import Menu from "../Home/Menu";
+import Header from "../../Home/Header";
+import Menu from "../../Home/Menu";
 import jwt_decode from "jwt-decode";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import Modal from "react-awesome-modal";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-class ApartmentSetting extends Component {
+class StoreSetting extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       showMe: true,
       showUser: false,
-      showApartment: false,
+      showStore: false,
       locations: [],
       locationsApartment: [],
       block_name: "Blok Seçiniz",
@@ -23,8 +23,8 @@ class ApartmentSetting extends Component {
       host_name: "",
       host_surname: "",
       host_state: "",
-      host_phoneno: ""
-      
+      host_phoneno: "",
+      stylebox:"small-box bg-danger"
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -35,21 +35,21 @@ class ApartmentSetting extends Component {
   openModal() {
     this.setState({
       visible: true,
-      showApartment: false,
+      showStore:false
     });
   }
 
   closeModal() {
     this.setState({
       visible: false,
-      showApartment: false,
+      showStore: false
     });
   }
   onApartmentSetting(data) {
     this.setState({
       showMe: false,
-      showApartment: false,
-      circlenumber: data.circlenumber,
+      showStore: false,
+      circlenumber: data.circlenumber
     });
   }
   //daire göstermek için kullanılıyor
@@ -59,37 +59,36 @@ class ApartmentSetting extends Component {
       toast.warn("Lütfen Blok Seçiniz!");
     }
     else{
-      this.setState({
-        showMe: true,
-        showUser: false,
-        showApartment: true,
-        aparmentnumbers: "",
-      });
-      //istenilen bloğa göre daitre bilgilerini getirir
-      axios
-        .post("apartmens/apartmenslist", {
-          block_name: this.state.block_name,
-        })
-        .then((response) => {
-          if (this.state.block_name == response.data[0].block_name) {
-            this.setState({
-              locationsApartment: response.data,
-            });
-          }
-        })
-        .catch((error) => {
-  
-         toast.error("Daire Kayıtları Boş!")
+    this.setState({
+      showMe: true,
+      showUser: false,
+      showStore: true,
+      storenumbers: ""
+    });
+    //istenilen bloğa göre daitre bilgilerini getirir
+    axios
+      .post("stores/storelist", {
+        block_name: this.state.block_name
+      })
+      .then(response => {
+        if (this.state.block_name == response.data[0].block_name) {
           
-        });
-      }
+          this.setState({
+            locationsApartment: response.data
+          });
+        }
+      })
+      .catch(error => {
+        toast.error("Dükkan Kayıtları Boş!")
+      });
+    }
   }
 
-  handleChangeBlockName = (e) => {
+  handleChangeBlockName = e => {
     let index = e.nativeEvent.target.selectedIndex;
 
     this.setState({
-      block_name: e.nativeEvent.target[index].text,
+      block_name: e.nativeEvent.target[index].text
     });
   };
   componentDidMount(e) {
@@ -97,14 +96,14 @@ class ApartmentSetting extends Component {
     try {
       jwt_decode(token);
       const decoded = jwt_decode(token);
-      axios.get("users/adminprofile").then((res) => {
+      axios.get("users/adminprofile").then(res => {
         var response = res.data;
         for (var i = 0; i < response.length; i++) {
           if (decoded.email === response[i].email) {
             if (response[i].status == false) {
               this.setState({
                 showMe: false,
-                showUser: true,
+                showUser: true
               });
             }
           }
@@ -113,15 +112,15 @@ class ApartmentSetting extends Component {
       //Blok Sayısı
       axios
         .get("blocks/blockslist")
-        .then((response) => {
+        .then(response => {
           if (response.data.length == 0) {
             this.openModal();
           }
           this.setState({
-            locations: response.data,
+            locations: response.data
           });
         })
-        .catch((error) => {
+        .catch(error => {
           console.log("Blok listelenemedi.");
         });
     } catch (error) {
@@ -129,30 +128,31 @@ class ApartmentSetting extends Component {
     }
   }
   render() {
-    const blocknumbers = this.state.locations.map((data) => (
+    const blocknumbers = this.state.locations.map(data => (
       <option key={data._id}>{data.block_name}</option>
     ));
-    const aparmentnumbers = this.state.locationsApartment.map((data) => (
+    const storenumbers = this.state.locationsApartment.map(data => (
       <div className="col-lg-3 col-6" key={data._id}>
         <div className={data.style_box}>
           <div className="inner">
             <p>
-              <h5>Daire {data.circlenumber} </h5>
-              <h6>Durum : {data.host_state}</h6>
+              <h5>Dükkan {data.storenumber} </h5>
+              <h6>Durum : {data.store_state}</h6>
               <h6>
-                Ev Sahibi : {data.host_name} {data.host_surname}
+                Dükkan Sahibi : {data.store_name} {data.store_surname}
               </h6>
-              <h6>Ev Sahibi Telefon : {data.host_phoneno}</h6>
+              <h6>Dükkan Telefon : {data.store_phoneno}</h6>
             </p>
           </div>
           <Link
-            to={{ pathname: "/apartmentregister", state: { foo: data } }}
+            to={{ pathname: "/storeregister" , state: { storeinfo: data }  }}
             className="small-box-footer "
           >
             {" "}
-            Ev Sahibi Ata
+            Dükkan Sahibi Ata
             <i className="fas fa-arrow-circle-right" />
           </Link>
+
         </div>
       </div>
     ));
@@ -171,41 +171,41 @@ class ApartmentSetting extends Component {
                         <section>
                           {/*Blok Uyarı Mesajı*/}
                           <Modal
-                            visible={this.state.visible}
-                            width="600"
-                            height="200"
-                            effect="fadeInUp"
-                            onClickAway={() => this.closeModal()}
-                          >
-                            <div className="modal-header">
-                              {" "}
-                              <h5>Uyarı</h5>
-                              <button
-                                type="button"
-                                className="close"
-                                data-dismiss="modal"
-                                onClick={() => this.closeModal()}
-                              >
-                                &times;
-                              </button>
-                            </div>
-                            <div className="modal-body">
-                              <p>Daire Kayıtları Boş.</p>
-                            </div>
-                            <div className="modal-footer">
-                              <button
-                                type="button"
-                                className="btn btn-default"
-                                data-dismiss="modal"
-                                onClick={() => this.closeModal()}
-                              >
-                                Kapat
-                              </button>
-                            </div>
-                          </Modal>
+                    visible={this.state.visible}
+                    width="600"
+                    height="200"
+                    effect="fadeInUp"
+                    onClickAway={() => this.closeModal()}
+                  >
+                    <div className="modal-header">
+                      {" "}
+                      <h5>Uyarı</h5>
+                      <button
+                        type="button"
+                        className="close"
+                        data-dismiss="modal"
+                        onClick={() => this.closeModal()}
+                      >
+                        &times;
+                      </button>
+                    </div>
+                    <div className="modal-body">
+                      <p>Dükkan Kayıtları Boş.</p>
+                    </div>
+                    <div className="modal-footer">
+                      <button
+                        type="button"
+                        className="btn btn-default"
+                        data-dismiss="modal"
+                        onClick={() => this.closeModal()}
+                      >
+                        Kapat
+                      </button>
+                    </div>
+                  </Modal>
                         </section>
                         <div className="card-header">
-                          <h3 className="card-title">Blok(Daire) Seçiniz</h3>
+                          <h3 className="card-title">Blok(Dükkan) Seçiniz</h3>
                         </div>
 
                         <form noValidate onSubmit={this.onSubmit}>
@@ -215,7 +215,7 @@ class ApartmentSetting extends Component {
                                 className="form-control"
                                 onChange={this.handleChangeBlockName}
                               >
-                                <option>{this.state.block_name}</option>
+                                  <option>{this.state.block_name}</option>
                                 {blocknumbers}
                               </select>
                             </div>
@@ -240,8 +240,8 @@ class ApartmentSetting extends Component {
               </section>
             </div>
             <div className="content-header">
-              {this.state.showApartment ? (
-                <div className="row">{aparmentnumbers}</div>
+              {this.state.showStore ? (
+                <div className="row">{storenumbers}</div>
               ) : null}
             </div>
           </div>
@@ -251,4 +251,4 @@ class ApartmentSetting extends Component {
     );
   }
 }
-export default ApartmentSetting;
+export default StoreSetting;

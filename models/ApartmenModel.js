@@ -7,7 +7,7 @@ const ApartmenSchema = new Schema({
     type: String
   },
   circlenumber: {
-    type: String
+    type: Number
   },
    host_state:{
     type:String
@@ -26,6 +26,9 @@ const ApartmenSchema = new Schema({
    },
    host_email:{
      type:String
+   },
+   car_numbers:{
+    type:String
    },
   date: {
     type: Date,

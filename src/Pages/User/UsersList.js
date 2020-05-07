@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import Header from "../Home/Header";
-import Menu from "../Home/Menu";
+import Header from "../../Home/Header";
+import Menu from "../../Home/Menu";
 import jwt_decode from "jwt-decode";
 import axios from "axios";
 import { Link } from "react-router-dom";

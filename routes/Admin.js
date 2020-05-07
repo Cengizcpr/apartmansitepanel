@@ -43,6 +43,42 @@ users.post("/register", (req, res) => {
       res.send(err);
     });
 });
+users.post("/useradd", (req, res) => {
+  const today = new Date();
+  const userData = {
+    first_name: req.body.first_name,
+    last_name: req.body.last_name,
+    email: req.body.email,
+    password: req.body.password,
+    created: today,
+    phone_no: req.body.phone_no,
+    status: req.body.status,
+  };
+
+  User.findOne({
+    email: req.body.email,
+  })
+    .then((user) => {
+      if (!user) {
+        bcrypt.hash(req.body.password, 10, (err, hash) => {
+          userData.password = hash;
+          User.create(userData)
+            .then((user) => {
+              res.send("true");
+            })
+            .catch((err) => {
+              res.send("false");
+            });
+        });
+      } else {
+        res.send("err");
+      }
+    })
+    .catch((err) => {
+      res.send(err);
+    });
+});
+
 //şifre kontrol
 users.post("/controlpassword", (req, res) => {
   if (bcrypt.compareSync(req.body.current_password, req.body.system_pas)) {

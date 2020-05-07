@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import Header from "../Home/Header";
-import Menu from "../Home/Menu";
+import Header from "../../Home/Header";
+import Menu from "../../Home/Menu";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 import { confirmAlert } from "react-confirm-alert";
@@ -18,7 +18,7 @@ class BuildSetting extends Component {
       locations: [],
       showMe: true,
       showUser: false,
-      showSave: true
+    
     };
 
     this.onChange = this.onChange.bind(this);
@@ -110,6 +110,7 @@ class BuildSetting extends Component {
     axios.get("builds/buildslist").then(response => {
   
       if (response.data[0] != undefined) {
+     
         const updateBuilds = {
           build_name: this.state.build_name,
           phone_no: this.state.phone_no,
@@ -117,14 +118,7 @@ class BuildSetting extends Component {
           blocknumbers: this.state.blocknumbers,
           _id:response.data[0]._id
         };
-        confirmAlert({
-          title: "Uyarı",
-          message:
-            "Blok sayısı güncellendiği takdirde tüm site detayları silinecektir.Yinede silmek istermisiniz?",
-          buttons: [
-            {
-              label: "Evet",
-              onClick: () =>
+      
                 axios.put("builds/buildsupdate", updateBuilds).then(response => {
                   axios
                     .post("builds/buildsetting", updateBuilds)
@@ -160,13 +154,7 @@ class BuildSetting extends Component {
                       toast.eror("Hata!Site Bilgileri Eklenmedi !");
                     });
                 })
-            },
-            {
-              label: "Hayır",
-              onClick: () => this.props.history.push("/buildsetting")
-            }
-          ]
-        });
+          
       } else {
         const newBuilds = {
           build_name: this.state.build_name,
@@ -219,12 +207,13 @@ class BuildSetting extends Component {
         if (res.data[0] == undefined) {
           this.setState({ blocknumbers: "Blok Sayısı Seçiniz.." });
         } else {
+          
           this.setState({
             build_name: res.data[0].build_name,
             phone_no: res.data[0].phone_no,
             adress: res.data[0].adress,
             blocknumbers: res.data[0].blocknumbers,
-            showSave: true
+            
           });
         }
       });
@@ -338,7 +327,7 @@ class BuildSetting extends Component {
                             </div>
                           </div>
                         </form>
-                        {this.state.showSave ? (
+                       
                           <div className="card-footer">
                             <button
                               className="btn btn-primary"
@@ -349,7 +338,7 @@ class BuildSetting extends Component {
                             <ToastContainer />
 
                           </div>
-                        ) : null}
+                     
                       </div>
                     ) : null}
                   </div>

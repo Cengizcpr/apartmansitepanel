@@ -1,25 +1,42 @@
 import React, { Component } from "react";
-import Header from "../Home/Header";
-import Menu from "../Home/Menu";
+import Header from "../../Home/Header";
+import Menu from "../../Home/Menu";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-class UsersPage extends Component {
-  constructor() {
-    super();
+class UserRegister extends Component {
+  constructor(props) {
+    super(props);
+    if (this.props.location.state != undefined) {
+      const { userupdate } = this.props.location.state;
+      this.state = {
+        _id: userupdate._id,
+        first_name: userupdate.first_name,
+        last_name: userupdate.last_name,
+        email: userupdate.email,
+        phone_no: userupdate.phone_no,
+        emails: userupdate.email,
+        sys_email: userupdate.email,
+        showMe: true,
+        showUser: false,
+        visible: false,
+      };
+    } else {
+      this.state = {
+        first_name: "",
+        last_name: "",
+        email: "",
+        emails: "",
+        phone_no: "",
+        showMe: true,
+        showUser: false,
+        visible: false,
+      };
+    }
 
-    this.state = {
-      first_name: "",
-      last_name: "",
-      phone_no: "",
-      adress: "",
-      password: "",
-      email: "",
-      status:false,
-      showMe: true,
-      showUser: false,
-    };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
@@ -27,13 +44,12 @@ class UsersPage extends Component {
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
-  //validation yapısı form
   handleValidation() {
     let first_name = this.state.first_name;
     let last_name = this.state.last_name;
     let email = this.state.email;
     let phone_no = this.state.phone_no;
-   
+
     let formIsValid = true;
     let partternLastname = /[a-zA-Z]/g;
     let resultLastname = partternLastname.test(last_name);
@@ -45,16 +61,10 @@ class UsersPage extends Component {
     let resultphone = patternphone.test(phone_no);
 
     //Boş mu kontrol?
-         if (
-      !first_name ||
-      !last_name ||
-      !email ||
-      !phone_no
-      
-    ) {
+    if (!first_name || !last_name || !email || !phone_no) {
       formIsValid = false;
       toast.error("Boş Bırakmayınız!");
-    }  
+    }
     //İsim için harf kontrol?
     if (resultname === false) {
       formIsValid = false;
@@ -76,31 +86,57 @@ class UsersPage extends Component {
 
     return formIsValid;
   }
+  updateUser() {
+    const updateUser = {
+      first_name: this.state.first_name,
+      last_name: this.state.last_name,
+      email: this.state.email,
+      phone_no: this.state.phone_no,
+      _id: this.state._id,
+    };
+
+    confirmAlert({
+      title: "Kullanıcı Güncelle",
+      message: "Kullanıcıyı güncellemek istediğinize emin misiniz?",
+      buttons: [
+        {
+          label: "Evet",
+          onClick: () =>
+            axios
+              .put("users/userupdate", updateUser)
+              .then((response) => {
+                this.props.history.push("/userslist");
+              })
+              .catch((error) => {
+                console.log(error);
+              }),
+        },
+        {
+          label: "Hayır",
+          onClick: () => this.props.history.push("/userupdate"),
+        },
+      ],
+    });
+  }
   onSubmit(e) {
     e.preventDefault();
     if (this.handleValidation()) {
-      const newUsers = {
-        first_name: this.state.first_name,
-        last_name: this.state.last_name,
-        password: this.state.phone_no,
-        email: this.state.email,
-        phone_no: this.state.phone_no,
-        status:this.state.status
-      };
-
-      axios
-        .post("users/register", newUsers)
-        .then((response) => {
-          if (response.request.response == "true") {
-            toast.success("Kayıt Başarılı! ");
-          } else if (response.request.response == "false") {
-            toast.error("Hata!Kayıt Başarısız! ");
-                    }else if (response.request.response == "err") {
-            toast.error("Hata! Eposta Sisteme Kayıtlı! ");
+      //vt aynı email ile güncellemesin diye
+      if (this.state.email != this.state.sys_email) {
+        const sysEmail = {
+          email: this.state.email
+        };
+        //telefon no kontrolü
+        axios.post("users/finduser", sysEmail).then((res) => {
+          if (res.request.response == "true") {
+            this.updateUser();
+          } else if (res.request.response == "false") {
+            toast.error("Hata! Eposta Sisteme Kayıtlı!");
           }
-          
-        })
-        
+        });
+      } else {
+        this.updateUser();
+      }
     }
   }
 
@@ -141,13 +177,12 @@ class UsersPage extends Component {
                     {this.state.showMe ? (
                       <div className="card card-primary">
                         <div className="card-header">
-                          <h3 className="card-title">Kullanıcı Ekle</h3>
+                          <h3 className="card-title">Kullanıcı Güncelle</h3>
                         </div>
-
                         <form noValidate onSubmit={this.onSubmit}>
                           <div className="card-body">
                             <div className="form-group">
-                              <label htmlFor="exampleInputEmail1">
+                              <label htmlFor="exampleInputPassword1">
                                 Kullanıcı Adı
                               </label>
                               <input
@@ -160,7 +195,6 @@ class UsersPage extends Component {
                                 required
                               />
                             </div>
-
                             <div className="form-group">
                               <label htmlFor="exampleInputPassword1">
                                 Kullanıcı Soyadı
@@ -176,7 +210,7 @@ class UsersPage extends Component {
                               />
                             </div>
                             <div className="form-group">
-                              <label htmlFor="exampleInputEmail1">
+                              <label htmlFor="exampleInputPassword1">
                                 Kullanıcı Eposta
                               </label>
                               <input
@@ -189,20 +223,21 @@ class UsersPage extends Component {
                                 required
                               />
                             </div>
-                           
                             <div className="form-group">
-                              <label htmlFor="exampleInputPassword1">
+                              <label htmlFor="exampleInputFile">
                                 Kullanıcı Telefon No
                               </label>
-                              <input
-                                type="text"
-                                className="form-control phone_no"
-                                placeholder="Kullanıcı Telefon No:"
-                                name="phone_no"
-                                maxLength="11"
-                                value={this.state.phone_no}
-                                onChange={this.onChange}
-                              />
+                              <div className="input-group">
+                                <input
+                                  type="text"
+                                  className="form-control phone_no"
+                                  placeholder="Kullanıcı Telefon No:"
+                                  name="phone_no"
+                                  maxLength="11"
+                                  value={this.state.phone_no}
+                                  onChange={this.onChange}
+                                />
+                              </div>
                             </div>
                           </div>
 
@@ -215,7 +250,7 @@ class UsersPage extends Component {
                               Kaydet
                             </button>
                           </div>
-                        </form>
+                        </form>{" "}
                         <ToastContainer />
                       </div>
                     ) : null}
@@ -230,4 +265,4 @@ class UsersPage extends Component {
     );
   }
 }
-export default UsersPage;
+export default UserRegister;

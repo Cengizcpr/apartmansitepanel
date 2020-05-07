@@ -10,6 +10,17 @@ class Menu extends Component {
       showMe: true,
       showUser: false,
     };
+    axios.get("builds/buildslist").then((response) => {
+      if (response.data[0] != undefined) {
+        this.setState({
+          locations: "/buildinfo",
+        });
+      } else {
+        this.setState({
+          locations: "/buildsetting",
+        });
+      }
+    });
   }
   componentDidMount(e) {
     const token = localStorage.usertoken;
@@ -83,8 +94,9 @@ class Menu extends Component {
                             <p>Anasayfa</p>
                           </Link>
                         </li>
+
                         <li className="nav-item ">
-                          <Link to="/buildsetting" className="nav-link ">
+                          <Link to={this.state.locations} className="nav-link ">
                             <i className="nav-icon fas fa-city" />
                             <p>Site Bilgileri</p>
                           </Link>
@@ -130,6 +142,12 @@ class Menu extends Component {
                           <Link to="/storesetting" className="nav-link ">
                             <i className="nav-icon fas fa-store" />
                             <p>Dükkan Detayları</p>
+                          </Link>
+                        </li>
+                        <li className="nav-item ">
+                          <Link to="/carpark" className="nav-link ">
+                            <i className="nav-icon fas fa-car" />
+                            <p>Otopark İşlemleri</p>
                           </Link>
                         </li>
                       </ul>

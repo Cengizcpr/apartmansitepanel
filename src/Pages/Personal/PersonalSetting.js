@@ -1,42 +1,23 @@
 import React, { Component } from "react";
-import Header from "../Home/Header";
-import Menu from "../Home/Menu";
+import Header from "../../Home/Header";
+import Menu from "../../Home/Menu";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
-import { confirmAlert } from "react-confirm-alert";
-import "react-confirm-alert/src/react-confirm-alert.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-class UserRegister extends Component {
-  constructor(props) {
-    super(props);
-    if (this.props.location.state != undefined) {
-      const { userupdate } = this.props.location.state;
-      this.state = {
-        _id: userupdate._id,
-        first_name: userupdate.first_name,
-        last_name: userupdate.last_name,
-        email: userupdate.email,
-        phone_no: userupdate.phone_no,
-        emails: userupdate.email,
-        sys_email: userupdate.email,
-        showMe: true,
-        showUser: false,
-        visible: false,
-      };
-    } else {
-      this.state = {
-        first_name: "",
-        last_name: "",
-        email: "",
-        emails: "",
-        phone_no: "",
-        showMe: true,
-        showUser: false,
-        visible: false,
-      };
-    }
+class PersonalSetting extends Component {
+  constructor() {
+    super();
 
+    this.state = {
+      first_name: "",
+      last_name: "",
+      phone_no: "",
+      adress: "",
+      departmans: "Departmanı Seçiniz..",
+      showMe: true,
+      showUser: false,
+    };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
@@ -44,29 +25,39 @@ class UserRegister extends Component {
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
+
+  handleChangePersonalDepartment = (e) => {
+    let index = e.nativeEvent.target.selectedIndex;
+
+    this.setState({
+      departmans: e.nativeEvent.target[index].text,
+    });
+  };
+  //validation yapısı form
   handleValidation() {
     let first_name = this.state.first_name;
     let last_name = this.state.last_name;
-    let email = this.state.email;
+    let adress = this.state.adress;
     let phone_no = this.state.phone_no;
-
+    let departmans = this.state.departmans;
     let formIsValid = true;
     let partternLastname = /[a-zA-Z]/g;
     let resultLastname = partternLastname.test(last_name);
     let partternname = /[a-zA-Z]/g;
     let resultname = partternname.test(first_name);
-    let patternemail = /[a-zA-Z0-9]+[\.]?([a-zA-Z0-9]+)?[\@][a-z]{3,9}[\.][a-z]{2,5}/g;
-    let resultemail = patternemail.test(email);
     let patternphone = /[0-9]{11}/g;
     let resultphone = patternphone.test(phone_no);
 
     //Boş mu kontrol?
-    if (!first_name || !last_name || !email || !phone_no) {
+    if (!first_name || !last_name || !phone_no || !adress) {
       formIsValid = false;
       toast.error("Boş Bırakmayınız!");
+    } else if (departmans == "Departmanı Seçiniz..") {
+      toast.warn("Lütfen Departmanı Seçiniz..");
+      formIsValid = false;
     }
     //İsim için harf kontrol?
-    if (resultname === false) {
+    else if (resultname === false) {
       formIsValid = false;
       toast.warn("Sadece Harf Giriniz!");
     }
@@ -74,11 +65,6 @@ class UserRegister extends Component {
     else if (resultLastname === false) {
       formIsValid = false;
       toast.warn("Sadece Harf Giriniz!");
-    }
-    //Email için uyumluluk kontrol?
-    else if (resultemail === false) {
-      formIsValid = false;
-      toast.error("Eposta Geçerli Değil!");
     } else if (resultphone === false) {
       formIsValid = false;
       toast.error("Telefon Numarası Geçerli Değil!");
@@ -86,57 +72,30 @@ class UserRegister extends Component {
 
     return formIsValid;
   }
-  updateUser() {
-    const updateUser = {
-      first_name: this.state.first_name,
-      last_name: this.state.last_name,
-      email: this.state.email,
-      phone_no: this.state.phone_no,
-      _id: this.state._id,
-    };
-
-    confirmAlert({
-      title: "Kullanıcı Güncelle",
-      message: "Kullanıcıyı güncellemek istediğinize emin misiniz?",
-      buttons: [
-        {
-          label: "Evet",
-          onClick: () =>
-            axios
-              .put("users/userupdate", updateUser)
-              .then((response) => {
-                this.props.history.push("/userslist");
-              })
-              .catch((error) => {
-                console.log(error);
-              }),
-        },
-        {
-          label: "Hayır",
-          onClick: () => this.props.history.push("/userupdate"),
-        },
-      ],
-    });
-  }
   onSubmit(e) {
     e.preventDefault();
     if (this.handleValidation()) {
-      //vt aynı email ile güncellemesin diye
-      if (this.state.email != this.state.sys_email) {
-        const sysEmail = {
-          email: this.state.email
-        };
-        //telefon no kontrolü
-        axios.post("users/finduser", sysEmail).then((res) => {
-          if (res.request.response == "true") {
-            this.updateUser();
-          } else if (res.request.response == "false") {
-            toast.error("Hata! Eposta Sisteme Kayıtlı!");
+      const newPersonal = {
+        first_name: this.state.first_name,
+        last_name: this.state.last_name,
+        adress: this.state.adress,
+        phone_no: this.state.phone_no,
+        departmans: this.state.departmans,
+      };
+      axios
+        .post("personals/personaladd", newPersonal)
+        .then((response) => {
+          if(response.request.response=="true")
+          {
+            toast.success("Kayıt Başarılı");
           }
-        });
-      } else {
-        this.updateUser();
-      }
+          else if (response.request.response == "false") {
+            toast.error("Hata!Kayıt Başarısız! ");
+                    }else if (response.request.response == "err") {
+            toast.error("Hata! Telefon Numarası Sisteme Kayıtlı! ");
+          }
+        })
+       
     }
   }
 
@@ -177,67 +136,84 @@ class UserRegister extends Component {
                     {this.state.showMe ? (
                       <div className="card card-primary">
                         <div className="card-header">
-                          <h3 className="card-title">Kullanıcı Güncelle</h3>
+                          <h3 className="card-title">Personel Ekle</h3>
                         </div>
+
                         <form noValidate onSubmit={this.onSubmit}>
                           <div className="card-body">
                             <div className="form-group">
-                              <label htmlFor="exampleInputPassword1">
-                                Kullanıcı Adı
+                              <label htmlFor="exampleInputEmail1">
+                                Personel Adı
                               </label>
                               <input
                                 type="text"
                                 className="form-control"
-                                placeholder="Kullanıcı Adı:"
+                                placeholder="Personel Adı:"
                                 name="first_name"
                                 value={this.state.first_name}
                                 onChange={this.onChange}
                                 required
                               />
                             </div>
+
                             <div className="form-group">
                               <label htmlFor="exampleInputPassword1">
-                                Kullanıcı Soyadı
+                                Personel Soyadı
                               </label>
                               <input
                                 type="text"
                                 className="form-control"
-                                placeholder="Kullanıcı Soyadı:"
+                                placeholder="Personel Soyadı:"
                                 name="last_name"
                                 value={this.state.last_name}
                                 onChange={this.onChange}
                                 required
                               />
                             </div>
+
                             <div className="form-group">
                               <label htmlFor="exampleInputPassword1">
-                                Kullanıcı Eposta
+                                Personel Telefon No
                               </label>
                               <input
                                 type="text"
-                                className="form-control"
-                                placeholder="Kullanıcı Eposta:"
-                                name="email"
-                                value={this.state.email}
+                                className="form-control phone_no"
+                                name="phone_no"
+                                placeholder="Personel Telefon No:"
+                                maxLength="11"
+                                value={this.state.phone_no}
                                 onChange={this.onChange}
-                                required
                               />
                             </div>
                             <div className="form-group">
-                              <label htmlFor="exampleInputFile">
-                                Kullanıcı Telefon No
+                              <label htmlFor="exampleInputPassword1">
+                                Personel Departmanı
                               </label>
-                              <div className="input-group">
-                                <input
-                                  type="text"
-                                  className="form-control phone_no"
-                                  placeholder="Kullanıcı Telefon No:"
-                                  name="phone_no"
-                                  maxLength="11"
-                                  value={this.state.phone_no}
-                                  onChange={this.onChange}
-                                />
-                              </div>
+                              <select
+                                className="form-control"
+                                onChange={this.handleChangePersonalDepartment}
+                              >
+                                <option>{this.state.departmans}</option>
+                                <option>Kapıcı </option>
+                                <option>Teknik Servis </option>
+                                <option>Güvenlik </option>
+                                <option>Bahçıvan </option>
+                                <option>Temizlikçi </option>
+                              </select>
+                            </div>
+                            <div className="form-group">
+                              <label htmlFor="exampleInputEmail1">
+                                Personel Adresi
+                              </label>
+                              <textarea
+                                rows="3"
+                                className="form-control"
+                                placeholder="Personel Adresi:"
+                                name="adress"
+                                value={this.state.adress}
+                                onChange={this.onChange}
+                                required
+                              />
                             </div>
                           </div>
 
@@ -250,7 +226,7 @@ class UserRegister extends Component {
                               Kaydet
                             </button>
                           </div>
-                        </form>{" "}
+                        </form>
                         <ToastContainer />
                       </div>
                     ) : null}
@@ -265,4 +241,4 @@ class UserRegister extends Component {
     );
   }
 }
-export default UserRegister;
+export default PersonalSetting;

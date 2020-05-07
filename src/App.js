@@ -2,23 +2,25 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import register from "./component/Register";
 import login from "./component/Login";
-import Profile from "./Pages/Profile";
+import Profile from "./Pages/User/Profile";
 import Home from "./Home/Home";
 import Notfound from "./component/Notfound";
-import Users from "./Pages/UsersPage";
-import BuildSetting from "./Pages/BuildSetting";
-import BlockSetting from "./Pages/BlockSetting";
-import PersonalSetting from "./Pages/PersonalSetting";
-import PersonalList from "./Pages/PersonalList";
-import PersonalUpdate from "./Pages/PersonalUpdate";
-import UsersList from "./Pages/UsersList";
-import UserRegister from "./Pages/UserUpdate";
-import StatusError from "./Pages/StatusError";
+import Users from "./Pages/User/UsersPage";
+import BuildSetting from "./Pages/Build/BuildSetting";
+import BuildUpdate from "./Pages/Build/BuildUpdate";
+import BlockSetting from "./Pages/Block/BlockSetting";
+import PersonalSetting from "./Pages/Personal/PersonalSetting";
+import PersonalList from "./Pages/Personal/PersonalList";
+import PersonalUpdate from "./Pages/Personal/PersonalUpdate";
+import UsersList from "./Pages/User/UsersList";
+import UserRegister from "./Pages/User/UserUpdate";
+import StatusError from "./component/StatusError";
 import UserHome from "./Home/UserHome";
-import ApartmentSetting from "./Pages/ApartmentSetting";
-import ApartmentUpdate from "./Pages/ApartmentUpdate";
-import StoreSetting from "./Pages/StoreSetting";
-import StoreUpdate from "./Pages/StoreUpdate";
+import ApartmentSetting from "./Pages/Apartment/ApartmentSetting";
+import ApartmentUpdate from "./Pages/Apartment/ApartmentUpdate";
+import StoreSetting from "./Pages/Store/StoreSetting";
+import StoreUpdate from "./Pages/Store/StoreUpdate";
+import CarPark from "./Pages/CarPark/CarPark";
 import Test from "./Pages/Test";
 class App extends Component {
   render() {
@@ -34,6 +36,7 @@ class App extends Component {
           <Route exact path="/userupdate" component={UserRegister}/>
           <Route exact path="/userslist" component={UsersList} />
           <Route exact path="/buildsetting" component={BuildSetting} />
+          <Route exact path="/buildinfo" component={BuildUpdate} />
           <Route exact path="/blocksetting" component={BlockSetting} />
           <Route exact path="/personaladd" component={PersonalSetting} />
           <Route exact path="/personallist" component={PersonalList} />
@@ -44,6 +47,7 @@ class App extends Component {
           <Route exact path="/apartmentregister" component={ApartmentUpdate}  />
           <Route exact path="/storesetting" component={StoreSetting}/>
           <Route export path="/storeregister" component={StoreUpdate}/>
+          <Route export path="/carpark" component={CarPark}/>
           <Route exact component={Notfound} />
         </Switch>
       </Router>

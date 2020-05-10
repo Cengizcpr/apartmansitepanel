@@ -3,10 +3,17 @@ const Schema = mongoose.Schema
 
 // otopark Şema Oluşturuldu.
 const CarparkSchema = new Schema({
+  
+   car_owner:{
+    type:String
+   },
    car_brand:{
     type:String
    },
    car_color:{
+     type:String
+   },
+   car_email:{
      type:String
    },
    car_plate:{
@@ -17,9 +24,6 @@ const CarparkSchema = new Schema({
    },
    phone_no:{
      type:String
-   },
-   car_owner:{
-    type:String
    },
   date: {
     type: Date,

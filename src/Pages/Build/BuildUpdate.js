@@ -11,12 +11,12 @@ class BuildUpdate extends Component {
     super();
     this.state = {
       build_name: "",
-      build_nameinp:"",
-      phone_noinp:"",
+      build_nameinp: "",
+      phone_noinp: "",
       phone_no: "",
-      adressinp:"",
+      adressinp: "",
       adress: "",
-      blocknumbersinp:"Blok Sayısı Seçiniz",
+      blocknumbersinp: "Blok Sayısı Seçiniz",
       blocknumbers: "",
       locations: [],
       showMe: true,
@@ -36,169 +36,153 @@ class BuildUpdate extends Component {
       blocknumbersinp: e.nativeEvent.target[index].text,
     });
   };
-    //validation yapısı form
-    handleValidation() {
-        let build_name = this.state.build_nameinp;
-        let phone_no = this.state.phone_noinp;
-        let adress = this.state.adressinp;
-        let blocknumbers = this.state.blocknumbersinp;
-        let formIsValid = true;
-        let partternBuildname = /[a-zA-Z0-9]/g;
-        let resultBuildname = partternBuildname.test(build_name);
-    
-        let patternphone = /[0-9]{11}/g;
-        let resultphone = patternphone.test(phone_no);
-       
-        //Boş mu kontrol?
-        if (
-          !build_name ||
-          !phone_no ||
-          !adress ||
-          !blocknumbers 
-          
-        ) {
-          formIsValid = false;
-          toast.error("Boş Bırakmayınız!");
-        }
-        //Site için harf kontrol?
-        else if (resultBuildname === false) {
-          formIsValid = false;
-          toast.warn("Sadece Harf ve Sayı Giriniz!");
-        }
-       
-        //Telefon için uyumluluk kontrol
-       else if (resultphone === false) {
-          formIsValid = false;
-          toast.error("Telefon Numarası Geçerli Değil!");
-        }
-        else if(blocknumbers=="Blok Sayısı Seçiniz.."){
-          formIsValid = false;
-          toast.error("Lütfen Blok Sayısı Seçiniz!");
-        }
-    
-        return formIsValid;
-      }
-      onSubmit(e) {
-        e.preventDefault();
-        if (this.handleValidation()) {
-    
-        const alf = [
-          "",
-          "A",
-          "B",
-          "C",
-          "D",
-          "E",
-          "F",
-          "G",
-          "H",
-          "I",
-          "J",
-          "K",
-          "L",
-          "M",
-          "N",
-          "O",
-          "P",
-          "R",
-          "S",
-          "T",
-          "U"
-        ];
-        const newBlocks = [];
-        //site bilgileri getir
-        axios.get("builds/buildslist").then(response => {
-      
-          if (response.data[0] != undefined) {
-         
-            const updateBuilds = {
-              build_name: this.state.build_nameinp,
-              phone_no: this.state.phone_noinp,
-              adress: this.state.adressinp,
-              blocknumbers: this.state.blocknumbersinp,
-              _id:response.data[0]._id
-            };
-            
-                    axios.put("builds/buildsupdate", updateBuilds).then(response => {
-                      axios
-                        .post("builds/buildsetting", updateBuilds)
-                        .then(response => {
-                          //site bilgileri güncellenınce blokları sıl
-                          axios.delete("blocks/blockdelete").then(res => {
-                            for (var i = 1; i <= this.state.blocknumbersinp; i++) {
-                              newBlocks[i] = {
-                                block_name: alf[i],
-                                circlenumber: "Girilmedi",
-                                storenumber: "Girilmedi"
-                              };
-                            }
-                            for (var i = 1; i <= this.state.blocknumbersinp; i++) {
-                              //blok bılgılerını ekle
-    
-                              axios
-                                .post("blocks/blocksetting", newBlocks[i])
-                                .then(response => {
-                                  //Blok eklendi
-                                })
-                                .catch(error => {
-                                  //blok eklenmedi
-                                });
-                              
-                            }
-                            
-                          toast.success("Site Bilgileri Güncellendi !");
-                        
-                          });
-                        })
-                        .catch(error => {
-                          toast.eror("Hata!Site Bilgileri Güncellenmedi !");
-                        });
-                    })
-                
-          } else {
-            const newBuilds = {
-              build_name: this.state.build_nameinp,
-              phone_no: this.state.phone_noinp,
-              adress: this.state.adressinp,
-              blocknumbers: this.state.blocknumbersinp,
-              
-            };
+  //validation yapısı form
+  handleValidation() {
+    let build_name = this.state.build_nameinp;
+    let phone_no = this.state.phone_noinp;
+    let adress = this.state.adressinp;
+    let blocknumbers = this.state.blocknumbersinp;
+    let formIsValid = true;
+    let partternBuildname = /[a-zA-Z0-9]/g;
+    let resultBuildname = partternBuildname.test(build_name);
+
+    let patternphone = /[0-9]{11}/g;
+    let resultphone = patternphone.test(phone_no);
+
+    //Boş mu kontrol?
+    if (!build_name || !phone_no || !adress || !blocknumbers) {
+      formIsValid = false;
+      toast.error("Boş Bırakmayınız!");
+    }
+    //Site için harf kontrol?
+    else if (resultBuildname === false) {
+      formIsValid = false;
+      toast.warn("Sadece Harf ve Sayı Giriniz!");
+    }
+
+    //Telefon için uyumluluk kontrol
+    else if (resultphone === false) {
+      formIsValid = false;
+      toast.error("Telefon Numarası Geçerli Değil!");
+    } else if (blocknumbers == "Blok Sayısı Seçiniz..") {
+      formIsValid = false;
+      toast.error("Lütfen Blok Sayısı Seçiniz!");
+    }
+
+    return formIsValid;
+  }
+  onSubmit(e) {
+    e.preventDefault();
+    if (this.handleValidation()) {
+      const alf = [
+        "",
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H",
+        "I",
+        "J",
+        "K",
+        "L",
+        "M",
+        "N",
+        "O",
+        "P",
+        "R",
+        "S",
+        "T",
+        "U",
+      ];
+      const newBlocks = [];
+      //site bilgileri getir
+      axios.get("builds/buildslist").then((response) => {
+        if (response.data[0] != undefined) {
+          const updateBuilds = {
+            build_name: this.state.build_nameinp,
+            phone_no: this.state.phone_noinp,
+            adress: this.state.adressinp,
+            blocknumbers: this.state.blocknumbersinp,
+            _id: response.data[0]._id,
+          };
+
+          axios.put("builds/buildsupdate", updateBuilds).then((response) => {
             axios
-              .post("builds/buildsetting", newBuilds)
-              .then(response => {
+              .post("builds/buildsetting", updateBuilds)
+              .then((response) => {
                 //site bilgileri güncellenınce blokları sıl
-                axios.delete("blocks/blockdelete").then(res => {
+                axios.delete("blocks/blockdelete").then((res) => {
                   for (var i = 1; i <= this.state.blocknumbersinp; i++) {
                     newBlocks[i] = {
                       block_name: alf[i],
                       circlenumber: "Girilmedi",
-                      storenumber: "Girilmedi"
+                      storenumber: "Girilmedi",
                     };
                   }
                   for (var i = 1; i <= this.state.blocknumbersinp; i++) {
                     //blok bılgılerını ekle
-    
+
                     axios
                       .post("blocks/blocksetting", newBlocks[i])
-                      .then(response => {
-                      //  console.log(" eklendi.");
+                      .then((response) => {
+                        //Blok eklendi
                       })
-                      .catch(error => {
-                       // console.log("Blok bilgileri eklenmedi.");
+                      .catch((error) => {
+                        //blok eklenmedi
                       });
-                    
                   }
+
                   toast.success("Site Bilgileri Güncellendi !");
-              
                 });
               })
-              .catch(error => {
+              .catch((error) => {
                 toast.eror("Hata!Site Bilgileri Güncellenmedi !");
               });
-          }
-        });
-      }
-      }
+          });
+        } else {
+          const newBuilds = {
+            build_name: this.state.build_nameinp,
+            phone_no: this.state.phone_noinp,
+            adress: this.state.adressinp,
+            blocknumbers: this.state.blocknumbersinp,
+          };
+          axios
+            .post("builds/buildsetting", newBuilds)
+            .then((response) => {
+              //site bilgileri güncellenınce blokları sıl
+              axios.delete("blocks/blockdelete").then((res) => {
+                for (var i = 1; i <= this.state.blocknumbersinp; i++) {
+                  newBlocks[i] = {
+                    block_name: alf[i],
+                    circlenumber: "Girilmedi",
+                    storenumber: "Girilmedi",
+                  };
+                }
+                for (var i = 1; i <= this.state.blocknumbersinp; i++) {
+                  //blok bılgılerını ekle
+
+                  axios
+                    .post("blocks/blocksetting", newBlocks[i])
+                    .then((response) => {
+                      //  console.log(" eklendi.");
+                    })
+                    .catch((error) => {
+                      // console.log("Blok bilgileri eklenmedi.");
+                    });
+                }
+                toast.success("Site Bilgileri Güncellendi !");
+              });
+            })
+            .catch((error) => {
+              toast.eror("Hata!Site Bilgileri Güncellenmedi !");
+            });
+        }
+      });
+    }
+  }
   componentDidMount(e) {
     const token = localStorage.usertoken;
     try {
@@ -369,7 +353,10 @@ class BuildUpdate extends Component {
                                   className="form-control"
                                   onChange={this.handleChangeBlockNumbers}
                                 >
-                                  <option> {this.state.blocknumbersinp} </option>
+                                  <option>
+                                    {" "}
+                                    {this.state.blocknumbersinp}{" "}
+                                  </option>
                                   {blocknumbers}
                                 </select>
                               </div>

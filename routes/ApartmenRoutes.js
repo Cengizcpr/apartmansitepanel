@@ -90,6 +90,8 @@ apartmens.post("/apartmenslist", (req, res) => {
   //daire kayıtları bos
     });
 });
+
+
 apartmens.post("/apartmensdelete", (req, res) => {
   Apartmen.remove({ block_name: req.body.block_name })
     .then((objs) => {

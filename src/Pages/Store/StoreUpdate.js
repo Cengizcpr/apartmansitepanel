@@ -219,6 +219,7 @@ class StoreUpdate extends Component {
         <Menu />
         <div className="content-wrapper">
           <div className="card">
+          <div className="card-body">
             <div className="container ">
               <section className="content ">
                 <div className="row justify-content-center">
@@ -383,6 +384,7 @@ class StoreUpdate extends Component {
                   </div>
                 </div>
               </section>
+            </div>
             </div>
           </div>
         </div>

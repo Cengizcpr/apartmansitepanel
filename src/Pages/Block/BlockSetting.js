@@ -18,7 +18,7 @@ class BlockSetting extends Component {
       showMeBlockİnfo: false,
       block_name: "",
       title_name: "",
-      sys_blockname:"",
+      sys_blockname: "",
       _id: "",
       showMe: true,
       showUser: false,
@@ -48,22 +48,20 @@ class BlockSetting extends Component {
     let block_name = this.state.block_name;
     let circlenumber = this.state.circlenumber;
     let storenumber = this.state.storenumber;
-   
+
     let formIsValid = true;
-   
+
     let partternname = /[a-zA-Z0-9]/g;
     let resultBlockname = partternname.test(block_name);
- 
 
     //Boş mu kontrol?
-    if (!block_name ) {
+    if (!block_name) {
       formIsValid = false;
       toast.error("Blok Adını Boş Bırakmayınız!");
     } else if (circlenumber == "Daire Sayısı Seçiniz...") {
       toast.warn("Lütfen Daire Sayısı Seçiniz..");
       formIsValid = false;
-    }
-    else if (storenumber == "Dükkan Sayısı Seçiniz...") {
+    } else if (storenumber == "Dükkan Sayısı Seçiniz...") {
       toast.warn("Lütfen Dükkan Sayısı Seçiniz..");
       formIsValid = false;
     }
@@ -72,7 +70,6 @@ class BlockSetting extends Component {
       formIsValid = false;
       toast.warn("Sadece Harf Giriniz!");
     }
-   
 
     return formIsValid;
   }
@@ -82,7 +79,7 @@ class BlockSetting extends Component {
     for (var i = 1; i <= this.state.circlenumber; i++) {
       newApartmens[i] = {
         block_name: this.state.block_name,
-        circlenumber:i,
+        circlenumber: i,
       };
     }
     for (var i = 1; i <= this.state.circlenumber; i++) {
@@ -113,8 +110,8 @@ class BlockSetting extends Component {
     }
   }
   //update blok
-  updateBlock(){
-  const newBlocks = {
+  updateBlock() {
+    const newBlocks = {
       block_name: this.state.block_name,
       circlenumber: this.state.circlenumber,
       storenumber: this.state.storenumber,
@@ -145,20 +142,20 @@ class BlockSetting extends Component {
               }); //veritabanına dükkan sayıları kayıt
           });
 
-       toast.success("Blok Bilgileri Kaydedilmiştir!")
+        toast.success("Blok Bilgileri Kaydedilmiştir!");
       })
       .catch((error) => {
-    //Site bilgileri eklenmedi
-      }); 
+        //Site bilgileri eklenmedi
+      });
   }
-  //kontrol vt 
+  //kontrol vt
   onSubmit(e) {
     e.preventDefault();
     if (this.handleValidation()) {
       //vt aynı block ile güncellemesin diye
       if (this.state.block_name != this.state.sys_blockname) {
         const sysEmail = {
-          block_name: this.state.block_name
+          block_name: this.state.block_name,
         };
         //telefon no kontrolü
         axios.post("blocks/findblock", sysEmail).then((res) => {
@@ -171,7 +168,6 @@ class BlockSetting extends Component {
       } else {
         this.updateBlock();
       }
-  
     }
   }
   handleChangeCircleNumbers = (e) => {
@@ -246,27 +242,24 @@ class BlockSetting extends Component {
   onVisibleİnfo(data) {
     this.setState({
       block_name: data.block_name,
-      sys_blockname:data.block_name,
+      sys_blockname: data.block_name,
       showMeBlock: false,
       showMeBlockİnfo: true,
       _id: data._id,
       title_name: data.block_name,
-      circlenumber:data.circlenumber,
-      storenumber:data.storenumber
+      circlenumber: data.circlenumber,
+      storenumber: data.storenumber,
     });
-    if(data.circlenumber=="Girilmedi")
-    {
+    if (data.circlenumber == "Girilmedi") {
       this.setState({
-        circlenumber:"Daire Sayısı Seçiniz..."
-      })
+        circlenumber: "Daire Sayısı Seçiniz...",
+      });
     }
-    if(data.storenumber=="Girilmedi")
-    {
+    if (data.storenumber == "Girilmedi") {
       this.setState({
-        storenumber:"Dükkan Sayısı Seçiniz..."
-      })
+        storenumber: "Dükkan Sayısı Seçiniz...",
+      });
     }
-   
   }
   render() {
     const blocknumbers = this.state.locations.map((data) => (
@@ -305,8 +298,8 @@ class BlockSetting extends Component {
         <Menu />
         {this.state.showMe ? (
           <div className="content-wrapper">
-            {this.state.showMeBlock ? (
-              <div className="content-header">
+            <div className="content-header">
+              {this.state.showMeBlock ? (
                 <section>
                   {/*Blok Uyarı Mesajı*/}
                   <Modal
@@ -343,80 +336,71 @@ class BlockSetting extends Component {
                     </div>
                   </Modal>
                 </section>
-                <div className="row">{blocknumbers}</div>
-              </div>
-            ) : null}
-            {this.state.showMeBlockİnfo ? (
-              <div className="card">
-                <div className="container">
-                  <section className="content">
-                    <div className="row justify-content-center">
-                      <div className="col-md-6">
-                        <div className="card card-primary">
-                          <div className="card-header">
-                            <h3 className="card-title">
-                              {this.state.title_name} Blok Bilgileri
-                            </h3>
-                          </div>
-                          <form noValidate onSubmit={this.onSubmit}>
-                            <div className="card-body">
-                              <div className="form-group">
-                                <label htmlFor="exampleInputEmail1">
-                                  Blok Adı
-                                </label>
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  name="block_name"
-                                  value={this.state.block_name}
-                                  onChange={this.onChange}
-                                  required
-                                />
-                              </div>
-                              <div className="form-group">
-                                <label htmlFor="exampleInputPassword1">
-                                  Daire Sayısı
-                                </label>
-                                <select
-                                  className="form-control"
-                                  onChange={this.handleChangeCircleNumbers}
-                                >
-                                  <option>{this.state.circlenumber} </option>
-                                  {circlenumbers}
-                                </select>
-                              </div>
-                              <div className="form-group">
-                                <label htmlFor="exampleInputPassword1">
-                                  Dükkan Sayısı
-                                </label>
-                                <select
-                                  className="form-control"
-                                  onChange={this.handleChangeStoreNumbers}
-                                >
-                                  <option>{this.state.storenumber} </option>
-                                  {storenumbers}
-                                </select>
-                              </div>
-                            </div>
-                            <div className="card-footer">
-                              <button
-                                type="submit"
-                                className="btn btn-primary"
-                                onClick={this.onSubmit}
-                              >
-                                Kaydet
-                              </button>
-                            </div>
-                          </form>
-                        </div>
+              ) : null}
+              <div className="row">{blocknumbers}</div>
+              {this.state.showMeBlockİnfo ? (
+                <div className="row justify-content-center">
+                  <div className="col-md-6">
+                    <div className="card card-primary">
+                      <div className="card-header">
+                        <h3 className="card-title">
+                          {this.state.title_name} Blok Bilgileri
+                        </h3>
                       </div>
+                      <form noValidate onSubmit={this.onSubmit}>
+                        <div className="card-body">
+                          <div className="form-group">
+                            <label htmlFor="exampleInputEmail1">Blok Adı</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              name="block_name"
+                              value={this.state.block_name}
+                              onChange={this.onChange}
+                              required
+                            />
+                          </div>
+                          <div className="form-group">
+                            <label htmlFor="exampleInputPassword1">
+                              Daire Sayısı
+                            </label>
+                            <select
+                              className="form-control"
+                              onChange={this.handleChangeCircleNumbers}
+                            >
+                              <option>{this.state.circlenumber} </option>
+                              {circlenumbers}
+                            </select>
+                          </div>
+                          <div className="form-group">
+                            <label htmlFor="exampleInputPassword1">
+                              Dükkan Sayısı
+                            </label>
+                            <select
+                              className="form-control"
+                              onChange={this.handleChangeStoreNumbers}
+                            >
+                              <option>{this.state.storenumber} </option>
+                              {storenumbers}
+                            </select>
+                          </div>
+                        </div>
+                        <div className="card-footer">
+                          <button
+                            type="submit"
+                            className="btn btn-primary"
+                            onClick={this.onSubmit}
+                          >
+                            Kaydet
+                          </button>
+                        </div>
+                      </form>
                     </div>
-                  </section>
+                  </div>{" "}
+                  <ToastContainer />
                 </div>
-                <ToastContainer />
-              </div>
-
-            ) : null}
+              ) : null}{" "}
+            </div>
           </div>
         ) : null}
         {this.state.showUser ? this.props.history.push("/statuserror") : null}

@@ -21,6 +21,8 @@ import ApartmentUpdate from "./Pages/Apartment/ApartmentUpdate";
 import StoreSetting from "./Pages/Store/StoreSetting";
 import StoreUpdate from "./Pages/Store/StoreUpdate";
 import CarPark from "./Pages/CarPark/CarPark";
+import FaultRegister from "./Pages/Fault/FaultRegister";
+
 import Test from "./Pages/Test";
 class App extends Component {
   render() {
@@ -48,6 +50,7 @@ class App extends Component {
           <Route exact path="/storesetting" component={StoreSetting}/>
           <Route export path="/storeregister" component={StoreUpdate}/>
           <Route export path="/carpark" component={CarPark}/>
+          <Route export path="/faultregister" component={FaultRegister}/>
           <Route exact component={Notfound} />
         </Switch>
       </Router>

@@ -76,7 +76,6 @@ class ApartmentSetting extends Component {
               locationsApartment: response.data,
             });
           }
-          console.log(response.request)
         })
         .catch((error) => {
   
@@ -163,6 +162,7 @@ class ApartmentSetting extends Component {
         <Menu />
         <div className="content-wrapper">
           <div className="card">
+            <div className="card-body">
             <div className="container ">
               <section className="content ">
                 <div className="row justify-content-center">
@@ -246,6 +246,7 @@ class ApartmentSetting extends Component {
               ) : null}
             </div>
           </div>
+        </div>
         </div>
         {this.state.showUser ? this.props.history.push("/statuserror") : null}
       </div>

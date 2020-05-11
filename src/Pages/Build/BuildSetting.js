@@ -254,6 +254,9 @@ class BuildSetting extends Component {
         <Header />
         <Menu />
         <div className="content-wrapper">
+          
+     <section className="content">
+  <div className="container-fluid">
           <div className="card">
             <div className="container ">
               <section className="content ">
@@ -346,6 +349,8 @@ class BuildSetting extends Component {
               </section>
             </div>
           </div>
+        </div>
+        </section>
         </div>
         {this.state.showUser ? this.props.history.push("/statuserror") : null}
       </div>

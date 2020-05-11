@@ -170,6 +170,7 @@ class UserRegister extends Component {
         <Menu />
         <div className="content-wrapper">
           <div className="card">
+          <div className="card-body">
             <div className="container ">
               <section className="content ">
                 <div className="row justify-content-center">
@@ -259,6 +260,7 @@ class UserRegister extends Component {
               </section>
             </div>
           </div>
+        </div>
         </div>
         {this.state.showUser ? this.props.history.push("/statuserror") : null}
       </div>

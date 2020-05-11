@@ -113,7 +113,23 @@ users.post("/finduser", (req, res) => {
       res.send("true");
     } else {
       res.send("false");
+
     }
+  });
+});
+//arıza için liste
+users.post("/findiduser", (req, res) => {
+  User.findOne({
+    _id: req.body._id,
+  })    .then((user) => {
+    if (user) {
+      res.json(user);
+    } else {
+      res.json({ error: "Admin already exists" });
+    }
+  })
+  .catch((err) => {
+    res.send("error: " + err);
   });
 });
 users.put("/userupdate", (req, res) => {

@@ -11,7 +11,7 @@ export default class Home extends Component {
 
     this.state = {
       showMe: true,
-      showUser: false
+      showUser: false,
     };
   }
   componentDidMount(e) {
@@ -19,15 +19,14 @@ export default class Home extends Component {
     try {
       jwt_decode(token);
       const decoded = jwt_decode(token);
-      axios.get("users/adminprofile").then(res => {
+      axios.get("users/adminprofile").then((res) => {
         var response = res.data;
         for (var i = 0; i < response.length; i++) {
           if (decoded.email === response[i].email) {
             if (response[i].status == false) {
-              
               this.setState({
                 showMe: false,
-                showUser: true
+                showUser: true,
               });
             }
           }
@@ -44,7 +43,9 @@ export default class Home extends Component {
         {this.state.showMe ? <Menu /> : this.props.history.push("/userhome")}
 
         <div className="content-wrapper">
-          <div className="content-header">Hoşgeldiniz</div>
+          <section className="content">
+            <div className="container-fluid"></div>
+          </section>
         </div>
         {this.state.showUser ? this.props.history.push("/statuserror") : null}
       </div>

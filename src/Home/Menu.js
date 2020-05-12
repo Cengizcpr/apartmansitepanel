@@ -150,12 +150,23 @@ class Menu extends Component {
                             <p>Otopark İşlemleri</p>
                           </Link>
                         </li>
+                        <li className="nav-item ">
+                          <Link to="/faultregister" className="nav-link ">
+                            <i className="nav-icon fas fa-tools" />
+                            <p>Arıza İşlemleri</p>
+                          </Link>
+                        </li>
+                        <li className="nav-item ">
+                          <Link to="/faultlist" className="nav-link ">
+                            <i class="nav-icon fas fa-list"></i> <p>Arıza Listele</p>
+                          </Link>
+                        </li>
                       </ul>
                     </nav>
                   </div>
                 </aside>
               ) : null}
-              {this.state.showUser ? (
+                  {this.state.showUser ? (
                 <aside className="main-sidebar sidebar-dark-primary elevation-4">
                   <Link to="/home" className="brand-link">
                     <img
@@ -197,12 +208,17 @@ class Menu extends Component {
                             <i className="nav-icon fas fa-tachometer-alt" />
                             <p>Anasayfa</p>
                           </Link>
+                        </li>   <li className="nav-item ">
+                          <Link to="/faultregister" className="nav-link ">
+                            <i className="nav-icon fas fa-tools" />
+                            <p>Arıza İşlemleri</p>
+                          </Link>
                         </li>
                       </ul>
                     </nav>
                   </div>
                 </aside>
-              ) : null}
+              ) : null}  
             </div>
           </div>
         </div>

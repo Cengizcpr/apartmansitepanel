@@ -16,6 +16,9 @@ class FaultRegister extends Component {
       fault_type: "",
       fault_comment: "",
       fault_priority: "",
+      _id: "",
+      fault_email:"",
+      fault_style:"",
       locationsfault: [],
     };
     this.onChange = this.onChange.bind(this);
@@ -32,25 +35,68 @@ class FaultRegister extends Component {
       fault_priority: e.nativeEvent.target[index].text,
     });
   };
-  onSubmit(e) {
-    e.preventDefault();
-    const newFault = {
-      fault_owner: this.state.fault_owner,
-      fault_locations: this.state.fault_locations,
-      fault_name: this.state.fault_name,
-      fault_type: this.state.fault_type,
-      fault_priority: this.state.fault_priority,
-      fault_comment: this.state.fault_comment,
-    };
+  handleValidation() {
+    let formIsValid = true;
+    let fault_locations = this.state.fault_locations;
+    let fault_name = this.state.fault_name;
+    let fault_owner = this.state.fault_owner;
+    let fault_type = this.state.fault_type;
+    let fault_priority = this.state.fault_priority;
+    let fault_comment = this.state.fault_comment;
 
+    //Boş mu kontrol?
+    if (
+      !fault_comment ||
+      !fault_locations ||
+      !fault_name ||
+      !fault_owner ||
+      !fault_type
+    ) {
+      formIsValid = false;
+      toast.error("Boş Alan Bırakmayınız!");
+    } else if (!fault_priority) {
+      formIsValid = false;
+      toast.warn("Lütfen Öncelik Durumu Seçiniz!");
+    } else if (fault_priority == "Öncelik Durum Seçiniz..") {
+      formIsValid = false;
+      toast.warn("Lütfen Öncelik Durumu Seçiniz!");
+    }
+    return formIsValid;
+  }
+  deleteFault(data) {
     axios
-      .post("fault/faultregister", newFault)
+      .post("fault/faultdelete", { _id: data._id })
       .then((res) => {
-        toast.success("Arıza Kayıt Başarılı!");
+        toast.success("Arıza Silindi!");
+
+        window.location.replace("/faultregister");
       })
       .catch((err) => {
-        toast.error("Hata! Kayıt Başarısız!");
+        toast.error("Hata! Arıza Silinemedi!");
       });
+  }
+  onSubmit(e) {
+    e.preventDefault();
+    if (this.handleValidation()) {
+      const newFault = {
+        fault_owner: this.state.fault_owner,
+        fault_locations: this.state.fault_locations,
+        fault_name: this.state.fault_name,
+        fault_type: this.state.fault_type,
+        fault_priority: this.state.fault_priority,
+        fault_comment: this.state.fault_comment,
+        fault_email:this.state.fault_email
+      };
+
+      axios
+        .post("fault/faultregister", newFault)
+        .then((res) => {
+          toast.success("Arıza Kayıt Başarılı!");
+        })
+        .catch((err) => {
+          toast.error("Hata! Kayıt Başarısız!");
+        });
+    }
   }
   componentDidMount(e) {
     const token = localStorage.usertoken;
@@ -66,13 +112,18 @@ class FaultRegister extends Component {
               .then((res) => {
                 this.setState({
                   fault_owner: res.data.first_name + " " + res.data.last_name,
+                  fault_email:res.data.email
                 });
                 //arıza listelenmesı
                 axios.get("fault/faultlist").then((res) => {
                   const result = [];
                   for (var i = 0; i < res.data.length; i++) {
-                    if (res.data[i].fault_owner == this.state.fault_owner) {
+                    if (res.data[i].fault_email == this.state.fault_email) {
+                      
                       result[i] = res.data[i];
+                      this.setState({
+                        fault_style:res.data[i].fault_style
+                      })
                     }
                   }
                   this.setState({
@@ -93,12 +144,11 @@ class FaultRegister extends Component {
 
   render() {
     const faultinfo = this.state.locationsfault.map((data) => (
-      <div className="alert alert-danger alert-dismissible" key={data._id}>
+      <div className={this.state.fault_style} key={data._id}>
         <button
           type="button"
           className="close"
-          data-dismiss="alert"
-          aria-hidden="true"
+          onClick={() => this.deleteFault(data)}
         >
           ×
         </button>
@@ -111,9 +161,9 @@ class FaultRegister extends Component {
         </p>
         <p>
           {" "}
-          Arıza Cins : {data.fault_type} Öncelik : {data.fault_priority}{" "}
-        </p>{" "}
-        <p> Arıza Açıklaması :{data.fault_comment}</p>
+          Arıza Cins : {data.fault_type} Öncelik : {data.fault_priority}
+          {"       "}{" "}
+        </p>
       </div>
     ));
     return (
@@ -128,7 +178,7 @@ class FaultRegister extends Component {
                   <div className="content-header">
                     <div className="row">
                       <div className="col-lg-6">
-                        <div className="card">
+                        <div className="card card-danger">
                           <div className="card-header border-0">
                             <div className="d-flex justify-content-between">
                               <h3 className="card-title">Arıza Talep Formu</h3>
@@ -146,6 +196,16 @@ class FaultRegister extends Component {
                                 <div className="col-sm-7">
                                   <label className="col-sm-7 col-form-label">
                                     {this.state.fault_owner}
+                                  </label>
+                                </div>
+                              </div>
+                              <div className="form-group row">
+                                <label className="col-sm-3 col-form-label">
+                                  Arıza Email :
+                                </label>
+                                <div className="col-sm-9">
+                                  <label className="col-sm-9 col-form-label">
+                                    {this.state.fault_email}
                                   </label>
                                 </div>
                               </div>
@@ -243,7 +303,7 @@ class FaultRegister extends Component {
                         </div>
                       </div>
                       <div className="col-lg-6">
-                        <div className="card">
+                        <div className="card card-danger">
                           <div className="card-header border-0">
                             <div className="d-flex justify-content-between">
                               <h3 className="card-title">Arızalar</h3>

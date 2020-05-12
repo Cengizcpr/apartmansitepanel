@@ -7,6 +7,9 @@ const FaultSchema = new Schema({
     fault_owner:{
     type:String
    },
+   fault_email:{
+     type:String
+   },
    fault_locations:{
     type:String
    },
@@ -23,6 +26,9 @@ const FaultSchema = new Schema({
      type:String
    },
    fault_state:{
+     type:String
+   },
+   fault_style:{
      type:String
    },
   date: {

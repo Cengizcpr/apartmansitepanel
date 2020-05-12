@@ -54,6 +54,12 @@ class Menu extends Component {
                           <p>Anasayfa</p>
                         </Link>
                       </li>
+                      <li className="nav-item ">
+                          <Link to="/faultregister" className="nav-link ">
+                            <i className="nav-icon fas fa-tools" />
+                            <p>Arıza İşlemleri</p>
+                          </Link>
+                        </li>
                     </ul>
                   </nav>
                 </div>

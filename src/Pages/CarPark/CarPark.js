@@ -13,7 +13,7 @@ class CarPark extends Component {
       last_name: "",
       phone_no: "",
       email: "",
-      _id:"",
+      _id: "",
       car_email: "",
       block_name: "",
       car_brand: "",
@@ -167,33 +167,31 @@ class CarPark extends Component {
         });
     }
   };
-  updateCar(data)
-  {
+  updateCar(data) {
     this.setState({
-      car_brand:data.car_brand,
-      car_owner:data.car_owner,
-      car_plate:data.car_plate,
-      locationsnumbers:data.locations,
-      car_color:data.car_color,
-      _id:data._id
-    })
+      car_brand: data.car_brand,
+      car_owner: data.car_owner,
+      car_plate: data.car_plate,
+      locationsnumbers: data.locations,
+      car_color: data.car_color,
+      _id: data._id,
+    });
   }
-  deleteCar(data)
-  {
+  deleteCar(data) {
     this.setState({
-      _id:data._id
-    })
-    console.log(this.state._id)
+      _id: data._id,
+    });
+    console.log(this.state._id);
     axios
       .post("carpark/cardelete", {
-        _id: data._id
+        _id: data._id,
       })
       .then((response) => {
         toast.success("Araç Silindi!");
       })
-      .catch((err)=>{
-      toast.error("Hata!Araç Silinemedi!");
-      })
+      .catch((err) => {
+        toast.error("Hata!Araç Silinemedi!");
+      });
   }
   findCarSubmit(e) {
     e.preventDefault();
@@ -223,40 +221,33 @@ class CarPark extends Component {
         locations: this.state.locationsnumbers,
         car_owner: this.state.first_name + " " + this.state.last_name,
         car_email: this.state.car_email,
-        
       };
-      
+
       axios
-      .post("carpark/locationfind", {
-        locations: this.state.locationsnumbers,
-      })
-      .then((response) => {
-        if(response.request.response=="true"){
-
-          axios.put("carpark/carupdate", newPark).then((response) => {
-            if(response.request.response=="true"){
-              toast.success("Güncelleme Başarılı! ");
-            }
-            else if(response.request.response=="true"){
-              toast.error("Hata! Güncelleme Başarısız! ");
-            }
-             
-          })
-        }
-     else   if(response.request.response=="false"){
-
-    
-      axios.post("carpark/carregister", newPark).then((response) => {
-        if (response.request.response == "true") {
-          toast.success("Kayıt Başarılı! ");
-        } else if (response.request.response == "false") {
-          toast.error("Hata!Kayıt Başarısız! ");
-        } else if (response.request.response == "err") {
-          toast.error("Hata! Konumda Araç Kayıtlı! ");
-        }
-      }); 
-      }
-      });
+        .post("carpark/locationfind", {
+          locations: this.state.locationsnumbers,
+        })
+        .then((response) => {
+          if (response.request.response == "true") {
+            axios.put("carpark/carupdate", newPark).then((response) => {
+              if (response.request.response == "true") {
+                toast.success("Güncelleme Başarılı! ");
+              } else if (response.request.response == "true") {
+                toast.error("Hata! Güncelleme Başarısız! ");
+              }
+            });
+          } else if (response.request.response == "false") {
+            axios.post("carpark/carregister", newPark).then((response) => {
+              if (response.request.response == "true") {
+                toast.success("Kayıt Başarılı! ");
+              } else if (response.request.response == "false") {
+                toast.error("Hata!Kayıt Başarısız! ");
+              } else if (response.request.response == "err") {
+                toast.error("Hata! Konumda Araç Kayıtlı! ");
+              }
+            });
+          }
+        });
     }
   }
   componentDidMount(e) {
@@ -314,7 +305,27 @@ class CarPark extends Component {
         <td>{data.car_brand}</td>
         <td>{data.car_color}</td>
         <td>{data.car_plate} </td>
-        <td> <button class="btn btn-success btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top"  onClick={() => this.updateCar(data)}><i class="fa fa-edit"></i></button> <button class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" onClick={() => this.deleteCar(data)}><i class="fa fa-trash"></i></button></td>
+        <td>
+          {" "}
+          <button
+            class="btn btn-success btn-sm rounded-0"
+            type="button"
+            data-toggle="tooltip"
+            data-placement="top"
+            onClick={() => this.updateCar(data)}
+          >
+            <i class="fa fa-edit"></i>
+          </button>{" "}
+          <button
+            class="btn btn-danger btn-sm rounded-0"
+            type="button"
+            data-toggle="tooltip"
+            data-placement="top"
+            onClick={() => this.deleteCar(data)}
+          >
+            <i class="fa fa-trash"></i>
+          </button>
+        </td>
       </tr>
     ));
     return (
@@ -322,103 +333,114 @@ class CarPark extends Component {
         {" "}
         <Header />
         <Menu />
-        <div className="container">
-          {" "}
-          {this.state.showMe ? (
-            <div className="content-header">
-              <div className="col-md-12">
-                <div className="card card-warning">
-                  <div className="card-header">
-                    <h3 className="card-title">Otopark İşlemleri</h3>
-                  </div>
-                  <div className="card-body">
-                    <div className="main-panel">
-                      <div>
-                        <div className="row">
-                          <div className="col-md-6 grid-margin stretch-card mb-2">
-                            <div className="card">
-                              <div className="card-body">
-                                <form onSubmit={this.findCarSubmit.bind(this)}>
-                                  <div className="form-group row">
-                                    <label className="col-sm-6 col-form-label">
-                                      Araç Sahibi Bilgileri
-                                    </label>
-                                  </div>
-                                  <div className="form-group row">
-                                    <label className="col-sm-3 col-form-label">
-                                      Blok Seçiniz:
-                                    </label>
-                                    <div className="col-sm-4">
-                                      <select
-                                        className="form-control"
-                                        onChange={this.handleChangeBlockName}
-                                      >
-                                        <option>Blok Seçiniz</option>
-                                        {blocknumbers}
-                                      </select>
-                                    </div>
-                                  </div>{" "}
-                                  <div className="form-group row">
-                                    <label className="col-sm-3 col-form-label">
-                                      Daire Seçiniz:
-                                    </label>
-                                    <div className="col-sm-4">
-                                      <select
-                                        className="form-control"
-                                        onChange={
-                                          this.handleChangeCircleNumbers
-                                        }
-                                      >
-                                        <option>Daire Seçiniz</option>
-                                        {aparmentnumbers}
-                                      </select>
-                                    </div>
-                                  </div>
-                                  <div className="form-group row">
-                                    <label className="col-sm-3 col-form-label">
-                                      Ad Soyad :
-                                    </label>
-                                    <div className="col-sm-9">
-                                      <h3 className="col-sm-9 col-form-label">
-                                        {this.state.first_name}{" "}
-                                        {this.state.last_name}
-                                      </h3>
-                                    </div>
-                                  </div>
-                                  <div className="form-group row">
-                                    <label className="col-sm-3 col-form-label">
-                                      Eposta :
-                                    </label>
-                                    <div className="col-sm-9">
-                                      <h3 className="col-sm-9 col-form-label">
-                                        {this.state.email}
-                                      </h3>
-                                    </div>
-                                  </div>
-                                  <div className="form-group row">
-                                    <label className="col-sm-3 col-form-label">
-                                      Telefon :
-                                    </label>
-                                    <div className="col-5">
-                                      <h3 className="col-sm-9 col-form-label">
-                                        {this.state.phone_no}
-                                      </h3>
-                                    </div>
-                                    <div className="col-sm-4">
-                                      <div className="col-sm-9">
-                                        <button
-                                          className="btn btn-warning mr-2"
+        <div className="content-wrapper">
+          <div className="card">
+            <div className="card-body">
+              <div className="container-fluid">
+                <div className="container">
+                  {" "}
+                  {this.state.showMe ? (
+                    <div className="content-header">
+                      <div className="col-md-12">
+                        <div className="card card-warning">
+                          <div className="card-header">
+                            <h3 className="card-title">Otopark İşlemleri</h3>
+                          </div>
+                          <div className="card-body">
+                            <div className="main-panel">
+                              <div>
+                                <div className="row">
+                                  <div className="col-md-6 grid-margin stretch-card mb-2">
+                                    <div className="card">
+                                      <div className="card-body">
+                                        <form
                                           onSubmit={this.findCarSubmit.bind(
                                             this
                                           )}
                                         >
-                                          <i class="fas fa-search"></i> Bul
-                                        </button>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </form>
-                                {/*      <div className="form-group row">
+                                          <div className="form-group row">
+                                            <label className="col-sm-6 col-form-label">
+                                              Araç Sahibi Bilgileri
+                                            </label>
+                                          </div>
+                                          <div className="form-group row">
+                                            <label className="col-sm-3 col-form-label">
+                                              Blok Seçiniz:
+                                            </label>
+                                            <div className="col-sm-4">
+                                              <select
+                                                className="form-control"
+                                                onChange={
+                                                  this.handleChangeBlockName
+                                                }
+                                              >
+                                                <option>Blok Seçiniz</option>
+                                                {blocknumbers}
+                                              </select>
+                                            </div>
+                                          </div>{" "}
+                                          <div className="form-group row">
+                                            <label className="col-sm-3 col-form-label">
+                                              Daire Seçiniz:
+                                            </label>
+                                            <div className="col-sm-4">
+                                              <select
+                                                className="form-control"
+                                                onChange={
+                                                  this.handleChangeCircleNumbers
+                                                }
+                                              >
+                                                <option>Daire Seçiniz</option>
+                                                {aparmentnumbers}
+                                              </select>
+                                            </div>
+                                          </div>
+                                          <div className="form-group row">
+                                            <label className="col-sm-3 col-form-label">
+                                              Ad Soyad :
+                                            </label>
+                                            <div className="col-sm-9">
+                                              <h3 className="col-sm-9 col-form-label">
+                                                {this.state.first_name}{" "}
+                                                {this.state.last_name}
+                                              </h3>
+                                            </div>
+                                          </div>
+                                          <div className="form-group row">
+                                            <label className="col-sm-3 col-form-label">
+                                              Eposta :
+                                            </label>
+                                            <div className="col-sm-9">
+                                              <h3 className="col-sm-9 col-form-label">
+                                                {this.state.email}
+                                              </h3>
+                                            </div>
+                                          </div>
+                                          <div className="form-group row">
+                                            <label className="col-sm-3 col-form-label">
+                                              Telefon :
+                                            </label>
+                                            <div className="col-5">
+                                              <h3 className="col-sm-9 col-form-label">
+                                                {this.state.phone_no}
+                                              </h3>
+                                            </div>
+                                            <div className="col-sm-4">
+                                              <div className="col-sm-9">
+                                                <button
+                                                  className="btn btn-warning mr-2"
+                                                  onSubmit={this.findCarSubmit.bind(
+                                                    this
+                                                  )}
+                                                >
+                                                  <i class="fas fa-search"></i>{" "}
+                                                  Bul
+                                                </button>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </form>
+                                        {/*      <div className="form-group row">
                                   <label className="col-sm-9 col-form-label">
                                    
                                   </label>
@@ -433,16 +455,16 @@ class CarPark extends Component {
                                   
                                   </div>
                                 </div> */}
-                              </div>
-                            </div>
-                          </div>
-                          <ToastContainer />
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <ToastContainer />
 
-                          <div className="col-md-6 grid-margin stretch-card mb-2">
-                            <div className="card">
-                              <div className="card-body">
-                                <form className="forms-sample">
-                                  {/*   <div className="form-group row">
+                                  <div className="col-md-6 grid-margin stretch-card mb-2">
+                                    <div className="card">
+                                      <div className="card-body">
+                                        <form className="forms-sample">
+                                          {/*   <div className="form-group row">
                                     <label className="col-sm-2 col-form-label"></label>
                                     <div className="col-sm-5">
                                       <img
@@ -453,120 +475,125 @@ class CarPark extends Component {
                                     </div>
                                   </div> */}
 
-                                  <div className="form-group row">
-                                    <label className="col-sm-6 col-form-label">
-                                      Araç Bilgileri
-                                    </label>
-                                  </div>
-                                  <div className="form-group row">
-                                    <label className="col-sm-3 col-form-label">
-                                      Konum :
-                                    </label>
-                                    <div className="col-sm-5">
-                                      <select
-                                        className="form-control"
-                                        onChange={this.handleChangeLocations}
-                                      >
-                                        <option>
-                                          {this.state.locationsnumbers}
-                                        </option>
-                                        {carlocations}
-                                      </select>
-                                    </div>
-                                  </div>
-                                  <div className="form-group row">
-                                    <label className="col-sm-3 col-form-label">
-                                      Araç Marka :
-                                    </label>
-                                    <div className="col-sm-7">
-                                      <input
-                                        type="text"
-                                        className="form-control"
-                                        name="car_brand"
-                                        placeholder="Araç Marka Giriniz:"
-                                        onChange={this.onChange}
-                                        value={this.state.car_brand}
-                                      />
-                                    </div>
-                                  </div>
-                                  <div className="form-group row">
-                                    <label className="col-sm-3 col-form-label">
-                                      Renk :
-                                    </label>
-                                    <div className="col-sm-7">
-                                      <input
-                                        type="text"
-                                        className="form-control"
-                                        name="car_color"
-                                        placeholder="Araç Renk Giriniz:"
-                                        onChange={this.onChange}
-                                        value={this.state.car_color}
-                                      />
-                                    </div>
-                                  </div>
-                                  <div className="form-group row">
-                                    <label className="col-sm-3 col-form-label">
-                                      Plaka :
-                                    </label>
-                                    <div className="col-sm-7">
-                                      <input
-                                        type="text"
-                                        className="form-control"
-                                        name="car_plate"
-                                        maxLength="8"
-                                        placeholder="Araç Plaka Giriniz:"
-                                        onChange={this.onChange}
-                                        value={this.state.car_plate}
-                                      />
-                                    </div>
-                                  </div>
+                                          <div className="form-group row">
+                                            <label className="col-sm-6 col-form-label">
+                                              Araç Bilgileri
+                                            </label>
+                                          </div>
+                                          <div className="form-group row">
+                                            <label className="col-sm-3 col-form-label">
+                                              Konum :
+                                            </label>
+                                            <div className="col-sm-5">
+                                              <select
+                                                className="form-control"
+                                                onChange={
+                                                  this.handleChangeLocations
+                                                }
+                                              >
+                                                <option>
+                                                  {this.state.locationsnumbers}
+                                                </option>
+                                                {carlocations}
+                                              </select>
+                                            </div>
+                                          </div>
+                                          <div className="form-group row">
+                                            <label className="col-sm-3 col-form-label">
+                                              Araç Marka :
+                                            </label>
+                                            <div className="col-sm-7">
+                                              <input
+                                                type="text"
+                                                className="form-control"
+                                                name="car_brand"
+                                                placeholder="Araç Marka Giriniz:"
+                                                onChange={this.onChange}
+                                                value={this.state.car_brand}
+                                              />
+                                            </div>
+                                          </div>
+                                          <div className="form-group row">
+                                            <label className="col-sm-3 col-form-label">
+                                              Renk :
+                                            </label>
+                                            <div className="col-sm-7">
+                                              <input
+                                                type="text"
+                                                className="form-control"
+                                                name="car_color"
+                                                placeholder="Araç Renk Giriniz:"
+                                                onChange={this.onChange}
+                                                value={this.state.car_color}
+                                              />
+                                            </div>
+                                          </div>
+                                          <div className="form-group row">
+                                            <label className="col-sm-3 col-form-label">
+                                              Plaka :
+                                            </label>
+                                            <div className="col-sm-7">
+                                              <input
+                                                type="text"
+                                                className="form-control"
+                                                name="car_plate"
+                                                maxLength="8"
+                                                placeholder="Araç Plaka Giriniz:"
+                                                onChange={this.onChange}
+                                                value={this.state.car_plate}
+                                              />
+                                            </div>
+                                          </div>
 
-                                  <div className="form-group row">
-                                    <div className="col-sm-9">
-
-                                      <button
-                                        className="btn btn-primary mr-2"
-                                        type="submit"
-                                        onClick={this.onSubmit}
-                                      >
-                                        <i class="fas fa-save"></i> 
-                                        Kaydet
-                                      </button>
+                                          <div className="form-group row">
+                                            <div className="col-sm-9">
+                                              <button
+                                                className="btn btn-primary mr-2"
+                                                type="submit"
+                                                onClick={this.onSubmit}
+                                              >
+                                                <i class="fas fa-save"></i>
+                                                Kaydet
+                                              </button>
+                                            </div>
+                                          </div>
+                                        </form>
+                                      </div>
                                     </div>
                                   </div>
-                                </form>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="row">
+                              <div className="col-sm-12">
+                                <div className="card-body">
+                                  <table className="table table-bordered">
+                                    <thead>
+                                      <tr>
+                                        <th>Konum</th>
+                                        <th>Ad Soyad</th>
+                                        <th>Telefon No</th>
+                                        <th>Marka</th>
+                                        <th>Renk</th>
+                                        <th>Plaka</th>
+                                        <th>Ayarlar</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>{carlist}</tbody>
+                                  </table>
+                                </div>
                               </div>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
-
-                    <div className="row">
-                      <div className="col-sm-12">
-                        <div className="card-body">
-                          <table className="table table-bordered">
-                            <thead>
-                              <tr>
-                                <th>Konum</th>
-                                <th>Ad Soyad</th>
-                                <th>Telefon No</th>
-                                <th>Marka</th>
-                                <th>Renk</th>
-                                <th>Plaka</th>
-                                <th>Ayarlar</th>
-                              </tr>
-                            </thead>
-                            <tbody>{carlist}</tbody>
-                          </table>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  ) : null}
                 </div>
               </div>
             </div>
-          ) : null}
+          </div>
         </div>
         {this.state.showUser ? this.props.history.push("/statuserror") : null}
       </div>

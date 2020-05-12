@@ -14,12 +14,14 @@ faults.post("/faultregister", (req, res) => {
     date.getFullYear();
   const faultData = {
     fault_owner: req.body.fault_owner,
+    fault_email:req.body.fault_email,
     fault_locations: req.body.fault_locations,
     fault_name: req.body.fault_name,
     fault_type: req.body.fault_type,
     fault_priority: req.body.fault_priority,
     fault_comment: req.body.fault_comment,
-    fault_state:"Arıza Bildirildi",
+    fault_state:"Bekleniyor",
+    fault_style:"alert alert-danger alert-dismissible",
     date: today,
   };
 
@@ -44,5 +46,14 @@ faults.get("/faultlist", (req, res) => {
   .catch((err) => {
     res.send("error: " + err);
   });
+});
+faults.post("/faultdelete", (req, res) => {
+  Fault.deleteOne({ _id: req.body._id })
+    .then((objs) => {
+      res.json(objs);
+    })
+    .catch((err) => {
+      res.json({ error: "faut already exists" });
+    });
 });
 module.exports = faults;

@@ -232,7 +232,7 @@ class CarPark extends Component {
             axios.put("carpark/carupdate", newPark).then((response) => {
               if (response.request.response == "true") {
                 toast.success("Güncelleme Başarılı! ");
-              } else if (response.request.response == "true") {
+              } else if (response.request.response == "false") {
                 toast.error("Hata! Güncelleme Başarısız! ");
               }
             });

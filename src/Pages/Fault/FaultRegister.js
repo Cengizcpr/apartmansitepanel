@@ -114,9 +114,12 @@ class FaultRegister extends Component {
                   fault_owner: res.data.first_name + " " + res.data.last_name,
                   fault_email:res.data.email
                 });
+                
                 //arıza listelenmesı
                 axios.get("fault/faultlist").then((res) => {
                   const result = [];
+                 
+                    
                   for (var i = 0; i < res.data.length; i++) {
                     if (res.data[i].fault_email == this.state.fault_email) {
                       
@@ -125,16 +128,22 @@ class FaultRegister extends Component {
                         fault_style:res.data[i].fault_style
                       })
                     }
-                  }
+                 
+                  }if(res.data.length>0){
                   this.setState({
                     locationsfault: result,
                   });
-                });
+                }
+                else{
+                  toast.info("Herhangi Arıza Kaydınız Bulunmamaktadır.")
+                }
+                })  
               })
               .catch((err) => {
                 toast.error("Hata! Arıza Sahibi Listelenemedi!");
               });
           }
+        
         }
       });
     } catch (error) {

@@ -79,18 +79,27 @@ class FaultList extends Component {
       fault_style: data.fault_style,
       _id: data._id,
     });
-    this.openModalFault();
+    this.openModalFault(); 
   }
   onSubmit(e) {
     e.preventDefault();
-    let style = "";
+/*   mesaj özellıgı   const message={
+      to:"+905530130692",
+      body:this.state.fault_owner
+    } */
+    axios.post("/api/messages").then((res)=>{
+      toast.success("okey")
+    }).catch((err)=>{
+      toast.error("asdas")
+    }) 
+     let style = "";
     if (this.state.fault_state == "Yapıldı") {
       style = "alert alert-success alert-dismissible";
     } else {
       style = "alert alert-danger alert-dismissible";
     }
 
-    const faultData = {
+/*     const faultData = {
       fault_owner: this.state.fault_owner,
       fault_email: this.state.fault_email,
       fault_locations: this.state.fault_locations,
@@ -110,7 +119,7 @@ class FaultList extends Component {
         this.closeModalFault();
         toast.error("Hata! Güncelleme Başarısız! ");
       }
-    });
+    });  */
   }
   componentDidMount(e) {
     const token = localStorage.usertoken;

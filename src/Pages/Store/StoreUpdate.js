@@ -231,13 +231,13 @@ class StoreUpdate extends Component {
                             {this.state.title_name} Dükkan Bilgileri
                           </h3>
                         </div>
-
-                        <form noValidate>
-                          <div className="card-body">
-                            <div className="form-group">
-                              <label htmlFor="exampleInputPassword1">
-                                Dükkan Adı
-                              </label>
+                        <form noValidate onSubmit={this.onSubmit}>
+                            <div className="card-body">
+                              <div className="form-group row">
+                                <label className="col-sm-5 col-form-label">
+                                Dükkan Adı :
+                                </label>
+                                <div className="col-sm-6">
                               <input
                                 type="text"
                                 className="form-control"
@@ -246,13 +246,16 @@ class StoreUpdate extends Component {
                                 value={this.state.storenumber}
                                 onChange={this.onChange}
                                 required
-                              ></input>
-                            </div>
-                            <div className="form-group">
-                              <label htmlFor="exampleInputPassword1">
-                                Dükkan Durumu
-                              </label>
-                              <select
+                              />
+                                </div>
+                              </div>
+
+                              <div className="form-group row">
+                                <label className="col-sm-5 col-form-label">
+                                  Dükkan Durumu :
+                                </label>
+                                <div className="col-sm-6">
+                                <select
                                 className="form-control"
                                 onChange={this.handleChangeHostState}
                               >
@@ -261,12 +264,13 @@ class StoreUpdate extends Component {
                                 <option> Ev Sahibi </option>
                                 <option> Kiracı </option>
                               </select>
-                            </div>
-                            <div className="form-group">
-                              <label htmlFor="exampleInputFile">
-                                Dükkan Sahibi Adı
-                              </label>
-                              <div className="input-group">
+                                </div>
+                              </div>
+                              <div className="form-group row">
+                                <label className="col-sm-5 col-form-label">
+                                Dükkan Sahibi Adı :
+                                </label>
+                                <div className="col-sm-6">
                                 <input
                                   type="text"
                                   className="form-control"
@@ -276,13 +280,13 @@ class StoreUpdate extends Component {
                                   onChange={this.onChange}
                                   required
                                 />
+                                </div>
                               </div>
-                            </div>
-                            <div className="form-group">
-                              <label htmlFor="exampleInputFile">
-                                Dükkan Sahibi Soyadı
-                              </label>
-                              <div className="input-group">
+                              <div className="form-group row">
+                                <label className="col-sm-5 col-form-label">
+                               Dükkan Sahibi Soyadı :
+                                </label>
+                                <div className="col-sm-6">
                                 <input
                                   type="text"
                                   className="form-control"
@@ -292,13 +296,13 @@ class StoreUpdate extends Component {
                                   onChange={this.onChange}
                                   required
                                 />
+                                </div>
                               </div>
-                            </div>
-                            <div className="form-group">
-                              <label htmlFor="exampleInputFile">
-                                Dükkan Telefon No
-                              </label>
-                              <div className="input-group">
+                              <div className="form-group row">
+                                <label className="col-sm-5 col-form-label">
+                                Dükkan Telefon No :
+                                </label>
+                                <div className="col-sm-6">
                                 <input
                                   type="text"
                                   className="form-control"
@@ -308,13 +312,13 @@ class StoreUpdate extends Component {
                                   onChange={this.onChange}
                                   required
                                 />
+                                </div>
                               </div>
-                            </div>
-                            <div className="form-group">
-                              <label htmlFor="exampleInputFile">
-                                Dükkan Email Adresi
-                              </label>
-                              <div className="input-group">
+                              <div className="form-group row">
+                                <label className="col-sm-5 col-form-label">
+                                Dükkan Email Adresi :
+                                </label>
+                                <div className="col-sm-6">
                                 <input
                                   type="text"
                                   className="form-control"
@@ -324,20 +328,39 @@ class StoreUpdate extends Component {
                                   onChange={this.onChange}
                                   required
                                 />
+                                </div>
                               </div>
+                              <div className="form-group row">
+                                <label className="col-sm-5 col-form-label">
+                                Dükkan Araç Sayısı:
+                                </label>
+                                <div className="col-sm-6">
+                                <select
+                                className="form-control"
+                                
+                               
+                              >
+                                
+                                <option>Araç Yok</option>
+                               
+                              </select>
+                                </div>
+                              </div>
+                              <button
+                                type="submit"
+                                className="btn btn-primary"
+                                onClick={this.onSubmit}
+                              >
+                                Kaydet
+                              </button>
                             </div>
-                          </div>
+                          </form>
+                      
+                       
+                      
+                    
 
-                          <div className="card-footer">
-                            <button
-                              type="submit"
-                              className="btn btn-primary"
-                              onClick={this.onSubmit}
-                            >
-                              Kaydet
-                            </button>
-                          </div>
-                        </form>
+                        
                         <section>
                           <Modal
                             visible={this.state.visible}

@@ -30,6 +30,8 @@ var StoreSetting = require("./routes/StoreRoutes");
 var CarPark = require("./routes/CarPark");
 var FaultSetting = require("./routes/FaultRoutes");
 var Message= require("./routes/Message");
+var İyzipay= require("./routes/iyzipay");
+
 app.use("/users", User);
 app.use("/apartmens", ApartmenSetting);
 app.use("/builds", BuildSetting);
@@ -39,6 +41,8 @@ app.use("/stores", StoreSetting);
 app.use("/carpark", CarPark);
 app.use("/fault", FaultSetting);
 app.use("/api",Message)
+app.use("/pay",İyzipay);
+
 app.use(express.static(path.join(__dirname, "public")));
 app.listen(port, function () {
   console.log("Server is running on port: " + port);

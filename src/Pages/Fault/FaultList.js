@@ -86,12 +86,12 @@ class FaultList extends Component {
 /*   mesaj özellıgı   const message={
       to:"+905530130692",
       body:this.state.fault_owner
-    } */
+    } 
     axios.post("/api/messages").then((res)=>{
       toast.success("okey")
     }).catch((err)=>{
       toast.error("asdas")
-    }) 
+    }) */
      let style = "";
     if (this.state.fault_state == "Yapıldı") {
       style = "alert alert-success alert-dismissible";
@@ -99,7 +99,7 @@ class FaultList extends Component {
       style = "alert alert-danger alert-dismissible";
     }
 
-/*     const faultData = {
+     const faultData = {
       fault_owner: this.state.fault_owner,
       fault_email: this.state.fault_email,
       fault_locations: this.state.fault_locations,
@@ -119,7 +119,7 @@ class FaultList extends Component {
         this.closeModalFault();
         toast.error("Hata! Güncelleme Başarısız! ");
       }
-    });  */
+    }); 
   }
   componentDidMount(e) {
     const token = localStorage.usertoken;
@@ -282,72 +282,72 @@ class FaultList extends Component {
                                         </button>
                                       </div>
                                       <div className="modal-body">
-                                        <div className="form-group row">
+                                        <div className="form-group row justify-content-center">
                                           <label className="col-sm-3 col-form-label">
                                             Arıza Yeri :
                                           </label>
-                                          <div className="col-sm-9">
-                                            <h3 className="col-sm-9 col-form-label">
+                                          <div className="col-sm-7">
+                                            <h3 className="col-sm-7 col-form-label">
                                               {this.state.fault_locations}
                                             </h3>
                                           </div>
                                         </div>
-                                        <div className="form-group row">
+                                        <div className="form-group row justify-content-center">
                                           <label className="col-sm-3 col-form-label">
                                             Arıza Sahibi Ad Soyad :
                                           </label>
-                                          <div className="col-sm-9">
-                                            <h3 className="col-sm-9 col-form-label">
+                                          <div className="col-sm-7">
+                                            <h3 className="col-sm-7 col-form-label">
                                               {this.state.fault_owner}
                                             </h3>
                                           </div>
                                         </div>
-                                        <div className="form-group row">
+                                        <div className="form-group row justify-content-center">
                                           <label className="col-sm-3 col-form-label">
                                             Arıza Sahibi Email :
                                           </label>
-                                          <div className="col-sm-9">
-                                            <h3 className="col-sm-9 col-form-label">
+                                          <div className="col-sm-7">
+                                            <h3 className="col-sm-7 col-form-label">
                                               {this.state.fault_email}
                                             </h3>
                                           </div>
                                         </div>
-                                        <div className="form-group row">
+                                        <div className="form-group row justify-content-center">
                                           <label className="col-sm-3 col-form-label">
                                             Arıza Tipi :
                                           </label>
-                                          <div className="col-sm-9">
-                                            <h3 className="col-sm-9 col-form-label">
+                                          <div className="col-sm-7">
+                                            <h3 className="col-sm-7 col-form-label">
                                               {this.state.fault_type}
                                             </h3>
                                           </div>
                                         </div>
-                                        <div className="form-group row">
+                                        <div className="form-group row justify-content-center">
                                           <label className="col-sm-3 col-form-label">
                                             Arıza Öncelik :
                                           </label>
-                                          <div className="col-sm-9">
-                                            <h3 className="col-sm-9 col-form-label">
+                                          <div className="col-sm-7">
+                                            <h3 className="col-sm-7 col-form-label">
                                               {this.state.fault_priority}
                                             </h3>
                                           </div>
                                         </div>
-                                        <div className="form-group row">
+                                        <div className="form-group row justify-content-center">
                                           <label className="col-sm-3 col-form-label">
                                             Arıza Açıklaması :
                                           </label>
-                                          <div className="col-sm-9">
-                                            <h3 className="col-sm-9 col-form-label">
+                                          <div className="col-sm-7">
+                                            <h3 className="col-sm-7 col-form-label">
                                               {this.state.fault_comment}
                                             </h3>
                                           </div>
                                         </div>
-                                        <div className="form-group row">
+                                        <div className="form-group row justify-content-center">
                                           <label className="col-sm-3 col-form-label">
                                             Arıza Durum :
                                           </label>
-                                          <div className="col-sm-6">
-                                            <h3 className="col-sm-6 col-form-label">
+                                          <div className="col-sm-7">
+                                            <h3 className="col-sm-7 col-form-label">
                                               <select
                                                 className="form-control"
                                                 onChange={

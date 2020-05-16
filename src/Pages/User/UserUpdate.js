@@ -182,11 +182,12 @@ class UserRegister extends Component {
                         </div>
                         <form noValidate onSubmit={this.onSubmit}>
                           <div className="card-body">
-                            <div className="form-group">
-                              <label htmlFor="exampleInputPassword1">
-                                Kullanıcı Adı
-                              </label>
-                              <input
+                          <div className="form-group row">
+                                <label className="col-sm-5 col-form-label">
+                                Kullanıcı Adı :
+                                </label>
+                                <div className="col-sm-6">
+                                <input
                                 type="text"
                                 className="form-control"
                                 placeholder="Kullanıcı Adı:"
@@ -195,26 +196,31 @@ class UserRegister extends Component {
                                 onChange={this.onChange}
                                 required
                               />
-                            </div>
-                            <div className="form-group">
-                              <label htmlFor="exampleInputPassword1">
-                                Kullanıcı Soyadı
-                              </label>
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="Kullanıcı Soyadı:"
-                                name="last_name"
-                                value={this.state.last_name}
-                                onChange={this.onChange}
-                                required
-                              />
-                            </div>
-                            <div className="form-group">
-                              <label htmlFor="exampleInputPassword1">
-                                Kullanıcı Eposta
-                              </label>
-                              <input
+                                </div>
+                              </div>
+                              <div className="form-group row">
+                                <label className="col-sm-5 col-form-label">
+                                Kullanıcı Soyadı :
+                                </label>
+                                <div className="col-sm-6">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  placeholder="Kullanıcı Soyadı:"
+                                  name="last_name"
+                                  value={this.state.last_name}
+                                  onChange={this.onChange}
+                                  required
+                                />
+                                </div>
+                              </div>
+                         
+                              <div className="form-group row">
+                                <label className="col-sm-5 col-form-label">
+                                Kullanıcı Eposta :
+                                </label>
+                                <div className="col-sm-6">
+                                <input
                                 type="text"
                                 className="form-control"
                                 placeholder="Kullanıcı Eposta:"
@@ -223,35 +229,40 @@ class UserRegister extends Component {
                                 onChange={this.onChange}
                                 required
                               />
-                            </div>
-                            <div className="form-group">
-                              <label htmlFor="exampleInputFile">
-                                Kullanıcı Telefon No
-                              </label>
-                              <div className="input-group">
-                                <input
-                                  type="text"
-                                  className="form-control phone_no"
-                                  placeholder="Kullanıcı Telefon No:"
-                                  name="phone_no"
-                                  maxLength="11"
-                                  value={this.state.phone_no}
-                                  onChange={this.onChange}
-                                />
+                                </div>
                               </div>
-                            </div>
-                          </div>
-
-                          <div className="card-footer">
-                            <button
+                         
+                              <div className="form-group row">
+                                <label className="col-sm-5 col-form-label">
+                                Telefon No :
+                                </label>
+                                <div className="col-sm-6">
+                                <input
+                                type="text"
+                                className="form-control phone_no"
+                                placeholder="Telefon No:"
+                                name="phone_no"
+                                maxLength="11"
+                                value={this.state.phone_no}
+                                onChange={this.onChange}
+                              />
+                                </div>
+                              </div>
+                         
+                              <button
                               type="submit"
                               className="btn btn-primary"
                               onClick={this.onSubmit}
                             >
                               Kaydet
                             </button>
+                          
+                          
                           </div>
-                        </form>{" "}
+
+                         
+                         
+                        </form>
                         <ToastContainer />
                       </div>
                     ) : null}

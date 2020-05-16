@@ -148,11 +148,12 @@ class UsersPage extends Component {
 
                         <form noValidate onSubmit={this.onSubmit}>
                           <div className="card-body">
-                            <div className="form-group">
-                              <label htmlFor="exampleInputEmail1">
-                                Kullanıcı Adı
-                              </label>
-                              <input
+                          <div className="form-group row">
+                                <label className="col-sm-5 col-form-label">
+                                Kullanıcı Adı :
+                                </label>
+                                <div className="col-sm-6">
+                                <input
                                 type="text"
                                 className="form-control"
                                 placeholder="Kullanıcı Adı:"
@@ -161,27 +162,31 @@ class UsersPage extends Component {
                                 onChange={this.onChange}
                                 required
                               />
-                            </div>
-
-                            <div className="form-group">
-                              <label htmlFor="exampleInputPassword1">
-                                Kullanıcı Soyadı
-                              </label>
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="Kullanıcı Soyadı:"
-                                name="last_name"
-                                value={this.state.last_name}
-                                onChange={this.onChange}
-                                required
-                              />
-                            </div>
-                            <div className="form-group">
-                              <label htmlFor="exampleInputEmail1">
-                                Kullanıcı Eposta
-                              </label>
-                              <input
+                                </div>
+                              </div>
+                              <div className="form-group row">
+                                <label className="col-sm-5 col-form-label">
+                                Kullanıcı Soyadı :
+                                </label>
+                                <div className="col-sm-6">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  placeholder="Kullanıcı Soyadı:"
+                                  name="last_name"
+                                  value={this.state.last_name}
+                                  onChange={this.onChange}
+                                  required
+                                />
+                                </div>
+                              </div>
+                         
+                              <div className="form-group row">
+                                <label className="col-sm-5 col-form-label">
+                                Kullanıcı Eposta :
+                                </label>
+                                <div className="col-sm-6">
+                                <input
                                 type="text"
                                 className="form-control"
                                 placeholder="Kullanıcı Eposta:"
@@ -190,33 +195,39 @@ class UsersPage extends Component {
                                 onChange={this.onChange}
                                 required
                               />
-                            </div>
-                           
-                            <div className="form-group">
-                              <label htmlFor="exampleInputPassword1">
-                                Kullanıcı Telefon No
-                              </label>
-                              <input
+                                </div>
+                              </div>
+                         
+                              <div className="form-group row">
+                                <label className="col-sm-5 col-form-label">
+                                Telefon No :
+                                </label>
+                                <div className="col-sm-6">
+                                <input
                                 type="text"
                                 className="form-control phone_no"
-                                placeholder="Kullanıcı Telefon No:"
+                                placeholder="Telefon No:"
                                 name="phone_no"
                                 maxLength="11"
                                 value={this.state.phone_no}
                                 onChange={this.onChange}
                               />
-                            </div>
-                          </div>
-
-                          <div className="card-footer">
-                            <button
+                                </div>
+                              </div>
+                         
+                              <button
                               type="submit"
                               className="btn btn-primary"
                               onClick={this.onSubmit}
                             >
                               Kaydet
                             </button>
+                          
+                          
                           </div>
+
+                         
+                         
                         </form>
                         <ToastContainer />
                       </div>

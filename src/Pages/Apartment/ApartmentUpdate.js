@@ -10,7 +10,6 @@ class ApartmentUpdate extends Component {
   constructor(props) {
     super(props);
 
-
     if (this.props.location.state != undefined) {
       const { foo } = this.props.location.state;
 
@@ -23,14 +22,13 @@ class ApartmentUpdate extends Component {
         host_email: foo.host_email,
         title_name: foo.circlenumber,
         sys_circlenumber: foo.circlenumber,
-        car_numbers:foo.car_numbers,
+        car_numbers: foo.car_numbers,
         showMe: true,
-      showUser: false,
-      visible: false,
-      status: false,
-      locations:[]
-        
-      }
+        showUser: false,
+        visible: false,
+        status: false,
+        locations: [],
+      };
     } else {
       this.state = {
         circlenumber: "",
@@ -39,17 +37,15 @@ class ApartmentUpdate extends Component {
         host_phoneno: "",
         host_state: "",
         title_name: "",
-        car_numbers:"",
+        car_numbers: "",
         showMe: true,
-      showUser: false,
-      visible: false,
-      status: false,
-      locations:[]
-    
-      }
-      
+        showUser: false,
+        visible: false,
+        status: false,
+        locations: [],
+      };
     }
-   
+
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
@@ -140,7 +136,7 @@ class ApartmentUpdate extends Component {
     } else if (this.state.host_state == "Kiracı") {
       style_box = "small-box bg-warning";
     }
-  
+
     const newApartmenİnfo = {
       circlenumber: this.state.circlenumber,
       host_name: this.state.host_name,
@@ -150,7 +146,7 @@ class ApartmentUpdate extends Component {
       style_box: style_box,
       title_name: this.state.title_name,
       host_email: this.state.host_email,
-      car_numbers:this.state.car_numbers
+      car_numbers: this.state.car_numbers,
     };
     axios.put("apartmens/apartmensupdate", newApartmenİnfo).then((response) => {
       const newUsers = {
@@ -210,7 +206,6 @@ class ApartmentUpdate extends Component {
     });
   };
 
-
   componentDidMount(e) {
     const token = localStorage.usertoken;
     try {
@@ -224,20 +219,19 @@ class ApartmentUpdate extends Component {
               this.setState({
                 showMe: false,
                 showUser: true,
-               
               });
             }
-            if(this.state.car_numbers==""){
+            if (this.state.car_numbers == "") {
               this.setState({
-                car_numbers:"Araç Sayısı Seçiniz.."
-              })
+                car_numbers: "Araç Sayısı Seçiniz..",
+              });
             }
             const res = [];
             for (var i = 1; i <= 5; i++) {
               res[i] = i;
             }
             this.setState({
-              locations: res
+              locations: res,
             });
           }
         }
@@ -248,7 +242,7 @@ class ApartmentUpdate extends Component {
   }
 
   render() {
-    const carnumbers = this.state.locations.map(data => (
+    const carnumbers = this.state.locations.map((data) => (
       <option key={data}>{data}</option>
     ));
     return (
@@ -265,49 +259,54 @@ class ApartmentUpdate extends Component {
                       <div className="card card-primary">
                         <div className="card-header">
                           <h3 className="card-title">
-                            Daire  {this.state.title_name} Bilgileri
+                            Daire {this.state.title_name} Bilgileri
                           </h3>
                         </div>
 
-                        <form noValidate>
+                        <form noValidate onSubmit={this.onSubmit}>
                           <div className="card-body">
-                            <div className="form-group">
-                              <label htmlFor="exampleInputPassword1">
-                                Daire Adı
+                            <div className="form-group row">
+                              <label className="col-sm-5 col-form-label">
+                                Daire Adı :
                               </label>
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="Daire Adı:"
-                                name="circlenumber"
-                                value={this.state.circlenumber}
-                                onChange={this.onChange}
-                                required
-                              ></input>
-                            </div>
-                            <div className="form-group">
-                              <label htmlFor="exampleInputPassword1">
-                                Daire Durumu
-                              </label>
-                              <select
-                                className="form-control"
-                                onChange={this.handleChangeHostState}
-                              >
-                                <option>{this.state.host_state}</option>
-                                <option>Boş</option>
-                                <option> Ev Sahibi </option>
-                                <option> Kiracı </option>
-                              </select>
-                            </div>
-                            <div className="form-group">
-                              <label htmlFor="exampleInputFile">
-                                Ev Sahibi Adı
-                              </label>
-                              <div className="input-group">
+                              <div className="col-sm-6">
                                 <input
                                   type="text"
                                   className="form-control"
-                                  placeholder="Ev Sahibi Adı:"
+                                  placeholder="Daire Adı:"
+                                  name="circlenumber"
+                                  value={this.state.circlenumber}
+                                  onChange={this.onChange}
+                                  required
+                                />
+                              </div>
+                            </div>
+
+                            <div className="form-group row">
+                              <label className="col-sm-5 col-form-label">
+                                Daire Durumu :
+                              </label>
+                              <div className="col-sm-6">
+                                <select
+                                  className="form-control"
+                                  onChange={this.handleChangeHostState}
+                                >
+                                  <option>{this.state.host_state}</option>
+                                  <option>Boş</option>
+                                  <option> Ev Sahibi </option>
+                                  <option> Kiracı </option>
+                                </select>
+                              </div>
+                            </div>
+                            <div className="form-group row">
+                              <label className="col-sm-5 col-form-label">
+                                Daire Sakini Adı :
+                              </label>
+                              <div className="col-sm-6">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  placeholder="Daire Sakini Adı:"
                                   name="host_name"
                                   value={this.state.host_name}
                                   onChange={this.onChange}
@@ -315,15 +314,15 @@ class ApartmentUpdate extends Component {
                                 />
                               </div>
                             </div>
-                            <div className="form-group">
-                              <label htmlFor="exampleInputFile">
-                                Ev Sahibi Soyadı
+                            <div className="form-group row">
+                              <label className="col-sm-5 col-form-label">
+                                Daire Sakini Soyadı :
                               </label>
-                              <div className="input-group">
+                              <div className="col-sm-6">
                                 <input
                                   type="text"
                                   className="form-control"
-                                  placeholder="Ev Sahibi Adı:"
+                                  placeholder="Daire Sakini Soyadı:"
                                   name="host_surname"
                                   value={this.state.host_surname}
                                   onChange={this.onChange}
@@ -331,31 +330,31 @@ class ApartmentUpdate extends Component {
                                 />
                               </div>
                             </div>
-                            <div className="form-group">
-                              <label htmlFor="exampleInputFile">
-                                Ev Sahibi Telefon No
+                            <div className="form-group row">
+                              <label className="col-sm-5 col-form-label">
+                                Daire Sakini Telefon No :
                               </label>
-                              <div className="input-group">
+                              <div className="col-sm-6">
                                 <input
                                   type="text"
                                   className="form-control phone_no"
                                   name="host_phoneno"
-                                  placeholder="Ev Sahibi Telefon No:"
+                                  placeholder="Daire Sakini Telefon No:"
                                   maxLength="11"
                                   value={this.state.host_phoneno}
                                   onChange={this.onChange}
                                 />
                               </div>
                             </div>
-                            <div className="form-group">
-                              <label htmlFor="exampleInputFile">
-                                Ev Sahibi Email Adresi
+                            <div className="form-group row">
+                              <label className="col-sm-5 col-form-label">
+                                Daire Sakini Email Adresi :
                               </label>
-                              <div className="input-group">
+                              <div className="col-sm-6">
                                 <input
                                   type="text"
                                   className="form-control"
-                                  placeholder="Ev Sahibi Email Adresi:"
+                                  placeholder=" Daire Sakini Email Adresi:"
                                   name="host_email"
                                   value={this.state.host_email}
                                   onChange={this.onChange}
@@ -363,23 +362,21 @@ class ApartmentUpdate extends Component {
                                 />
                               </div>
                             </div>
-                            <div className="form-group">
-                              <label htmlFor="exampleInputPassword1">
-                                Araç Sayısı
+                            <div className="form-group row">
+                              <label className="col-sm-5 col-form-label">
+                                Daire Araç Sayısı:
                               </label>
-                              <select
-                                className="form-control"
-                                onChange={this.handleChangeCar}
-                               
-                              >
-                                <option  >{this.state.car_numbers}</option>
-                                <option>Araç Yok</option>
-                               {carnumbers}
-                              </select>
+                              <div className="col-sm-6">
+                                <select
+                                  className="form-control"
+                                  onChange={this.handleChangeCar}
+                                >
+                                  <option>{this.state.car_numbers}</option>
+                                  <option>Araç Yok</option>
+                                  {carnumbers}
+                                </select>
+                              </div>
                             </div>
-                          </div>
-
-                          <div className="card-footer">
                             <button
                               type="submit"
                               className="btn btn-primary"
@@ -389,6 +386,7 @@ class ApartmentUpdate extends Component {
                             </button>
                           </div>
                         </form>
+
                         <section>
                           <Modal
                             visible={this.state.visible}

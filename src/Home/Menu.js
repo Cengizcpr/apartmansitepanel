@@ -9,6 +9,12 @@ class Menu extends Component {
     this.state = {
       showMe: true,
       showUser: false,
+      showUserMenu: false,
+      showBuildMenu: false,
+      showFaultMenu: false,
+      showPersonalMenu: false,
+      showDuesMenu:false,
+      menustyle: "right fas fa-angle-left",
     };
     axios.get("builds/buildslist").then((response) => {
       if (response.data[0] != undefined) {
@@ -21,6 +27,71 @@ class Menu extends Component {
         });
       }
     });
+  }
+  visibleUser() {
+    if (this.state.showUserMenu == false) {
+      this.setState({
+        showUserMenu: true,
+        menustyle: "right fas fa-angle-down",
+      });
+    } else {
+      this.setState({
+        showUserMenu: false,
+        menustyle: "right fas fa-angle-left",
+      });
+    }
+  }
+  visibleBuild() {
+    if (this.state.showBuildMenu == false) {
+      this.setState({
+        showBuildMenu: true,
+        menustyle: "right fas fa-angle-down",
+      });
+    } else {
+      this.setState({
+        showBuildMenu: false,
+        menustyle: "right fas fa-angle-left",
+      });
+    }
+  }
+  visibleFault() {
+    if (this.state.showFaultMenu == false) {
+      this.setState({
+        showFaultMenu: true,
+        menustyle: "right fas fa-angle-down",
+      });
+    } else {
+      this.setState({
+        showFaultMenu: false,
+        menustyle: "right fas fa-angle-left",
+      });
+    }
+  }
+  visiblePersonal() {
+    if (this.state.showPersonalMenu == false) {
+      this.setState({
+        showPersonalMenu: true,
+        menustyle: "right fas fa-angle-down",
+      });
+    } else {
+      this.setState({
+        showPersonalMenu: false,
+        menustyle: "right fas fa-angle-left",
+      });
+    }
+  }
+  visibleDues() {
+    if (this.state.showDuesMenu == false) {
+      this.setState({
+        showDuesMenu: true,
+        menustyle: "right fas fa-angle-down",
+      });
+    } else {
+      this.setState({
+        showDuesMenu: false,
+        menustyle: "right fas fa-angle-left",
+      });
+    }
   }
   componentDidMount(e) {
     const token = localStorage.usertoken;
@@ -75,7 +146,7 @@ class Menu extends Component {
                         />
                       </div>
                       <div className="info">
-                        <Link to="/adminprofile" className="d-block">
+                        <Link to="/adminprofile" className="text text-lg">
                           Admin
                         </Link>
                       </div>
@@ -91,74 +162,189 @@ class Menu extends Component {
                         <li className="nav-item ">
                           <Link to="/home" className="nav-link ">
                             <i className="nav-icon fas fa-home" />
-                            <p>Anasayfa</p>
+                            <p className="text text-lg">Anasayfa</p>
+                          </Link>
+                        </li>
+
+                        <li className="nav-item">
+                          <Link
+                            onClick={() => this.visibleUser()}
+                            className="nav-link "
+                          >
+                            <i className="nav-icon fas fa-users" />
+                            <p className="text text-lg">Kullanıcılar</p>
+                            <i className={this.state.menustyle}></i>
                           </Link>
                         </li>
 
                         <li className="nav-item ">
-                          <Link to={this.state.locations} className="nav-link ">
-                            <i className="nav-icon fas fa-city" />
-                            <p>Site Bilgileri</p>
+                          {this.state.showUserMenu ? (
+                            <Link to="/users" className="nav-link ">
+                              <i className="nav-icon fas fa-edit" />
+                              <p>Kullanıcı Ekle</p>
+                            </Link>
+                          ) : null}
+                        </li>
+                        <li className="nav-item ">
+                          {this.state.showUserMenu ? (
+                            <Link to="/userslist" className="nav-link ">
+                              <i className="nav-icon fas fa-address-card" />
+                              <p>Kullanıcıları Listele</p>
+                            </Link>
+                          ) : null}
+                        </li>
+                        <li className="nav-item">
+                          <Link
+                            onClick={() => this.visiblePersonal()}
+                            className="nav-link "
+                          >
+                            <i className="nav-icon fas fa-user-tie" />
+                            <p className="text text-lg">Personeller</p>
+                            <i className={this.state.menustyle}></i>
                           </Link>
+                        </li>
+                        <li className="nav-item ">
+                          {this.state.showPersonalMenu ? (
+                            <Link to="/personaladd" className="nav-link ">
+                              <i className="nav-icon fas fa-edit " />
+                              <p>Personel Ekle</p>
+                            </Link>
+                          ) : null}
+                        </li>
+                        <li className="nav-item ">
+                          {" "}
+                          {this.state.showPersonalMenu ? (
+                            <Link to="/personallist" className="nav-link ">
+                              <i className="nav-icon fas fa-copy" />
+                              <p>Personelleri Listele</p>
+                            </Link>
+                          ) : null}
                         </li>
 
-                        <li className="nav-item ">
-                          <Link to="/users" className="nav-link ">
-                            <i className="nav-icon fas fa-edit" />
-                            <p>Kullanıcı Ekle</p>
+                        <li className="nav-item">
+                          <Link
+                            onClick={() => this.visibleBuild()}
+                            className="nav-link "
+                          >
+                            <i className="nav-icon fas fa-home" />
+                            <p className="text text-lg">Site Ayarları</p>
+                            <i className={this.state.menustyle}></i>
                           </Link>
                         </li>
-                        <li className="nav-item ">
-                          <Link to="/userslist" className="nav-link ">
-                            <i className="nav-icon fas fa-address-card" />
-                            <p>Kullanıcıları Listele</p>
-                          </Link>
-                        </li>
-                        <li className="nav-item ">
-                          <Link to="/personaladd" className="nav-link ">
-                            <i className="nav-icon fas fa-edit " />
-                            <p>Personel Ekle</p>
-                          </Link>
-                        </li>
-                        <li className="nav-item ">
-                          <Link to="/personallist" className="nav-link ">
-                            <i className="nav-icon fas fa-copy" />
-                            <p>Personelleri Listele</p>
-                          </Link>
-                        </li>
-                        <li className="nav-item ">
-                          <Link to="/blocksetting" className="nav-link ">
-                            <i className="nav-icon fas fa-building" />
-                            <p>Blok Ayarları</p>
-                          </Link>
-                        </li>
-                        <li className="nav-item ">
-                          <Link to="/apartmentsetting" className="nav-link ">
-                            <i className="nav-icon fas fa-address-card" />
-                            <p>Daire Detayları</p>
-                          </Link>
-                        </li>
-                        <li className="nav-item ">
-                          <Link to="/storesetting" className="nav-link ">
-                            <i className="nav-icon fas fa-store" />
-                            <p>Dükkan Detayları</p>
-                          </Link>
-                        </li>
-                        <li className="nav-item ">
-                          <Link to="/carpark" className="nav-link ">
-                            <i className="nav-icon fas fa-car" />
-                            <p>Otopark İşlemleri</p>
-                          </Link>
-                        </li>
-                        <li className="nav-item ">
-                          <Link to="/faultregister" className="nav-link ">
+                       
+                            <li className="nav-item "> {this.state.showBuildMenu ? (
+                              <Link
+                                to={this.state.locations}
+                                className="nav-link "
+                              >
+                                <i className="nav-icon fas fa-city" />
+                                <p>Site Bilgileri</p>
+                              </Link>) : null}
+                            </li>
+                            <li className="nav-item "> {this.state.showBuildMenu ? (
+                              <Link to="/blocksetting" className="nav-link ">
+                                <i className="nav-icon fas fa-building" />
+                                <p>Blok Ayarları</p>
+                              </Link>) : null}
+                            </li>
+                            <li className="nav-item "> {this.state.showBuildMenu ? (
+                              <Link
+                                to="/apartmentsetting"
+                                className="nav-link "
+                              >
+                                <i className="nav-icon fas fa-address-card" />
+                                <p>Daire Detayları</p>
+                              </Link>) : null}
+                            </li>
+                            <li className="nav-item "> {this.state.showBuildMenu ? (
+                              <Link to="/storesetting" className="nav-link ">
+                                <i className="nav-icon fas fa-store" />
+                                <p>Dükkan Detayları</p>
+                              </Link>) : null}
+                            </li>
+                            <li className="nav-item "> {this.state.showBuildMenu ? (
+                              <Link to="/carpark" className="nav-link ">
+                                <i className="nav-icon fas fa-car" />
+                                <p>Otopark İşlemleri</p>
+                              </Link>) : null}
+                            </li>
+                         
+                        
+                        <li className="nav-item">
+                          <Link
+                            onClick={() => this.visibleFault()}
+                            className="nav-link "
+                          >
                             <i className="nav-icon fas fa-tools" />
-                            <p>Arıza İşlemleri</p>
+                            <p className="text text-lg">Arıza Takip</p>
+                            <i className={this.state.menustyle}></i>
                           </Link>
                         </li>
+
                         <li className="nav-item ">
-                          <Link to="/faultlist" className="nav-link ">
-                            <i class="nav-icon fas fa-list"></i> <p>Arıza Listele</p>
+                          {" "}
+                          {this.state.showFaultMenu ? (
+                            <Link to="/faultregister" className="nav-link ">
+                              <i className="nav-icon fas fa-wrench" />
+                              <p>Arıza Ekle</p>
+                            </Link>
+                          ) : null}
+                        </li>
+                        <li className="nav-item ">
+                          {" "}
+                          {this.state.showFaultMenu ? (
+                            <Link to="/faultlist" className="nav-link ">
+                              <i class="nav-icon fas fa-list"></i>{" "}
+                              <p>Arıza Listele</p>
+                            </Link>
+                          ) : null}
+                        </li>
+                        <li className="nav-item">
+                          <Link
+                            onClick={() => this.visibleDues()}
+                            className="nav-link "
+                          >
+                            <i className="nav-icon fas fa-lira-sign" />
+                            <p className="text text-lg">Aidat İşlemleri</p>
+                            <i className={this.state.menustyle}></i>
+                          </Link>
+                        </li>
+
+                        <li className="nav-item ">
+                          
+                          {this.state.showDuesMenu ? (
+                            <Link to="/duesadd" className="nav-link ">
+                              <i className="nav-icon fas fa-plus" />
+                              <p>Aidat Ekle</p>
+                            </Link>
+                          ) : null}
+                        </li>
+                        <li className="nav-item ">
+                          
+                          {this.state.showDuesMenu ? (
+                            <Link to="/" className="nav-link ">
+                              <i class="nav-icon fas fa-money-check"></i>{" "}
+                              <p>Aidat Ödeme</p>
+                            </Link>
+                          ) : null}
+                        </li>
+                        <li className="nav-item ">
+                          
+                          {this.state.showDuesMenu ? (
+                            <Link to="/" className="nav-link ">
+                              <i class="nav-icon fas fa-coins"></i>{" "}
+                              <p>Aidat Listele</p>
+                            </Link>
+                          ) : null}
+                        </li>
+                        <li className="nav-item">
+                          <Link
+                            to="/adminprofile"
+                            className="nav-link "
+                          >
+                            <i className="nav-icon fas fa-cogs" />
+                            <p className="text text-lg">Ayarlar</p>
+                            
                           </Link>
                         </li>
                       </ul>
@@ -166,7 +352,7 @@ class Menu extends Component {
                   </div>
                 </aside>
               ) : null}
-                  {this.state.showUser ? (
+              {this.state.showUser ? (
                 <aside className="main-sidebar sidebar-dark-primary elevation-4">
                   <Link to="/home" className="brand-link">
                     <img
@@ -208,7 +394,8 @@ class Menu extends Component {
                             <i className="nav-icon fas fa-tachometer-alt" />
                             <p>Anasayfa</p>
                           </Link>
-                        </li>   <li className="nav-item ">
+                        </li>{" "}
+                        <li className="nav-item ">
                           <Link to="/faultregister" className="nav-link ">
                             <i className="nav-icon fas fa-tools" />
                             <p>Arıza İşlemleri</p>
@@ -218,7 +405,7 @@ class Menu extends Component {
                     </nav>
                   </div>
                 </aside>
-              ) : null}  
+              ) : null}
             </div>
           </div>
         </div>

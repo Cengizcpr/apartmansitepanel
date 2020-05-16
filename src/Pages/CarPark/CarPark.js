@@ -167,6 +167,7 @@ class CarPark extends Component {
         });
     }
   };
+ 
   updateCar(data) {
     this.setState({
       car_brand: data.car_brand,
@@ -568,7 +569,7 @@ class CarPark extends Component {
                             <div className="row">
                               <div className="col-sm-12">
                                 <div className="card-body">
-                                  <table className="table table-bordered">
+                                  <table className="table table-bordered" id="carprint">
                                     <thead>
                                       <tr>
                                         <th>Konum</th>

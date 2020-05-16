@@ -192,93 +192,101 @@ class PersonalUpdate extends Component {
                       </div>
 
                       <form noValidate onSubmit={this.onSubmit}>
-                        <div className="card-body">
-                          <div className="form-group">
-                            <label htmlFor="exampleInputEmail1">
-                              Personel Adı
-                            </label>
-                            <input
-                              type="text"
-                              className="form-control"
-                              placeholder="Personel Adı:"
-                              name="first_name"
-                              value={this.state.first_name}
-                              onChange={this.onChange}
-                              required
-                            />
-                          </div>
+                            <div className="card-body">
+                              <div className="form-group row">
+                                <label className="col-sm-5 col-form-label">
+                                  Personel Adı :
+                                </label>
+                                <div className="col-sm-6">
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="Personel Adı:"
+                                    name="first_name"
+                                    value={this.state.first_name}
+                                    onChange={this.onChange}
+                                    required
+                                  />
+                                </div>
+                              </div>
 
-                          <div className="form-group">
-                            <label htmlFor="exampleInputPassword1">
-                              Personel Soyadı
-                            </label>
-                            <input
-                              type="text"
-                              className="form-control"
-                              placeholder="Personel Soyadı:"
-                              name="last_name"
-                              value={this.state.last_name}
-                              onChange={this.onChange}
-                              required
-                            />
-                          </div>
-                       
-                          <div className="form-group">
-                            <label htmlFor="exampleInputPassword1">
-                              Personel Telefon No
-                            </label>
-                            <input
-                                type="text"
-                                className="form-control phone_no"
-                                name="phone_no"
-                                placeholder="Personel Telefon No:"
-                                maxLength="11"
-                                value={this.state.phone_no}
-                                onChange={this.onChange}
-                              />
-                          </div>
-                          <div className="form-group">
-                            <label htmlFor="exampleInputPassword1">
-                              Personel Departmanı
-                            </label>
-                            <select
-                              className="form-control"
-                              onChange={this.handleChangePersonalDepartment}
-                            >
-                              <option>{this.state.departmans} </option>
-                              <option>Kapıcı </option>
-                              <option>Teknik Servis </option>
-                              <option>Güvenlik </option>
-                              <option>Bahçıvan </option>
-                              <option>Temizlikçi </option>
-                            </select>
-                          </div>
-                          <div className="form-group">
-                            <label htmlFor="exampleInputEmail1">
-                              Personel Adresi
-                            </label>
-                            <textarea
-                              rows="3"
-                              className="form-control"
-                              placeholder="Personel Adresi:"
-                              name="adress"
-                              value={this.state.adress}
-                              onChange={this.onChange}
-                              required
-                            />
-                          </div>
-                        </div>
-
-                        <div className="card-footer">
-                          <button
-                            type="submit"
-                            className="btn btn-primary"
-                            onClick={this.onSubmit}
-                          >
-                            Kaydet
-                          </button>
-                        </div>
-                      </form>
+                              <div className="form-group row">
+                                <label className="col-sm-5 col-form-label">
+                                  Personel Soyadı :
+                                </label>
+                                <div className="col-sm-6">
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="Personel Soyadı:"
+                                    name="last_name"
+                                    value={this.state.last_name}
+                                    onChange={this.onChange}
+                                    required
+                                  />
+                                </div>
+                              </div>
+                              <div className="form-group row">
+                                <label className="col-sm-5 col-form-label">
+                                  Personel Telefon No :
+                                </label>
+                                <div className="col-sm-6">
+                                  <input
+                                    type="text"
+                                    className="form-control phone_no"
+                                    name="phone_no"
+                                    placeholder="Personel Telefon No:"
+                                    maxLength="11"
+                                    value={this.state.phone_no}
+                                    onChange={this.onChange}
+                                  />
+                                </div>
+                              </div>
+                              <div className="form-group row">
+                                <label className="col-sm-5 col-form-label">
+                                  Personel Departmanı :
+                                </label>
+                                <div className="col-sm-6">
+                                  <select
+                                    className="form-control"
+                                    onChange={
+                                      this.handleChangePersonalDepartment
+                                    }
+                                  >
+                                    <option>{this.state.departmans}</option>
+                                    <option>Kapıcı </option>
+                                    <option>Teknik Servis </option>
+                                    <option>Güvenlik </option>
+                                    <option>Bahçıvan </option>
+                                    <option>Temizlikçi </option>
+                                  </select>
+                                </div>
+                              </div>
+                              <div className="form-group row">
+                                <label className="col-sm-5 col-form-label">
+                                  Personel Adresi :
+                                </label>
+                                <div className="col-sm-6">
+                                  <textarea
+                                    rows="3"
+                                    className="form-control"
+                                    placeholder="Personel Adresi:"
+                                    name="adress"
+                                    value={this.state.adress}
+                                    onChange={this.onChange}
+                                    required
+                                  />
+                                </div>
+                              </div>
+                              <button
+                                type="submit"
+                                className="btn btn-primary"
+                                onClick={this.onSubmit}
+                              >
+                                Kaydet
+                              </button>
+                            </div>
+                          </form>
                       <ToastContainer />
                     </div>
                     ) : null}

@@ -44,7 +44,9 @@ export default class Home extends Component {
 
         <div className="content-wrapper">
           <section className="content">
-            <div className="container-fluid"></div>
+            <div className="container-fluid">
+              
+            </div>
           </section>
         </div>
         {this.state.showUser ? this.props.history.push("/statuserror") : null}

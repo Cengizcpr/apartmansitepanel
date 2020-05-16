@@ -168,7 +168,7 @@ class StoreSetting extends Component {
                 <div className="row justify-content-center">
                   <div className="col-md-6">
                     {this.state.showMe ? (
-                      <div className="card card-primary">
+                      <div className="card card-warning">
                         <section>
                           {/*Blok Uyarı Mesajı*/}
                           <Modal
@@ -225,7 +225,7 @@ class StoreSetting extends Component {
                           <div className="card-footer">
                             <button
                               type="submit"
-                              className="btn btn-primary"
+                              className="btn btn-warning"
                               // onClick={() => this.onApartmentİnfo()}
                               onClick={this.onSubmit}
                             >

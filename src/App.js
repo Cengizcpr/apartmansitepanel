@@ -23,7 +23,8 @@ import StoreUpdate from "./Pages/Store/StoreUpdate";
 import CarPark from "./Pages/CarPark/CarPark";
 import FaultRegister from "./Pages/Fault/FaultRegister";
 import FaultList from "./Pages/Fault/FaultList";
-import Test from "./Pages/Test";
+import DuesAdd from "./Pages/Dues/DuesAdd";
+import Test from "./Pages/CrediCart/Credicart";
 class App extends Component {
   render() {
     return (
@@ -52,7 +53,8 @@ class App extends Component {
           <Route export path="/carpark" component={CarPark}/>
           <Route export path="/faultregister" component={FaultRegister}/>
           <Route export path="/faultlist" component={FaultList}/>
-
+          <Route export path="/duesadd" component={DuesAdd}/>
+ 
           <Route exact component={Notfound} />
         </Switch>
       </Router>

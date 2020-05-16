@@ -140,9 +140,9 @@ class ApartmentSetting extends Component {
               <h5>Daire {data.circlenumber} </h5>
               <h6>Durum : {data.host_state}</h6>
               <h6>
-                Ev Sahibi : {data.host_name} {data.host_surname}
+               Daire Sakini : {data.host_name} {data.host_surname}
               </h6>
-              <h6>Ev Sahibi Telefon : {data.host_phoneno}</h6>
+              <h6>Daire Sakini Telefon : {data.host_phoneno}</h6>
             </p>
           </div>
           <Link

@@ -135,7 +135,7 @@ class FaultRegister extends Component {
                   });
                 }
                 else{
-                  toast.info("Herhangi Arıza Kaydınız Bulunmamaktadır.")
+                  toast.info("Herhangi Arıza Kaydınız Bulunmamaktadır!")
                 }
                 })  
               })

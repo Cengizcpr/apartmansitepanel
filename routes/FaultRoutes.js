@@ -40,7 +40,7 @@ faults.get("/faultlist", (req, res) => {
     if (user) {
       res.json(user);
     } else {
-      res.json({ error: "Admin already exists" });
+      res.json({ error: "Fault already exists" });
     }
   })
   .catch((err) => {

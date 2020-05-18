@@ -5,15 +5,18 @@ import jwt_decode from "jwt-decode";
 
 class Menu extends Component {
   constructor() {
+    
     super();
     this.state = {
-      showMe: true,
-      showUser: false,
+     
       showUserMenu: false,
       showBuildMenu: false,
       showFaultMenu: false,
       showPersonalMenu: false,
+      showFaultMenuUser:true,
       showDuesMenu:false,
+      showButton:true,
+     
       menustyle: "right fas fa-angle-left",
     };
     axios.get("builds/buildslist").then((response) => {
@@ -27,6 +30,7 @@ class Menu extends Component {
         });
       }
     });
+
   }
   visibleUser() {
     if (this.state.showUserMenu == false) {
@@ -104,8 +108,8 @@ class Menu extends Component {
           if (decoded.email === response[i].email) {
             if (response[i].status == false) {
               this.setState({
-                showMe: false,
-                showUser: true,
+                
+                
               });
             }
           }
@@ -117,12 +121,13 @@ class Menu extends Component {
   }
 
   render() {
+
     return (
       <div className="content-wrapper">
         <div className="content-header">
           <div className="row">
             <div className="col-lg-3 col-6">
-              {this.state.showMe ? (
+             
                 <aside className="main-sidebar sidebar-dark-primary elevation-4">
                   <Link to="/home" className="brand-link">
                     <img
@@ -153,11 +158,12 @@ class Menu extends Component {
                     </div>
 
                     <nav className="mt-2">
-                      <ul
+                     <ul
                         className="nav nav-pills nav-sidebar flex-column "
                         data-widget="treeview"
                         role="menu"
                         data-accordion="false"
+                        
                       >
                         <li className="nav-item ">
                           <Link to="/home" className="nav-link ">
@@ -165,8 +171,7 @@ class Menu extends Component {
                             <p className="text text-lg">Anasayfa</p>
                           </Link>
                         </li>
-
-                        <li className="nav-item">
+                        <li className="nav-item" >
                           <Link
                             onClick={() => this.visibleUser()}
                             className="nav-link "
@@ -176,7 +181,7 @@ class Menu extends Component {
                             <i className={this.state.menustyle}></i>
                           </Link>
                         </li>
-
+ 
                         <li className="nav-item ">
                           {this.state.showUserMenu ? (
                             <Link to="/users" className="nav-link ">
@@ -269,7 +274,7 @@ class Menu extends Component {
                               </Link>) : null}
                             </li>
                          
-                        
+                            {this.state.showFaultMenuUser ? (
                         <li className="nav-item">
                           <Link
                             onClick={() => this.visibleFault()}
@@ -280,7 +285,7 @@ class Menu extends Component {
                             <i className={this.state.menustyle}></i>
                           </Link>
                         </li>
-
+                    ) : null}
                         <li className="nav-item ">
                           {" "}
                           {this.state.showFaultMenu ? (
@@ -299,6 +304,7 @@ class Menu extends Component {
                             </Link>
                           ) : null}
                         </li>
+                        
                         <li className="nav-item">
                           <Link
                             onClick={() => this.visibleDues()}
@@ -319,15 +325,7 @@ class Menu extends Component {
                             </Link>
                           ) : null}
                         </li>
-                        <li className="nav-item ">
-                          
-                          {this.state.showDuesMenu ? (
-                            <Link to="/" className="nav-link ">
-                              <i class="nav-icon fas fa-money-check"></i>{" "}
-                              <p>Aidat Ödeme</p>
-                            </Link>
-                          ) : null}
-                        </li>
+                      
                         <li className="nav-item ">
                           
                           {this.state.showDuesMenu ? (
@@ -337,7 +335,7 @@ class Menu extends Component {
                             </Link>
                           ) : null}
                         </li>
-                        <li className="nav-item">
+                        <li className="nav-item" >
                           <Link
                             to="/adminprofile"
                             className="nav-link "
@@ -347,65 +345,12 @@ class Menu extends Component {
                             
                           </Link>
                         </li>
-                      </ul>
+                      </ul>             
+
                     </nav>
                   </div>
                 </aside>
-              ) : null}
-              {this.state.showUser ? (
-                <aside className="main-sidebar sidebar-dark-primary elevation-4">
-                  <Link to="/home" className="brand-link">
-                    <img
-                      src="dist/img/AdminLTELogo.png"
-                      alt="AdminLTELogo"
-                      className="brand-image img-circle elevation-3"
-                      style={{ opacity: ".8" }}
-                    />
-                    <span className="brand-text font-weight-light">
-                      Apartman Site Panel
-                    </span>
-                  </Link>
-
-                  <div className="sidebar">
-                    <div className="user-panel mt-3 pb-3 mb-3 d-flex">
-                      <div className="image">
-                        <img
-                          src="dist/img/user2-160x160.jpg"
-                          className="img-circle elevation-2"
-                          alt="UserImage"
-                        />
-                      </div>
-                      <div className="info">
-                        <Link to="/adminprofile" className="d-block">
-                          Kullanıcı
-                        </Link>
-                      </div>
-                    </div>
-
-                    <nav className="mt-2">
-                      <ul
-                        className="nav nav-pills nav-sidebar flex-column "
-                        data-widget="treeview"
-                        role="menu"
-                        data-accordion="false"
-                      >
-                        <li className="nav-item ">
-                          <Link to="/home" className="nav-link ">
-                            <i className="nav-icon fas fa-tachometer-alt" />
-                            <p>Anasayfa</p>
-                          </Link>
-                        </li>{" "}
-                        <li className="nav-item ">
-                          <Link to="/faultregister" className="nav-link ">
-                            <i className="nav-icon fas fa-tools" />
-                            <p>Arıza İşlemleri</p>
-                          </Link>
-                        </li>
-                      </ul>
-                    </nav>
-                  </div>
-                </aside>
-              ) : null}
+           
             </div>
           </div>
         </div>

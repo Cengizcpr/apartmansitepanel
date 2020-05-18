@@ -72,6 +72,20 @@ apartmens.post("/findapartmens", (req, res) => {
     }
   });
 });
+//daire aidat içinkontrol
+apartmens.get("/findapartmendues", (req, res) => {
+  Apartmen.find({
+  })    .then((apartmen) => {
+    if (apartmen) {
+      res.json(apartmen);
+    } else {
+      res.json({ error: "Apartmen already exists" });
+    }
+  })
+  .catch((err) => {
+    res.send("error: " + err);
+  });
+});
 apartmens.post("/apartmenslist", (req, res) => {
   Apartmen.find({ block_name: req.body.block_name }, function (err, objs) {
     var dbs = objs[0];
@@ -87,7 +101,7 @@ apartmens.post("/apartmenslist", (req, res) => {
       } 
     })
     .catch((err) => {
-  //daire kayıtları bos
+  res.send("false")
     });
 });
 

@@ -15,7 +15,6 @@ import PersonalUpdate from "./Pages/Personal/PersonalUpdate";
 import UsersList from "./Pages/User/UsersList";
 import UserRegister from "./Pages/User/UserUpdate";
 import StatusError from "./component/StatusError";
-import UserHome from "./Home/UserHome";
 import ApartmentSetting from "./Pages/Apartment/ApartmentSetting";
 import ApartmentUpdate from "./Pages/Apartment/ApartmentUpdate";
 import StoreSetting from "./Pages/Store/StoreSetting";
@@ -24,6 +23,7 @@ import CarPark from "./Pages/CarPark/CarPark";
 import FaultRegister from "./Pages/Fault/FaultRegister";
 import FaultList from "./Pages/Fault/FaultList";
 import DuesAdd from "./Pages/Dues/DuesAdd";
+import DuesPay from "./Pages/Dues/DuesPay";
 import Test from "./Pages/CrediCart/Credicart";
 class App extends Component {
   render() {
@@ -45,7 +45,6 @@ class App extends Component {
           <Route exact path="/personallist" component={PersonalList} />
           <Route exact path="/personalupdate" component={PersonalUpdate}/>
           <Route exact path="/statuserror" component={StatusError} />
-          <Route exact path="/userhome" component={UserHome} />
           <Route exact path="/apartmentsetting" component={ApartmentSetting} />
           <Route exact path="/apartmentregister" component={ApartmentUpdate}  />
           <Route exact path="/storesetting" component={StoreSetting}/>
@@ -54,7 +53,8 @@ class App extends Component {
           <Route export path="/faultregister" component={FaultRegister}/>
           <Route export path="/faultlist" component={FaultList}/>
           <Route export path="/duesadd" component={DuesAdd}/>
- 
+          <Route export path="/duespay" component={DuesPay}/>
+
           <Route exact component={Notfound} />
         </Switch>
       </Router>

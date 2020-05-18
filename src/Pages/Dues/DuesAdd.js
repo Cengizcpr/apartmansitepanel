@@ -63,11 +63,11 @@ class DuesAdd extends Component {
   handleChangeCalendar = (date) => {
     this.setState({
       startDate: date,
-      operation_date:
+      operation_date:  date.getDate() +
+      "/" +
         parseInt(date.getMonth() + 1) +
         "/" +
-        date.getDate() +
-        "/" +
+      
         date.getFullYear(),
     });
   };
@@ -76,16 +76,46 @@ class DuesAdd extends Component {
     this.setState({
       endDate: date,
       payment_date:
+      date.getDate() +
+      "/" +
         parseInt(date.getMonth() + 1) +
         "/" +
-        date.getDate() +
-        "/" +
+      
         date.getFullYear(),
     });
   };
+    //aidat validation
+    handleValidation() {
+      let operation_date = this.state.operation_date;
+      let payment_date = this.state.payment_date;
+      let amount = this.state.amount;
+      let duesComment = this.state.duesComment;
+      let duesGroup = this.state.duesGroup;
+      let duesSelectyear = this.state.duesSelectyear;
+      let duesSelectmonth = this.state.duesSelectmonth;
+
+      let formIsValid = true;
+  
+      let partternamount = /[0-9]/g;
+      let resultAmount = partternamount.test(amount);
+      
+      //Boş mu kontrol?
+      if (!operation_date || !payment_date || !amount || !duesComment|| !duesGroup|| !duesSelectyear|| !duesSelectmonth) {
+        formIsValid = false;
+        toast.error("Boş Bırakmayınız!");
+      }
+      //Tutar  için sayı kontrol?
+      else if (resultAmount === false) {
+        formIsValid = false;
+        toast.warn("Sadece Tutar Giriniz!");
+      }
+
+      return formIsValid;
+    }
+  
   onSubmit(e) {
     e.preventDefault();
-    
+    if(this.handleValidation()){
    
    const duesAdds = {
         payment_date: this.state.payment_date,
@@ -93,6 +123,7 @@ class DuesAdd extends Component {
         amount: this.state.amount,
         duesComment: this.state.duesComment,
         duesGroup: this.state.duesGroup,
+        duesMonth:this.state.duesSelectmonth,
         duesYearMonth:
           this.state.duesSelectyear + "/"+ this.state.duesGroup+"/"+this.state.duesSelectmonth,
       };
@@ -109,6 +140,18 @@ class DuesAdd extends Component {
       .catch((error) => {
         toast.error("Hata!Bu Döneme Ait Kayıt Başarısız!");
       });
+    }
+  }
+  deleteDues(data){
+    axios
+    .post("dues/duesdelete", { _id: data._id })
+    .then((res) => {
+      toast.success(data.duesYearMonth+"Aidat Silindi!");
+
+    })
+    .catch((err) => {
+      toast.error("Hata! Aidat Silinemedi!");
+    });
   }
   componentDidMount(e) {
     const token = localStorage.usertoken;
@@ -165,12 +208,12 @@ class DuesAdd extends Component {
    
          <div className="col-sm-4" key={data._id}>
          <div className="callout callout-info">
-           <button type="button" className="close">
+           <button type="button" className="close" onClick={()=>this.deleteDues(data)}>
              ×
            </button>
-           <h5>
-           <i className="icon fas fa-calendar-day"></i>   {data.duesYearMonth.slice(11)}
-           </h5>
+           <h6>
+           <i className="icon fas fa-calendar-day"></i>   {data.duesYearMonth.slice(14)}
+           </h6>
            </div>
          </div>
     ));
@@ -178,12 +221,12 @@ class DuesAdd extends Component {
    
       <div className="col-sm-4" key={data._id}>
       <div className="callout callout-info">
-        <button type="button" className="close">
+        <button type="button" className="close" onClick={()=>this.deleteDues(data)}>
           ×
         </button>
-        <h5>
-        <i className="icon fas fa-calendar-day"></i>   {data.duesYearMonth.slice(12)}
-        </h5>
+        <h6>
+        <i className="icon fas fa-calendar-day"></i>   {data.duesYearMonth.slice(15)}
+        </h6>
         </div>
       </div>
  ));
@@ -251,18 +294,18 @@ class DuesAdd extends Component {
                                       <option>
                                         {this.state.duesSelectmonth}
                                       </option>
-                                      <option> Ocak </option>
-                                      <option> Şubat </option>
-                                      <option> Mart </option>
-                                      <option> Nisan </option>
-                                      <option> Mayıs </option>
-                                      <option> Haziran </option>
-                                      <option> Temmuz </option>
-                                      <option> Ağustos </option>
-                                      <option> Eylül </option>
-                                      <option> Ekim </option>
-                                      <option> Kasım </option>
-                                      <option> Aralık </option>
+                                      <option> 01-OCAK </option>
+                                      <option> 02-ŞUBAT </option>
+                                      <option> 03-MART </option>
+                                      <option> 04-NİSAN </option>
+                                      <option> 05-MAYIS </option>
+                                      <option> 06-HAZİRAN </option>
+                                      <option> 07-TEMMUZ </option>
+                                      <option> 08-AĞUSTOS </option>
+                                      <option> 09-EYLÜL </option>
+                                      <option> 10-EKİM </option>
+                                      <option> 11-KASIM </option>
+                                      <option> 12-ARALIK </option>
                                     </select>
                                   </div>
                                 </div>

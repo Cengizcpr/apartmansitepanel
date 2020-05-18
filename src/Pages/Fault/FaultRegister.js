@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Header from "../../Home/Header";
 import Menu from "../../Home/Menu";
+import UserMenu from "../../Home/UserMenu";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 import { ToastContainer, toast } from "react-toastify";
@@ -20,6 +21,8 @@ class FaultRegister extends Component {
       fault_email:"",
       fault_style:"",
       locationsfault: [],
+      menuVisible:true
+    
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -69,7 +72,6 @@ class FaultRegister extends Component {
       .then((res) => {
         toast.success("Arıza Silindi!");
 
-        window.location.replace("/faultregister");
       })
       .catch((err) => {
         toast.error("Hata! Arıza Silinemedi!");
@@ -107,6 +109,16 @@ class FaultRegister extends Component {
         var response = res.data;
         for (var i = 0; i < response.length; i++) {
           if (decoded._id === response[i]._id) {
+             if (response[i].status) {
+              this.setState({
+                showMe: true,
+              });
+            } 
+            else{
+              this.setState({
+                showMe: false,
+              });
+            }
             axios
               .post("users/findiduser", { _id: decoded._id })
               .then((res) => {
@@ -175,10 +187,16 @@ class FaultRegister extends Component {
         </p>
       </div>
     ));
+    var partial;
+    if (this.state.showMe === true) {
+      partial = <Menu />;
+    } else if (this.state.showMe === false) {
+      partial = <UserMenu />;
+    }
     return (
       <div>
         <Header />
-        <Menu />
+       {partial}
         <div className="content-wrapper">
           <div className="card">
             <div className="card-body">

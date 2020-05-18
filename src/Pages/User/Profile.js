@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import jwt_decode from "jwt-decode";
 import Header from "../../Home/Header";
 import Menu from "../../Home/Menu";
+import UserMenu from "../../Home/UserMenu";
+
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -18,7 +20,7 @@ class Profile extends Component {
       email: "",
       phone_no: "",
       _id: "",
-      status: "",
+      
     };
 
     this.onChange = this.onChange.bind(this);
@@ -162,7 +164,8 @@ class Profile extends Component {
                   email: response[i].email,
                   _id: response[i]._id,
                   system_pas: response[i].password,
-                  status: "Yönetici",
+                 
+                  showMe: true,
                 });
               } else {
                 this.setState({
@@ -172,7 +175,7 @@ class Profile extends Component {
                   email: response[i].email,
                   _id: response[i]._id,
                   system_pas: response[i].password,
-                  status: "Kullanıcı",
+                  showMe: false,
                 });
               }
             }
@@ -187,11 +190,17 @@ class Profile extends Component {
   }
 
   render() {
+    var partial;
+    if (this.state.showMe === true) {
+      partial = <Menu />;
+    } else if (this.state.showMe === false) {
+      partial = <UserMenu />;
+    }
     return (
       <div>
         {" "}
         <Header />
-        <Menu />
+        {partial}
         <div className="container">
           <div className="content-header">
             <div className="main-panel">

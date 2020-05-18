@@ -73,6 +73,20 @@ stores.post("/storelist", (req, res) => {
       res.send("error: " + err);
     });
 });
+//dükkan aidat içinkontrol
+stores.get("/findstoredues", (req, res) => {
+  Store.find({
+  })    .then((store) => {
+    if (store) {
+      res.json(store);
+    } else {
+      res.json({ error: "Store already exists" });
+    }
+  })
+  .catch((err) => {
+    res.send("error: " + err);
+  });
+});
  stores.put("/storesupdate", (req, res) => {
   const blocksData = {
     storenumber: req.body.storenumber,

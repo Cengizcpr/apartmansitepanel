@@ -3,8 +3,9 @@ const Schema = mongoose.Schema
 
 // Admin Şema Oluşturuldu.
 const AdminSchema = new Schema({
-  first_name: {
-    type: String
+  
+  first_name:{
+    type:String
   },
   last_name: {
     type: String
@@ -20,8 +21,7 @@ const AdminSchema = new Schema({
   phone_no: {
     type: String,
     required: true
-  },
-  status: {
+  },status: {
     type: Boolean
   },
   

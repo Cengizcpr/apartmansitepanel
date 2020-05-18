@@ -10,8 +10,11 @@ const DuesSchema = new Schema({
    duesGroup:{
      type:String
    },
-   amount:{
+   duesMonth:{
     type:String
+  },
+   amount:{
+    type:Number
    },
    payment_date:{
      type:String

@@ -87,6 +87,7 @@ class Register extends Component {
           password: this.state.password,
           phone_no: this.state.phone_no,
           status:this.state.status
+         
         };
 
         axios

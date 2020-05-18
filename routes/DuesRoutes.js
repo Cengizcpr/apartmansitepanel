@@ -17,6 +17,7 @@ dues.post("/duesadd", (req, res) => {
     date.getFullYear();
   const duesData = {
     duesYearMonth: req.body.duesYearMonth,
+    duesMonth:req.body.duesMonth,
     duesGroup: req.body.duesGroup,
     amount: req.body.amount,
     payment_date: req.body.payment_date,
@@ -63,4 +64,27 @@ dues.get("/dueslist", (req, res) => {
   });
 });
 
+//daire aidat içinkontrol
+dues.post("/finddues", (req, res) => {
+  Dues.find({
+    duesGroup: req.body.duesGroup,
+  }).then((dues) => {
+    if (dues) {
+    
+      res.json(dues)
+    } else {
+     res.send("false")
+      
+    }
+  });
+});
+dues.post("/duesdelete", (req, res) => {
+  Dues.deleteOne({ _id: req.body._id })
+    .then((objs) => {
+      res.json(objs);
+    })
+    .catch((err) => {
+      res.json({ error: "dues already exists" });
+    });
+});
 module.exports = dues;

@@ -9,10 +9,7 @@ export default class Home extends Component {
   constructor() {
     super();
 
-    this.state = {
-      showMe: true,
-      showUser: false,
-    };
+    this.state = {};
   }
   componentDidMount(e) {
     const token = localStorage.usertoken;
@@ -20,13 +17,15 @@ export default class Home extends Component {
       jwt_decode(token);
       const decoded = jwt_decode(token);
       axios.get("users/adminprofile").then((res) => {
-        var response = res.data;
-        for (var i = 0; i < response.length; i++) {
-          if (decoded.email === response[i].email) {
-            if (response[i].status == false) {
+        for (var i = 0; i < res.data.length; i++) {
+          if (decoded._id === res.data[i]._id) {
+            if (res.data[i].status) {
+              this.setState({
+                showMe: true,
+              });
+            } else {
               this.setState({
                 showMe: false,
-                showUser: true,
               });
             }
           }
@@ -37,19 +36,22 @@ export default class Home extends Component {
     }
   }
   render() {
+    var partial;
+    if (this.state.showMe === true) {
+      partial = <Menu />;
+    } else if (this.state.showMe === false) {
+      partial = <UserMenu />;
+    }
     return (
       <div>
         <Header />
-        {this.state.showMe ? <Menu /> : this.props.history.push("/userhome")}
+        {partial}
 
         <div className="content-wrapper">
           <section className="content">
-            <div className="container-fluid">
-              
-            </div>
+            <div className="container-fluid"></div>
           </section>
         </div>
-        {this.state.showUser ? this.props.history.push("/statuserror") : null}
       </div>
     );
   }

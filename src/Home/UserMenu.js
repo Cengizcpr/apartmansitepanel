@@ -48,16 +48,32 @@ class Menu extends Component {
                       role="menu"
                       data-accordion="false"
                     >
-                      <li className="nav-item ">
-                        <Link to="/home" className="nav-link ">
-                          <i className="nav-icon fas fa-tachometer-alt" />
-                          <p>Anasayfa</p>
-                        </Link>
-                      </li>
-                      <li className="nav-item ">
+                  <li className="nav-item ">
+                          <Link to="/home" className="nav-link ">
+                            <i className="nav-icon fas fa-tachometer-alt" />
+                            <p className="text text-lg">Anasayfa</p>
+                          </Link>
+                        </li>{" "}
+                        <li className="nav-item ">
                           <Link to="/faultregister" className="nav-link ">
                             <i className="nav-icon fas fa-tools" />
-                            <p>Arıza İşlemleri</p>
+                            <p className="text text-lg">Arıza İşlemleri</p>
+                          </Link>
+                        </li> 
+                        <li className="nav-item ">
+                          <Link to="/duespay" className="nav-link ">
+                            <i className="nav-icon fas fa-money-check" />
+                            <p className="text text-lg">Aidat Ödeme</p>
+                          </Link>
+                        </li>
+                        <li className="nav-item">
+                          <Link
+                            to="/adminprofile"
+                            className="nav-link "
+                          >
+                            <i className="nav-icon fas fa-cogs" />
+                            <p className="text text-lg">Ayarlar</p>
+                            
                           </Link>
                         </li>
                     </ul>

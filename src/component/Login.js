@@ -77,11 +77,9 @@ class Login extends Component {
 
             for (var i = 0; i < response.length; i++) {
               if (decoded.email === response[i].email) {
-                if (response[i].status == true) {
+               
                   this.props.history.push(`/home`);
-                } else {
-                  this.props.history.push(`/userhome`);
-                }
+               
               }
             }
           });

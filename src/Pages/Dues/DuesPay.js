@@ -19,6 +19,8 @@ class DuesPay extends Component {
       locationsdues: [],
       amount: "",
       number: "",
+      style_button:false,
+      text_button:" Ödeme Yapmak İçin Tıklayınız."
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -78,50 +80,33 @@ class DuesPay extends Component {
                 showMe: false,
               });
             }
-          
-            axios.get("apartmens/findapartmendues").then((res) => {
-           
-              for (var i = 0; i < res.data.length; i++) {
-                if (res.data[i].host_email == decoded.email) {
-                  this.setState({
-                    duesOwnername:
-                    res.data[i].host_name + " " + res.data[i].host_surname,
-                    duesType: "Daire " + res.data[i].circlenumber,
-                    blockName: res.data[i].block_name,
-                  });
-                  axios
-                    .post("dues/finddues", { duesGroup: "Daire" })
-                    .then((response) => {
+            const user = decoded.first_name + " " + decoded.last_name;
+            axios
+              .post("duesloan/finddues", { loanPersonName: user })
+              .then((response) => {
+               
+                this.setState({
+                  locationsdues: response.data
+                 
+                });
+                for(var i=0;i<response.data.length;i++){
+                  if(response.data[i].loanPersonName==user){
+                    if(response.data[i].loanState=="true"){
                       this.setState({
-                        locationsdues: response.data,
-                      });
-                    });
+                        style_button:true,
+                        text_button:"Ödeme Alındı"
+                      })
+                    }
+                    this.setState({
+                      duesType:response.data[i].duesGroup,
+                      duesOwnername:user,
+                      blockName:response.data[i].loanGroupName
+                    })                
+                  
+                  
+                  }
                 }
-              }
-            });              
-
-            axios.get("stores/findstoredues").then((res) => {
-
-              for (var i = 0; i < res.data.length; i++) {
-                if (res.data[i].store_email == decoded.email) {
-            this.setState({
-              duesOwnername:
-              res.data[i].store_name + " " + res.data[i].store_surname,
-            duesType: "Dükkan " + res.data[i].storenumber,
-            blockName: res.data[i].block_name,
-            })
-                  axios
-                    .post("dues/finddues", { duesGroup: "Dükkan" })
-                    .then((response) => {
-                      this.setState({
-                        locationsdues: response.data,
-                       
-                      });
-                    });
-                }
-              }
-            });
-           
+              });
           }
         }
       });
@@ -161,9 +146,8 @@ class DuesPay extends Component {
           <p className=" text-md">
             <b> Son Ödeme Tarihi :</b> {data.payment_date}
           </p>
-
-          <button type="button" class="btn btn-block btn-default btn-sm">
-            Ödeme Yapmak İçin Tıklayınız.
+          <button type="button" className={this.state.style_button?"btn btn-block btn-success disabled":"btn btn-block btn-default btn-sm " }>
+           {this.state.text_button}
           </button>
         </div>
       </div>
@@ -172,9 +156,7 @@ class DuesPay extends Component {
       <div>
         {" "}
         <Header />
-        
-            {partial}
-        
+        {partial}
         <div className="content-wrapper">
           <div className="card">
             <div className="card-body">
@@ -184,8 +166,8 @@ class DuesPay extends Component {
                     <div className="card card-info">
                       <div className="card-header">
                         <h3 className="card-title">
-                          Aidat Dönem {this.state.blockName} Blok  {this.state.duesType} {" "}{this.state.duesOwnername}
-                          
+                          Aidat Dönem  {" "}
+                          {this.state.duesType} {this.state.blockName} {this.state.duesOwnername}
                         </h3>
                       </div>
                       {/* /.card-header */}

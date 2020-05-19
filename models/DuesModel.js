@@ -4,8 +4,8 @@ const Schema = mongoose.Schema
 // Aidat Şema Oluşturuldu.
 const DuesSchema = new Schema({
   
-    duesYearMonth:{
-    type:String
+  duesYearMonth:{
+  type:String
    },
    duesGroup:{
      type:String

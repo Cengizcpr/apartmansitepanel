@@ -112,6 +112,70 @@ class DuesAdd extends Component {
 
       return formIsValid;
     }
+    circleDues(dataDues)
+    {
+      axios.get("apartmens/findapartmendues").then((res)=>{
+        for (var i = 0; i < res.data.length; i++) {
+          if(res.data[i].host_state!="Boş"){
+          
+            const duesLoanData={
+              duesYearMonth: dataDues.duesYearMonth,
+              duesMonth:dataDues.duesMonth,
+              duesYear:dataDues.duesYearMonth.slice(0,4),
+              duesGroup: dataDues.duesGroup,
+              amount: dataDues.amount,
+              loanPersonName: res.data[i].host_name+" "+res.data[i].host_surname,
+              loanPersonPhoneno:res.data[i].host_phoneno,
+              loanGroupName:res.data[i].block_name+res.data[i].circlenumber,
+              loanState:false
+            }
+            axios
+            .post("duesloan/duesloanadd", duesLoanData)
+            .then((response) => {
+              if (response.data == true) {
+                 //aidat tanımlandı
+              }
+             else if (response.data == false) {
+                toast.error("Hata!Aidat Tanımlanamamıştır!");
+            }
+            })
+          
+          
+          }
+          }
+      
+      })
+
+    }
+    storeDues(dataDues){
+      axios.get("stores/findstoredues").then((res)=>{ 
+        for (var i = 0; i < res.data.length; i++) {
+          if(res.data[i].store_state!="Boş"){
+            const duesLoanData={
+              duesYearMonth: dataDues.duesYearMonth,
+              duesMonth:dataDues.duesMonth,
+              duesYear:dataDues.duesYearMonth.slice(0,4),
+              duesGroup: dataDues.duesGroup,
+              amount: dataDues.amount,
+              loanPersonName: res.data[i].store_name+" "+res.data[i].store_surname,
+              loanPersonPhoneno:res.data[i].store_phoneno,
+              loanGroupName:res.data[i].block_name+res.data[i].storenumber,
+              loanState:false
+            }
+            axios
+            .post("duesloan/duesloanadd", duesLoanData)
+            .then((response) => {
+              if (response.data == true) {
+                //  toast.success(duesLoanData.duesMonth.slice(3)+" Ayı Aidatları Tanımlanmıştır.");
+              }  else if (response.data == false) {
+                toast.error("Hata!Aidat Tanımlanamamıştır!");
+            }
+            })
+            
+          }
+        }
+      })
+    }
   
   onSubmit(e) {
     e.preventDefault();
@@ -132,6 +196,10 @@ class DuesAdd extends Component {
       .post("dues/duesadd", duesAdds)
       .then((response) => {
         if (response.data == true) {
+          if(duesAdds.duesGroup=="Daire"){
+          this.circleDues(duesAdds);}
+          else if(duesAdds.duesGroup=="Dükkan"){
+          this.storeDues(duesAdds);}
           toast.success(duesAdds.duesYearMonth + "'a Ait Kayıt Başarılı!");
         } else if (response.data == false) {
           toast.error("Hata! " + duesAdds.duesYearMonth + "'a Ait Kayıt Var!");
@@ -146,7 +214,13 @@ class DuesAdd extends Component {
     axios
     .post("dues/duesdelete", { _id: data._id })
     .then((res) => {
-      toast.success(data.duesYearMonth+"Aidat Silindi!");
+      axios
+    .post("duesloan/duesloandelete", { duesYearMonth: data.duesYearMonth })
+    .then((res) => {
+      toast.success(data.duesYearMonth+" Aidat Silindi!");
+
+    })
+     
 
     })
     .catch((err) => {
@@ -186,6 +260,7 @@ class DuesAdd extends Component {
                   this.setState({
                     locationsinfo: resultcircle,
                     locationsinfostore:resultstore
+                    
                   });
               
 

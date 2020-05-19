@@ -32,6 +32,8 @@ var FaultSetting = require("./routes/FaultRoutes");
 var Message= require("./routes/Message");
 var İyzipay= require("./routes/iyzipay");
 var DuesSetting= require("./routes/DuesRoutes");
+var DuesLoanSetting= require("./routes/DuesLoanRoutes");
+
 app.use("/users", User);
 app.use("/apartmens", ApartmenSetting);
 app.use("/builds", BuildSetting);
@@ -41,6 +43,7 @@ app.use("/stores", StoreSetting);
 app.use("/carpark", CarPark);
 app.use("/fault", FaultSetting);
 app.use("/dues", DuesSetting);
+app.use("/duesloan", DuesLoanSetting);
 app.use("/api",Message)
 app.use("/pay",İyzipay);
 

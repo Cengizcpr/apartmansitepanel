@@ -97,7 +97,7 @@ class BlockSetting extends Component {
     for (var i = 1; i <= this.state.storenumber; i++) {
       newStore[i] = {
         block_name: this.state.block_name,
-        storenumber: this.state.block_name + i,
+        storenumber:  i,
       };
     }
     for (var i = 1; i <= this.state.storenumber; i++) {

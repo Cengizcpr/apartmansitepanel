@@ -7,7 +7,7 @@ const StoreSchema = new Schema({
     type: String
   },
   storenumber: {
-    type: String
+    type: Number
   },
   store_state:{
     type:String
@@ -27,10 +27,13 @@ const StoreSchema = new Schema({
    store_email:{
      type:String
    },
+   car_numbers:{
+    type:String
+   },
   date: {
     type: Date,
     default: Date.now
   }
 })
 
-module.exports = Apartmen = mongoose.model('stores', StoreSchema)
+module.exports = Store = mongoose.model('stores', StoreSchema)

@@ -3,6 +3,7 @@ const blocks = express.Router();
 const cors = require("cors");
 const Block = require("../models/BlockModel");
 const Apartmen = require("../models/ApartmenModel");
+const Store = require("../models/StoreModel");
 
 blocks.use(cors());
 
@@ -99,8 +100,13 @@ blocks.delete("/blockdelete", (req, res) => {
       Apartmen.remove()
       .then(obj=>
         {
+          Store.remove()
+          .then(obj=>
+            {
           res.json(objs);
         })
+      })
+        
       
     })
     .catch(err => {

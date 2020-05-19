@@ -200,9 +200,9 @@ class ApartmentUpdate extends Component {
   };
   handleChangeCar = (e) => {
     let index = e.nativeEvent.target.selectedIndex;
-
+    let cars=e.nativeEvent.target[index].text;
     this.setState({
-      car_numbers: e.nativeEvent.target[index].text,
+      car_numbers: cars
     });
   };
 

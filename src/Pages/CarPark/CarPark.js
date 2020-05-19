@@ -26,6 +26,7 @@ class CarPark extends Component {
       locationscar: [],
       locations: [],
       locationsApartment: [],
+      locationsStore:[],
       locationscarlist: [],
     };
 
@@ -89,15 +90,18 @@ class CarPark extends Component {
   };
   handleChangeCircleNumbers = (e) => {
     let index = e.nativeEvent.target.selectedIndex;
-    var circlenumber = e.nativeEvent.target[index].text[6];
-
+    var circlenumber = e.nativeEvent.target[index].text.slice(6);
+    var storenumber = e.nativeEvent.target[index].text.slice(7);
+    var numberstype = e.nativeEvent.target[index].text;
     if (e.nativeEvent.target[index].text == "Daire Seçiniz") {
       toast.warn("Lütfen Daire Seçiniz!");
     } else {
+      if(numberstype.slice(0,5)=="Daire"){
       const result = [];
-
+       
       for (var i = 0; i < this.state.locationsApartment.length; i++) {
         result[i] = this.state.locationsApartment[i];
+        if(result[i]!=undefined){
         if (result[i].circlenumber == circlenumber) {
           if (result[i].car_numbers != "Araç Yok") {
             this.setState({
@@ -107,11 +111,12 @@ class CarPark extends Component {
               email: result[i].host_email,
               car_email: result[i].host_email,
               car_owner: result[i].host_name + " " + result[i].host_surname,
+              locationsnumbers:"Konum Seçiniz"
             });
             const res = [];
             let carnum = result[i].car_numbers;
             for (var i = 1; i <= carnum; i++) {
-              res[i] = this.state.block_name + circlenumber + "-" + i;
+              res[i] = this.state.block_name +"E"+ circlenumber + "-" + i;
             }
             this.setState({
               locationscar: res,
@@ -131,6 +136,52 @@ class CarPark extends Component {
         }
       }
     }
+
+    }
+
+     else if(numberstype.slice(0,6)=="Dükkan"){     
+
+      const result = [];
+
+      for (var i = 0; i < this.state.locationsStore.length; i++) {
+        result[i] = this.state.locationsStore[i];
+        if(result[i]!=undefined){
+        if (result[i].storenumber == storenumber ) {
+          if (result[i].car_numbers != "Araç Yok") {
+            this.setState({
+              first_name: result[i].store_name,
+              last_name: result[i].store_surname,
+              phone_no: result[i].store_phoneno,
+              email: result[i].store_email,
+              car_email: result[i].store_email,
+              car_owner: result[i].store_name + " " + result[i].store_surname,
+              locationsnumbers:"Konum Seçiniz"
+            });
+            const res = [];
+            let carnum = result[i].car_numbers;
+            for (var i = 1; i <= carnum; i++) {
+              res[i] = this.state.block_name+"D" + storenumber + "-" + i;
+            }
+            this.setState({
+              locationscar: res,
+            });
+          } else {
+            const res = [];
+            toast.error("Araç Yok");
+            this.setState({
+              first_name: "",
+              last_name: "",
+              phone_no: "",
+              email: "",
+              car_owner: "",
+              locationscar: res,
+            });
+          }
+        }
+      }
+      }
+    }  
+  }
   };
   handleChangeBlockName = (e) => {
     e.preventDefault();
@@ -156,14 +207,37 @@ class CarPark extends Component {
                   block_name: res[i].block_name,
                 });
               }
-
             this.setState({
               locationsApartment: res,
             });
+            
           }
         })
         .catch((err) => {
           toast.error("Daire Kayıtları Boş!");
+        });
+        axios
+        .post("stores/storelist", {
+          block_name: block_name,
+        })
+        .then((response) => {
+          if (block_name == response.data[0].block_name) {
+            const res = [];
+            for (var i = 0; i < response.data.length; i++)
+              if (response.data[i].store_name != "") {
+                res[i] = response.data[i];
+                this.setState({
+                  block_name: res[i].block_name,
+                });
+              }
+             this.setState({
+              locationsStore: res,
+            }); 
+            
+          }
+        })
+        .catch((err) => {
+          toast.error("Dükkan Kayıtları Boş!");
         });
     }
   };
@@ -182,7 +256,6 @@ class CarPark extends Component {
     this.setState({
       _id: data._id,
     });
-    console.log(this.state._id);
     axios
       .post("carpark/cardelete", {
         _id: data._id,
@@ -201,6 +274,7 @@ class CarPark extends Component {
         car_email: this.state.car_email,
       })
       .then((response) => {
+        console.log(this.state.car_email)
         if (this.state.car_owner == response.data[0].car_owner) {
           this.setState({
             locationscarlist: response.data,
@@ -298,6 +372,9 @@ class CarPark extends Component {
     const aparmentnumbers = this.state.locationsApartment.map((data) => (
       <option key={data._id}>Daire {data.circlenumber} </option>
     ));
+    const storenumbers = this.state.locationsStore.map((data) => (
+      <option key={data._id}>Dükkan {data.storenumber} </option>
+    )); 
     const carlist = this.state.locationscarlist.map((data) => (
       <tr key={data._id}>
         <td>{data.locations}</td>
@@ -393,6 +470,7 @@ class CarPark extends Component {
                                               >
                                                 <option>Daire Seçiniz</option>
                                                 {aparmentnumbers}
+                                                {storenumbers} 
                                               </select>
                                             </div>
                                           </div>
@@ -441,21 +519,7 @@ class CarPark extends Component {
                                             </div>
                                           </div>
                                         </form>
-                                        {/*      <div className="form-group row">
-                                  <label className="col-sm-9 col-form-label">
-                                   
-                                  </label>
-                                    <div className="col-sm-3">
-                                      <button
-                                        className="btn btn-warning mr-2"
-                                        type="submit"
-                                        onClick={this.onSubmit}
-                                      >
-                                        Araç Bul
-                                      </button>
-                                  
-                                  </div>
-                                </div> */}
+                            
                                       </div>
                                     </div>
                                   </div>
@@ -465,17 +529,7 @@ class CarPark extends Component {
                                     <div className="card">
                                       <div className="card-body">
                                         <form className="forms-sample">
-                                          {/*   <div className="form-group row">
-                                    <label className="col-sm-2 col-form-label"></label>
-                                    <div className="col-sm-5">
-                                      <img
-                                        src={require("../lfs-plaka.png")}
-                                       
-                                        className="pull-right"
-                                      />
-                                    </div>
-                                  </div> */}
-
+                                    
                                           <div className="form-group row">
                                             <label className="col-sm-6 col-form-label">
                                               Araç Bilgileri

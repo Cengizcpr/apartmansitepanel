@@ -136,6 +136,8 @@ class BuildUpdate extends Component {
                   }
 
                   toast.success("Site Bilgileri Güncellendi !");
+                  setTimeout(function(){  window.location.replace("/buildinfo")}.bind(this),3000)
+
                 });
               })
               .catch((error) => {
@@ -174,6 +176,8 @@ class BuildUpdate extends Component {
                     });
                 }
                 toast.success("Site Bilgileri Güncellendi !");
+                setTimeout(function(){  window.location.replace("/buildinfo")}.bind(this),3000)
+
               });
             })
             .catch((error) => {

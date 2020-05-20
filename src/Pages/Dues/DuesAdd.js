@@ -201,6 +201,8 @@ class DuesAdd extends Component {
           else if(duesAdds.duesGroup=="Dükkan"){
           this.storeDues(duesAdds);}
           toast.success(duesAdds.duesYearMonth + "'a Ait Kayıt Başarılı!");
+          setTimeout(function(){  window.location.replace("/duesadd")}.bind(this),3000)
+
         } else if (response.data == false) {
           toast.error("Hata! " + duesAdds.duesYearMonth + "'a Ait Kayıt Var!");
         }

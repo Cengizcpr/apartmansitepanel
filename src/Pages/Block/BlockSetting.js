@@ -143,6 +143,9 @@ class BlockSetting extends Component {
           });
 
         toast.success("Blok Bilgileri Kaydedilmiştir!");
+        setTimeout(function(){  window.location.replace("/blocksetting")}.bind(this),3000)
+
+
       })
       .catch((error) => {
         //Site bilgileri eklenmedi

@@ -173,6 +173,8 @@ class BuildSetting extends Component {
                     });
                 }
                 toast.success("Site Bilgileri Eklendi !");
+                setTimeout(function(){ this.props.history.push("/buildinfo")}.bind(this),3000)
+
               });
             })
             .catch((error) => {

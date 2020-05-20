@@ -274,7 +274,6 @@ class CarPark extends Component {
         car_email: this.state.car_email,
       })
       .then((response) => {
-        console.log(this.state.car_email)
         if (this.state.car_owner == response.data[0].car_owner) {
           this.setState({
             locationscarlist: response.data,

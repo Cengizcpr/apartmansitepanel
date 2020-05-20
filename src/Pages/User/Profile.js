@@ -45,6 +45,8 @@ class Profile extends Component {
             axios.put("users/newpassword", updatePassword).then((response) => {
               if (response.request.response == "true") {
                 toast.success("Şifreniz Değiştirilmiştir!");
+                setTimeout(function(){  window.location.replace("/adminprofile")}.bind(this),3000)
+
               } else if (response.request.response == "false") {
                 toast.error("Hata!Şifreniz Değiştirilemedi!");
               }
@@ -139,6 +141,8 @@ class Profile extends Component {
         .put("users/userupdate", updateUser)
         .then((response) => {
           toast.success("Güncelleme Başarılı !");
+          setTimeout(function(){  window.location.replace("/adminprofile")}.bind(this),3000)
+
         })
         .catch((error) => {
           toast.error("Güncelleme Başarısız !");

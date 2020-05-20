@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Header from "../../Home/Header";
 import Menu from "../../Home/Menu";
+import UserMenu from "../../Home/UserMenu";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 import { ToastContainer, toast } from "react-toastify";
@@ -8,11 +9,14 @@ import "react-toastify/dist/ReactToastify.css";
 import PaymentCard from "react-payment-card-component";
 import Modal from "react-awesome-modal";
 
-class CrediCart extends Component {
-  constructor() {
-    super();
-
-    this.state = {
+class CrediPaymentTest extends Component {
+  constructor(props) {
+    super(props);
+    if (this.props.location.state != undefined) {
+      const { cardinfo } = this.props.location.state;
+      this.state = {
+        duesGroup:cardinfo.duesGroup,
+        amount:cardinfo.amount,
         cart_numbers:"",
         cvv:"",
         cartexpiration:"",
@@ -23,7 +27,25 @@ class CrediCart extends Component {
         locationsyear:[],
       visiblecard: true,
       flipped:false
-    };
+      };
+    } else {
+      this.state = {
+        cart_numbers:"",
+        duesGroup:"",
+        amount:"",
+        cvv:"",
+        cartexpiration:"",
+        cartowner_name:"",
+        cart_month:"",
+        cart_year:"",
+        locationsmonth:[],
+        locationsyear:[],
+      visiblecard: true,
+      flipped:false
+      };
+    }
+
+    
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
@@ -63,7 +85,11 @@ class CrediCart extends Component {
         cartowner_name:this.state.cartowner_name,
         cart_month:this.state.cart_month,
         cart_year:this.state.cart_year, 
-    }
+        amount:this.state.amount
+      
+      
+      }
+      console.log(this.state.amount)
     axios.post("/pay/iyzipay",cartPay).then((res)=>{
         console.log(res.data.status)
         if(res.data.status=="success"){
@@ -83,7 +109,16 @@ class CrediCart extends Component {
       axios.get("users/adminprofile").then((res) => {
         var response = res.data;
         for (var i = 0; i < response.length; i++) {
-          if (decoded.email === response[i].email) {
+          if (decoded._id === response[i]._id) {      
+            if (res.data[i].status) {
+              this.setState({
+                showMe: true,
+              });
+            } else {
+              this.setState({
+                showMe: false,
+              });
+            }     
             const resmonth = [];
             for (var i = 1; i <= 12; i++) {
               resmonth[i] = i;
@@ -113,10 +148,16 @@ class CrediCart extends Component {
       const cartyear = this.state.locationsyear.map(data => (
         <option key={data}>{data}</option>
       ));
+      var partial;
+      if (this.state.showMe === true) {
+        partial = <Menu />;
+      } else if (this.state.showMe === false) {
+        partial = <UserMenu />;
+      }
     return (
       <div>
         <Header />
-        <Menu />
+        {partial}
         <div className="content-wrapper">
           <div className="card">
             <div className="card-body">
@@ -265,4 +306,4 @@ class CrediCart extends Component {
     );
   }
 }
-export default CrediCart;
+export default CrediPaymentTest;

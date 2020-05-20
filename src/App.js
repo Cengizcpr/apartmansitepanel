@@ -24,13 +24,13 @@ import FaultRegister from "./Pages/Fault/FaultRegister";
 import FaultList from "./Pages/Fault/FaultList";
 import DuesAdd from "./Pages/Dues/DuesAdd";
 import DuesPay from "./Pages/Dues/DuesPay";
-import Test from "./Pages/CrediCart/Credicart";
+import CrediPaymentTest from "./Pages/CrediCart/CrediPaymentTest";
 class App extends Component {
   render() {
     return (
       <Router>
         <Switch>
-          <Route exact path="/test" component={Test}/>
+          <Route exact path="/duespayment" component={CrediPaymentTest}/>
           <Route exact path="/" component={login} />
           <Route exact path="/register" component={register} />
           <Route exact path="/adminprofile" component={Profile} />

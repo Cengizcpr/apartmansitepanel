@@ -6,7 +6,7 @@ var Iyzipay = require('iyzipay');
 
   ıyzıpay.use(cors());
   ıyzıpay.post('/iyzipay', (req, res) => {
-  
+  console.log(req.body.amount)
     var iyzipay = new Iyzipay({
         apiKey: 'sandbox-P2LvuO1os3XB5ZtTZgIS3JdLCDQYhWFR',
         secretKey: 'sandbox-5E3Ro5wVe07WbgQ48VfZyEiINZ29egyE',
@@ -15,8 +15,8 @@ var Iyzipay = require('iyzipay');
     var request = {
         locale: Iyzipay.LOCALE.TR,
         conversationId: '123456789',
-        price: '1',
-        paidPrice: '1.2',
+        price: req.body.amount,
+        paidPrice: req.body.amount,
         currency: Iyzipay.CURRENCY.TRY,
         installment: '1',
         basketId: 'B67832',
@@ -66,30 +66,14 @@ var Iyzipay = require('iyzipay');
                 category1: 'Collectibles',
                 category2: 'Accessories',
                 itemType: Iyzipay.BASKET_ITEM_TYPE.PHYSICAL,
-                price: '0.3'
-            },
-            {
-                id: 'BI102',
-                name: 'Game code',
-                category1: 'Game',
-                category2: 'Online Game Items',
-                itemType: Iyzipay.BASKET_ITEM_TYPE.VIRTUAL,
-                price: '0.5'
-            },
-            {
-                id: 'BI103',
-                name: 'Usb',
-                category1: 'Electronics',
-                category2: 'Usb / Cable',
-                itemType: Iyzipay.BASKET_ITEM_TYPE.PHYSICAL,
-                price: '0.2'
+                price: '50'
             }
         ]
     };
     
     iyzipay.payment.create(request, function (err, result) {
        res.json(result)
-       
+       console.log(result)
     }) 
   });
   

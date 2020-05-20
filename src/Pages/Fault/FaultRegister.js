@@ -94,6 +94,7 @@ class FaultRegister extends Component {
         .post("fault/faultregister", newFault)
         .then((res) => {
           toast.success("Arıza Kayıt Başarılı!");
+          setTimeout(function(){  window.location.replace("/faultregister")}.bind(this),3000)
         })
         .catch((err) => {
           toast.error("Hata! Kayıt Başarısız!");

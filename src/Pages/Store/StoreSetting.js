@@ -48,8 +48,8 @@ class StoreSetting extends Component {
   onSubmit(e) {
     e.preventDefault();
     if (this.state.block_name == "Blok Seçiniz") {
-      toast.warn("Lütfen Blok Seçiniz!");
-    }
+  toast.warn("Lütfen Blok Seçiniz!")
+}
     else{
       this.setState({
         showMe: true,

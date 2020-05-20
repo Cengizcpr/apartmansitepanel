@@ -62,6 +62,9 @@ class DuesPay extends Component {
   onSubmit(e) {
     e.preventDefault();
   }
+  duesİnfoCard(data){
+  
+  }
   componentDidMount(e) {
     const token = localStorage.usertoken;
     try {
@@ -125,10 +128,10 @@ class DuesPay extends Component {
     const duesinfo = this.state.locationsdues.map((data) => (
       <div className="col-sm-3" key={data._id}>
         <div
-          className="position-relative p-3 callout callout-info"
+          className="position-relative p-3 callout callout-info "
           style={{ height: 180 }}
         >
-          <div className="ribbon-wrapper">
+          <div className="ribbon-wrapper ">
             <div className="ribbon bg-primary">
               <b>{data.duesMonth.slice(0, 2)}</b>
             </div>
@@ -146,9 +149,10 @@ class DuesPay extends Component {
           <p className=" text-md">
             <b> Son Ödeme Tarihi :</b> {data.payment_date}
           </p>
-          <button type="button" className={this.state.style_button?"btn btn-block btn-success disabled":"btn btn-block btn-default btn-sm " }>
-           {this.state.text_button}
-          </button>
+        
+          <Link style={{ textDecoration: 'none',color:"#fff" }} className={this.state.style_button?"btn btn-block btn-success disabled btn-sm":"btn btn-block btn-danger btn-sm" }  to={{ pathname: "/duespayment",  state: { cardinfo: data } }}>
+           {this.state.text_button}</Link>
+        
         </div>
       </div>
     ));

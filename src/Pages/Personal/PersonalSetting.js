@@ -85,6 +85,8 @@ class PersonalSetting extends Component {
       axios.post("personals/personaladd", newPersonal).then((response) => {
         if (response.request.response == "true") {
           toast.success("Kayıt Başarılı");
+          setTimeout(function(){ this.props.history.push("/personallist")}.bind(this),3000)
+
         } else if (response.request.response == "false") {
           toast.error("Hata!Kayıt Başarısız! ");
         } else if (response.request.response == "err") {

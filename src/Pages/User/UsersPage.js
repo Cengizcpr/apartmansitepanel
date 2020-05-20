@@ -93,6 +93,7 @@ class UsersPage extends Component {
         .then((response) => {
           if (response.request.response == "true") {
             toast.success("Kayıt Başarılı! ");
+            setTimeout(function(){ this.props.history.push("/userslist")}.bind(this),3000)
           } else if (response.request.response == "false") {
             toast.error("Hata!Kayıt Başarısız! ");
                     }else if (response.request.response == "err") {

@@ -66,7 +66,7 @@ var Iyzipay = require('iyzipay');
                 category1: 'Collectibles',
                 category2: 'Accessories',
                 itemType: Iyzipay.BASKET_ITEM_TYPE.PHYSICAL,
-                price: '50'
+                price: req.body.amount
             }
         ]
     };

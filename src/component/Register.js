@@ -97,7 +97,7 @@ class Register extends Component {
           .then((response) => {
             if (response.request.response == "true") {
               toast.success("Kayıt Başarılı! ");
-              setTimeout(function(){ this.props.history.push("/")}.bind(this),3000)
+              setTimeout(function(){ this.props.history.push("/")}.bind(this),1000)
 
             } else if (response.request.response == "false") {
               toast.error("Hata!Kayıt Başarısız! ");

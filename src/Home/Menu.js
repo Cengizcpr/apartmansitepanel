@@ -329,7 +329,7 @@ class Menu extends Component {
                         <li className="nav-item ">
                           
                           {this.state.showDuesMenu ? (
-                            <Link to="/" className="nav-link ">
+                            <Link to="/dueslist" className="nav-link ">
                               <i class="nav-icon fas fa-coins"></i>{" "}
                               <p>Aidat Listele</p>
                             </Link>

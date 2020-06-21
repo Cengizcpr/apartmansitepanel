@@ -24,10 +24,16 @@ const DuesLoanSchema = new Schema({
   loanPersonPhoneno: {
     type: String,
   },
+  loanEmail: {
+    type: String,
+  },
   loanGroupName: {
     type: String,
   },
   loanState: {
+    type: Boolean,
+  },
+  style_box: {
     type: String,
   },
   payment_date: {

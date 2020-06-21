@@ -49,7 +49,7 @@ class Menu extends Component {
                       data-accordion="false"
                     >
                   <li className="nav-item ">
-                          <Link to="/home" className="nav-link ">
+                          <Link to="/userhome" className="nav-link ">
                             <i className="nav-icon fas fa-tachometer-alt" />
                             <p className="text text-lg">Anasayfa</p>
                           </Link>

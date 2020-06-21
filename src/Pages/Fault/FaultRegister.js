@@ -71,6 +71,8 @@ class FaultRegister extends Component {
       .post("fault/faultdelete", { _id: data._id })
       .then((res) => {
         toast.success("Arıza Silindi!");
+        setTimeout(function(){  window.location.replace("/faultregister")}.bind(this),3000)
+
 
       })
       .catch((err) => {

@@ -125,6 +125,7 @@ class DuesAdd extends Component {
               duesGroup: dataDues.duesGroup,
               amount: dataDues.amount,
               loanPersonName: res.data[i].host_name+" "+res.data[i].host_surname,
+              loanEmail:res.data[i].host_email,
               loanPersonPhoneno:res.data[i].host_phoneno,
               loanGroupName:res.data[i].block_name+res.data[i].circlenumber,
               loanState:false
@@ -157,6 +158,7 @@ class DuesAdd extends Component {
               duesYear:dataDues.duesYearMonth.slice(0,4),
               duesGroup: dataDues.duesGroup,
               amount: dataDues.amount,
+              loanEmail:res.data[i].store_email,
               loanPersonName: res.data[i].store_name+" "+res.data[i].store_surname,
               loanPersonPhoneno:res.data[i].store_phoneno,
               loanGroupName:res.data[i].block_name+res.data[i].storenumber,
@@ -220,6 +222,7 @@ class DuesAdd extends Component {
     .post("duesloan/duesloandelete", { duesYearMonth: data.duesYearMonth })
     .then((res) => {
       toast.success(data.duesYearMonth+" Aidat Silindi!");
+      setTimeout(function(){  window.location.replace("/duesadd")}.bind(this),3000)
 
     })
      

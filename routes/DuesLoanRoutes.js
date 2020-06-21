@@ -25,9 +25,10 @@ duesloan.post("/duesloanadd", (req, res) => {
     loanPersonName: req.body.loanPersonName,
     loanPersonPhoneno:req.body.loanPersonPhoneno,
     loanGroupName:req.body.loanGroupName,
-    loanState:req.body.loanState
+    loanState:req.body.loanState,
+    loanEmail:req.body.loanEmail,
+    style_box:"btn btn-block btn-danger btn-sm"
   };
-  console.log(duesData)
   DuesLoan.findOne({
     duesYearMonth: req.body.duesYearMonth
   })
@@ -52,8 +53,25 @@ duesloan.post("/duesloanadd", (req, res) => {
       res.send("error: " + err);
     });
 });
-/*  //aidat ödeme için liste
-duesloan.get("/duesloanlist", (req, res) => {
+duesloan.put("/duesupdate", (req, res) => {
+  const duesData = {
+  loanState:req.body.loanState,
+  style_box:req.body.style_box
+  };
+  DuesLoan.update(
+    { _id: req.body._id },
+    duesData,
+    function (err, objs) {}
+  )
+    .then((dues) => {
+      res.json({ status: dues + "Updated!" });
+    })
+    .catch((err) => {
+      res.json({ message: "true" });
+    });
+});
+  //aidat  için liste
+duesloan.get("/dueshomelist", (req, res) => {
   DuesLoan.find({
   })    .then((dues) => {
     if (dues) {
@@ -65,13 +83,15 @@ duesloan.get("/duesloanlist", (req, res) => {
   .catch((err) => {
     res.send("error: " + err);
   });
-}); */
+}); 
 
 //daire aidat içinkontrol
 duesloan.post("/finddues", (req, res) => {
   DuesLoan.find({
-    loanPersonName: req.body.loanPersonName,
-  }).then((dues) => {
+    loanEmail: req.body.loanEmail,
+  })
+  .sort({duesMonth:1}) 
+  .then((dues) => {
     if (dues) {
     
       res.json(dues)

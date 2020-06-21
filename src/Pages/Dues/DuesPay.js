@@ -19,8 +19,7 @@ class DuesPay extends Component {
       locationsdues: [],
       amount: "",
       number: "",
-      style_button:false,
-      text_button:" Ödeme Yapmak İçin Tıklayınız."
+      text_button: " Ödeme Yapmak İçin Tıklayınız.",
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -62,9 +61,7 @@ class DuesPay extends Component {
   onSubmit(e) {
     e.preventDefault();
   }
-  duesİnfoCard(data){
-  
-  }
+  duesİnfoCard(data) {}
   componentDidMount(e) {
     const token = localStorage.usertoken;
     try {
@@ -84,29 +81,26 @@ class DuesPay extends Component {
               });
             }
             const user = decoded.first_name + " " + decoded.last_name;
-            axios
-              .post("duesloan/finddues", { loanPersonName: user })
+         const email=decoded.email;  
+         axios
+              .post("duesloan/finddues", { loanEmail: email })
               .then((response) => {
-               
                 this.setState({
-                  locationsdues: response.data
-                 
+                  locationsdues: response.data,
                 });
-                for(var i=0;i<response.data.length;i++){
-                  if(response.data[i].loanPersonName==user){
-                    if(response.data[i].loanState=="true"){
+                for (var i = 0; i < response.data.length; i++) {
+                  if (response.data[i].loanEmail == email) {
+                    if (response.data[i].loanState == true) {
                       this.setState({
-                        style_button:true,
-                        text_button:"Ödeme Alındı"
-                      })
+                        
+                        text_button: "Ödeme",
+                      });
                     }
                     this.setState({
-                      duesType:response.data[i].duesGroup,
-                      duesOwnername:user,
-                      blockName:response.data[i].loanGroupName
-                    })                
-                  
-                  
+                      duesType: response.data[i].duesGroup,
+                      duesOwnername: user,
+                      blockName: response.data[i].loanGroupName,
+                    });
                   }
                 }
               });
@@ -149,10 +143,15 @@ class DuesPay extends Component {
           <p className=" text-md">
             <b> Son Ödeme Tarihi :</b> {data.payment_date}
           </p>
-        
-          <Link style={{ textDecoration: 'none',color:"#fff" }} className={this.state.style_button?"btn btn-block btn-success disabled btn-sm":"btn btn-block btn-danger btn-sm" }  to={{ pathname: "/duespayment",  state: { cardinfo: data } }}>
-           {this.state.text_button}</Link>
-        
+
+          <Link
+            style={{ textDecoration: "none", color: "#fff" }}
+            className={data.style_box}
+              
+            to={{ pathname: "/duespayment", state: { cardinfo: data } }}
+          >
+            {this.state.text_button}
+          </Link>
         </div>
       </div>
     ));
@@ -170,8 +169,8 @@ class DuesPay extends Component {
                     <div className="card card-info">
                       <div className="card-header">
                         <h3 className="card-title">
-                          Aidat Dönem  {" "}
-                          {this.state.duesType} {this.state.blockName} {this.state.duesOwnername}
+                          Aidat Dönem {this.state.duesType}{" "}
+                          {this.state.blockName} {this.state.duesOwnername}
                         </h3>
                       </div>
                       {/* /.card-header */}

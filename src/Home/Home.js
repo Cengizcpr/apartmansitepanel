@@ -18,7 +18,8 @@ class Home extends Component {
       buildName:"",
       blockNumber:"",
       storeNumber:"",
-      apartmenNumber:""
+      apartmenNumber:"",
+      showMe:true
     };
   }
 

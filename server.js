@@ -33,6 +33,7 @@ var Message= require("./routes/Message");
 var İyzipay= require("./routes/iyzipay");
 var DuesSetting= require("./routes/DuesRoutes");
 var DuesLoanSetting= require("./routes/DuesLoanRoutes");
+var AppointmentSetting = require("./routes/AppointmentRoutes");
 
 app.use("/users", User);
 app.use("/apartmens", ApartmenSetting);
@@ -46,6 +47,8 @@ app.use("/dues", DuesSetting);
 app.use("/duesloan", DuesLoanSetting);
 app.use("/api",Message)
 app.use("/pay",İyzipay);
+app.use("/appointment",AppointmentSetting);
+
 
 app.use(express.static(path.join(__dirname, "public")));
 app.listen(port, function () {

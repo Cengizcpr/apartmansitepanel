@@ -140,6 +140,7 @@ users.put("/userupdate", (req, res) => {
     email: req.body.email,
     phone_no: req.body.phone_no,
     _id: req.body._id,
+    status:req.body.status
   };
 
   User.update({ _id: req.body._id }, userData, function (err, objs) {})

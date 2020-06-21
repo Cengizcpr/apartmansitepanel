@@ -6,22 +6,21 @@ import axios from "axios";
 import jwt_decode from "jwt-decode";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-class FaultRegister extends Component {
+class AppointmentAdd extends Component {
   constructor() {
     super();
 
     this.state = {
-      fault_owner: "",
-      fault_locations: "",
-      fault_name: "",
-      fault_type: "",
-      fault_comment: "",
-      fault_priority: "",
+      name_surname: "",
+      appo_title: "",
+      appo_subject: "",   
+      appo_comment: "",
       _id: "",
-      fault_email:"",
-      fault_style:"",
-      locationsfault: [],
-   
+      phone_no:"",
+      
+      appo_state:false,
+      locationsappo: [],
+      menuVisible:true
     
     };
     this.onChange = this.onChange.bind(this);
@@ -31,75 +30,60 @@ class FaultRegister extends Component {
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
-  handleChangePriority = (e) => {
-    let index = e.nativeEvent.target.selectedIndex;
 
-    this.setState({
-      fault_priority: e.nativeEvent.target[index].text,
-    });
-  };
   handleValidation() {
     let formIsValid = true;
-    let fault_locations = this.state.fault_locations;
-    let fault_name = this.state.fault_name;
-    let fault_owner = this.state.fault_owner;
-    let fault_type = this.state.fault_type;
-    let fault_priority = this.state.fault_priority;
-    let fault_comment = this.state.fault_comment;
+    let appo_title = this.state.appo_title;
+    let appo_subject = this.state.appo_subject;
+    let name_surname = this.state.name_surname;
+    let appo_comment = this.state.appo_comment;
 
     //Boş mu kontrol?
     if (
-      !fault_comment ||
-      !fault_locations ||
-      !fault_name ||
-      !fault_owner ||
-      !fault_type
+      !appo_comment ||
+      !appo_title ||
+      !appo_subject ||
+      !name_surname 
+     
     ) {
       formIsValid = false;
       toast.error("Boş Alan Bırakmayınız!");
-    } else if (!fault_priority) {
-      formIsValid = false;
-      toast.warn("Lütfen Öncelik Durumu Seçiniz!");
-    } else if (fault_priority == "Öncelik Durum Seçiniz..") {
-      formIsValid = false;
-      toast.warn("Lütfen Öncelik Durumu Seçiniz!");
-    }
+    } 
     return formIsValid;
   }
-  deleteFault(data) {
+  deleteAppo(data) {
     axios
-      .post("fault/faultdelete", { _id: data._id })
+      .post("appointment/appodelete", { _id: data._id })
       .then((res) => {
-        toast.success("Arıza Silindi!");
-        setTimeout(function(){  window.location.replace("/faultregister")}.bind(this),3000)
+        toast.success("Randevu Silindi!");
+        setTimeout(function(){  window.location.replace("/apporegister")}.bind(this),3000)
 
 
       })
       .catch((err) => {
-        toast.error("Hata! Arıza Silinemedi!");
+        toast.error("Hata! Randevu Silinemedi!");
       });
   }
   onSubmit(e) {
     e.preventDefault();
     if (this.handleValidation()) {
-      const newFault = {
-        fault_owner: this.state.fault_owner,
-        fault_locations: this.state.fault_locations,
-        fault_name: this.state.fault_name,
-        fault_type: this.state.fault_type,
-        fault_priority: this.state.fault_priority,
-        fault_comment: this.state.fault_comment,
-        fault_email:this.state.fault_email
+      const newAppointment = {
+        name_surname: this.state.name_surname,
+        appo_title: this.state.appo_title,
+        appo_subject: this.state.appo_subject,
+        appo_comment: this.state.appo_comment,
+        phone_no:this.state.phone_no,
+        appo_state:false
       };
 
       axios
-        .post("fault/faultregister", newFault)
+        .post("appointment/apporegister", newAppointment)
         .then((res) => {
-          toast.success("Arıza Kayıt Başarılı!");
-          setTimeout(function(){  window.location.replace("/faultregister")}.bind(this),3000)
+          toast.success("Randevu Talep Başarılı!");
+          setTimeout(function(){  window.location.replace("/apporegister")}.bind(this),3000)
         })
         .catch((err) => {
-          toast.error("Hata! Kayıt Başarısız!");
+          toast.error("Hata! Talep Başarısız!");
         });
     }
   }
@@ -126,36 +110,35 @@ class FaultRegister extends Component {
               .post("users/findiduser", { _id: decoded._id })
               .then((res) => {
                 this.setState({
-                  fault_owner: res.data.first_name + " " + res.data.last_name,
-                  fault_email:res.data.email
+                    name_surname: res.data.first_name + " " + res.data.last_name,
+                    phone_no:res.data.phone_no
                 });
                 
                 //arıza listelenmesı
-                axios.get("fault/faultlist").then((res) => {
+                axios.get("appointment/appolist").then((res) => {
                   const result = [];
                  
                     
                   for (var i = 0; i < res.data.length; i++) {
-                    if (res.data[i].fault_email == this.state.fault_email) {
+                    if (res.data[i].phone_no == this.state.phone_no) {
                       
                       result[i] = res.data[i];
-                      this.setState({
-                        fault_style:res.data[i].fault_style
-                      })
+                     
+                     
                     }
                  
                   }if(res.data.length>0){
                   this.setState({
-                    locationsfault: result,
+                    locationsappo: result,
                   });
                 }
                 else{
-                  toast.info("Herhangi Arıza Kaydınız Bulunmamaktadır!")
+                  toast.info("Herhangi Randevu Talebiniz Bulunmamaktadır!")
                 }
                 })  
               })
               .catch((err) => {
-                toast.error("Hata! Arıza Sahibi Listelenemedi!");
+                toast.error("Hata! Randevu Sahibi Listelenemedi!");
               });
           }
         
@@ -167,27 +150,24 @@ class FaultRegister extends Component {
   }
 
   render() {
-    const faultinfo = this.state.locationsfault.map((data) => (
-      <div className={this.state.fault_style} key={data._id}>
+    const appoinfo = this.state.locationsappo.map((data) => (
+      <div className="alert alert-dark alert-dismissible" key={data._id}>
         <button
           type="button"
           className="close"
-          onClick={() => this.deleteFault(data)}
+          onClick={() => this.deleteAppo(data)}
         >
           ×
         </button>
         <h5>
-          <i className="icon fas fa-exclamation-triangle"></i> Arıza
+          <i className="icon fas fa-exclamation-triangle"></i> Randevu 
         </h5>
         <p>
           {" "}
-          Arıza Yeri : {data.fault_locations} Arıza Adı : {data.fault_name}
+        <b>  Başlık :</b> {data.appo_title} <b> Konusu : </b> {data.appo_subject} <p> <b>Randevu Durumu : </b>{data.appo_state ? "Beklemede" : "Kabul Edildi"}   <br/> <b>Açıklama : </b>  {data.appo_comment}</p>
+      
         </p>
-        <p>
-          {" "}
-          Arıza Cins : {data.fault_type} Öncelik : {data.fault_priority}
-          {"       "}{" "}
-        </p>
+       
       </div>
     ));
     var partial;
@@ -208,10 +188,10 @@ class FaultRegister extends Component {
                   <div className="content-header">
                     <div className="row">
                       <div className="col-lg-6">
-                        <div className="card card-danger">
+                        <div className="card card-dark">
                           <div className="card-header border-0">
                             <div className="d-flex justify-content-between">
-                              <h3 className="card-title">Arıza Talep Formu</h3>
+                              <h3 className="card-title">Randevu Talep Formu</h3>
                             </div>
                           </div>
                           <div className="card-body">
@@ -221,35 +201,35 @@ class FaultRegister extends Component {
                             >
                               <div className="form-group row">
                                 <label className="col-sm-3 col-form-label">
-                                  Arıza Sahibi :
-                                </label>
-                                <div className="col-sm-7">
-                                  <label className="col-sm-7 col-form-label">
-                                    {this.state.fault_owner}
-                                  </label>
-                                </div>
-                              </div>
-                              <div className="form-group row">
-                                <label className="col-sm-3 col-form-label">
-                                  Arıza Email :
+                                  Ad Soyad :
                                 </label>
                                 <div className="col-sm-9">
                                   <label className="col-sm-9 col-form-label">
-                                    {this.state.fault_email}
+                                    {this.state.name_surname}
                                   </label>
                                 </div>
                               </div>
                               <div className="form-group row">
                                 <label className="col-sm-3 col-form-label">
-                                  Arıza Yeri :
+                                Telefon No :
                                 </label>
-                                <div className="col-sm-7">
+                                <div className="col-sm-9">
+                                  <label className="col-sm-9 col-form-label">
+                                    {this.state.phone_no}
+                                  </label>
+                                </div>
+                              </div>
+                              <div className="form-group row">
+                                <label className="col-sm-3 col-form-label">
+                                  Başlık :
+                                </label>
+                                <div className="col-sm-9">
                                   <input
                                     type="text"
                                     className="form-control"
-                                    placeholder="Arıza Yeri:"
-                                    name="fault_locations"
-                                    value={this.state.fault_locations}
+                                    placeholder="Randevu Başlık:"
+                                    name="appo_title"
+                                    value={this.state.appo_title}
                                     onChange={this.onChange}
                                     required
                                   />
@@ -257,64 +237,33 @@ class FaultRegister extends Component {
                               </div>
                               <div className="form-group row">
                                 <label className="col-sm-3 col-form-label">
-                                  Arıza Adı :
+                                  Konusu :
                                 </label>
-                                <div className="col-sm-7">
+                                <div className="col-sm-9">
                                   <input
                                     type="text"
                                     className="form-control"
-                                    placeholder="Arıza Adı:"
-                                    name="fault_name"
-                                    value={this.state.fault_name}
+                                    placeholder=" Randevu Konusu:"
+                                    name="appo_subject"
+                                    value={this.state.appo_subject}
                                     onChange={this.onChange}
                                     required
                                   />
                                 </div>
                               </div>
-                              <div className="form-group row">
-                                <label className="col-sm-3 col-form-label">
-                                  Arıza Cins :
-                                </label>
-                                <div className="col-sm-7">
-                                  <input
-                                    type="text"
-                                    className="form-control"
-                                    placeholder="Arıza Cinsi:"
-                                    name="fault_type"
-                                    value={this.state.fault_type}
-                                    onChange={this.onChange}
-                                    required
-                                  />
-                                </div>
-                              </div>
+                            
 
                               <div className="form-group row">
                                 <label className="col-sm-3 col-form-label">
-                                  Öncelik :
+                                  Açıklama :
                                 </label>
-                                <div className="col-sm-7">
-                                  <select
-                                    className="form-control"
-                                    onChange={this.handleChangePriority}
-                                  >
-                                    <option> Öncelik Durumu Seçiniz.. </option>
-                                    <option> Normal </option>
-                                    <option> Orta </option>
-                                    <option> Yüksek </option>
-                                  </select>
-                                </div>
-                              </div>
-                              <div className="form-group row">
-                                <label className="col-sm-3 col-form-label">
-                                  Arıza Açıklaması :
-                                </label>
-                                <div className="col-sm-7">
+                                <div className="col-sm-9">
                                   <textarea
                                     rows="3"
                                     className="form-control"
-                                    placeholder="Arıza Açıklaması :"
-                                    name="fault_comment"
-                                    value={this.state.fault_comment}
+                                    placeholder="Randevu Açıklaması :"
+                                    name="appo_comment"
+                                    value={this.state.appo_comment}
                                     onChange={this.onChange}
                                     maxLength="60"
                                     required
@@ -333,10 +282,10 @@ class FaultRegister extends Component {
                         </div>
                       </div>
                       <div className="col-lg-6">
-                        <div className="card card-danger">
+                        <div className="card card-dark">
                           <div className="card-header border-0">
                             <div className="d-flex justify-content-between">
-                              <h3 className="card-title">Arızalar</h3>
+                              <h3 className="card-title">Randevu Taleplerim</h3>
                             </div>
                           </div>
                           <div className="card-body">
@@ -348,18 +297,9 @@ class FaultRegister extends Component {
                                 <div className="chartjs-size-monitor-shrink"></div>
                               </div>
 
-                              <div class="col-12">{faultinfo}</div>
+                              <div class="col-12">{appoinfo}</div>
                             </div>
-                            <div className="d-flex flex-row justify-content-end">
-                              <span className="mr-2">
-                                <i className="fas fa-square text-green" />{" "}
-                                Tamamlandı
-                              </span>
-                              <span>
-                                <i className="fas fa-square text-red" />{" "}
-                                Bekleniyor
-                              </span>
-                            </div>
+                           
                           </div>
                         </div>
                       </div>
@@ -375,4 +315,4 @@ class FaultRegister extends Component {
     );
   }
 }
-export default FaultRegister;
+export default AppointmentAdd;

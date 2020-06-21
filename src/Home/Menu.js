@@ -16,7 +16,7 @@ class Menu extends Component {
       showFaultMenuUser:true,
       showDuesMenu:false,
       showButton:true,
-     
+      showAppointmentMenu:false,
       menustyle: "right fas fa-angle-left",
     };
     axios.get("builds/buildslist").then((response) => {
@@ -80,6 +80,19 @@ class Menu extends Component {
     } else {
       this.setState({
         showPersonalMenu: false,
+        menustyle: "right fas fa-angle-left",
+      });
+    }
+  }
+  visibleAppointment() {
+    if (this.state.showAppointmentMenu == false) {
+      this.setState({
+        showAppointmentMenu: true,
+        menustyle: "right fas fa-angle-down",
+      });
+    } else {
+      this.setState({
+        showAppointmentMenu: false,
         menustyle: "right fas fa-angle-left",
       });
     }
@@ -335,6 +348,35 @@ class Menu extends Component {
                             </Link>
                           ) : null}
                         </li>
+                        <li className="nav-item">
+                          <Link
+                            onClick={() => this.visibleAppointment()}
+                            className="nav-link "
+                          >
+                            <i className="nav-icon fas fa-calendar-check" />
+                            <p className="text text-lg">Randevu </p>
+                            <i className={this.state.menustyle}></i>
+                          </Link>
+                        </li>
+                        <li className="nav-item ">
+                          
+                          {this.state.showAppointmentMenu ? (
+                            <Link to="/apporegister" className="nav-link ">
+                              <i className="nav-icon fas fa-calendar-plus" />
+                              <p>Randevu Talep</p>
+                            </Link>
+                          ) : null}
+                        </li>
+                        <li className="nav-item ">
+                          
+                          {this.state.showAppointmentMenu ? (
+                            <Link to="/appointmentlist" className="nav-link ">
+                              <i className="nav-icon fas fa-clipboard-list" />
+                              <p>Randevu Listele</p>
+                            </Link>
+                          ) : null}
+                        </li>
+                        
                         <li className="nav-item" >
                           <Link
                             to="/adminprofile"

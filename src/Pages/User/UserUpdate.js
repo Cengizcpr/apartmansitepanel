@@ -23,6 +23,7 @@ class UserRegister extends Component {
         showMe: true,
         showUser: false,
         visible: false,
+        status:userupdate.status ? "Admin" : "Kullanıcı"
       };
     } else {
       this.state = {
@@ -31,6 +32,7 @@ class UserRegister extends Component {
         email: "",
         emails: "",
         phone_no: "",
+        status:"Ünvan Seçiniz..",
         showMe: true,
         showUser: false,
         visible: false,
@@ -41,6 +43,13 @@ class UserRegister extends Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
 
+  handleChangeUserStatus = (e) => {
+    let index = e.nativeEvent.target.selectedIndex;
+
+    this.setState({
+      status: e.nativeEvent.target[index].text,
+    });
+  };
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
@@ -87,14 +96,35 @@ class UserRegister extends Component {
     return formIsValid;
   }
   updateUser() {
-    const updateUser = {
+    var updateUser = {
       first_name: this.state.first_name,
       last_name: this.state.last_name,
       email: this.state.email,
       phone_no: this.state.phone_no,
       _id: this.state._id,
+      status:this.state.status
     };
-
+    if(this.state.status=="Admin"){
+      updateUser = {
+        first_name: this.state.first_name,
+        last_name: this.state.last_name,
+        email: this.state.email,
+        phone_no: this.state.phone_no,
+        _id: this.state._id,
+        status:true
+      };
+    }
+    else if(this.state.status=="Kullanıcı"){
+      updateUser = {
+        first_name: this.state.first_name,
+        last_name: this.state.last_name,
+        email: this.state.email,
+        phone_no: this.state.phone_no,
+        _id: this.state._id,
+        status:false
+      };
+    }
+ 
     confirmAlert({
       title: "Kullanıcı Güncelle",
       message: "Kullanıcıyı güncellemek istediğinize emin misiniz?",
@@ -248,7 +278,24 @@ class UserRegister extends Component {
                               />
                                 </div>
                               </div>
-                         
+                              <div className="form-group row">
+                                <label className="col-sm-5 col-form-label">
+                                   Ünvanı :
+                                </label>
+                                <div className="col-sm-6">
+                                  <select
+                                    className="form-control"
+                                    onChange={
+                                      this.handleChangeUserStatus
+                                    }
+                                  >
+                                    <option>{this.state.status}</option>
+                                    <option>Admin </option>
+                                    <option>Kullanıcı</option>
+                                   
+                                  </select>
+                                </div>
+                              </div>
                               <button
                               type="submit"
                               className="btn btn-primary"

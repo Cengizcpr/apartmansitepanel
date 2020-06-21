@@ -3,6 +3,8 @@ import jwt_decode from "jwt-decode";
 import Header from "../../Home/Header";
 import Menu from "../../Home/Menu";
 import axios from "axios";
+import UserMenu from "../../Home/UserMenu";
+
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 class CarPark extends Component {
@@ -21,8 +23,7 @@ class CarPark extends Component {
       car_plate: "",
       locationsnumbers: "Konum Seçiniz",
       car_owner: "",
-      showMe: true,
-      showUser: false,
+      
       locationscar: [],
       locations: [],
       locationsApartment: [],
@@ -333,10 +334,14 @@ class CarPark extends Component {
         var response = res.data;
         for (var i = 0; i < response.length; i++) {
           if (decoded._id === response[i]._id) {
-            if (response[i].status == false) {
+            if (response[i].status) {
+              this.setState({
+                showMe: true,
+              });
+            } 
+            else{
               this.setState({
                 showMe: false,
-                showUser: true,
               });
             }
             //Blok Sayısı
@@ -405,18 +410,24 @@ class CarPark extends Component {
         </td>
       </tr>
     ));
+    var partial;
+    if (this.state.showMe === true) {
+      partial = <Menu />;
+    } else if (this.state.showMe === false) {
+      partial = <UserMenu />;
+    }
     return (
       <div>
         {" "}
         <Header />
-        <Menu />
+       {partial}
         <div className="content-wrapper">
           <div className="card">
             <div className="card-body">
               <div className="container-fluid">
                 <div className="container">
                   {" "}
-                  {this.state.showMe ? (
+              
                     <div className="content-header">
                       <div className="col-md-12">
                         <div className="card card-warning">
@@ -643,13 +654,12 @@ class CarPark extends Component {
                         </div>
                       </div>
                     </div>
-                  ) : null}
+                 
                 </div>
               </div>
             </div>
           </div>
         </div>
-        {this.state.showUser ? this.props.history.push("/statuserror") : null}
       </div>
     );
   }

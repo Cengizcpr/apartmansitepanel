@@ -26,6 +26,8 @@ import FaultList from "./Pages/Fault/FaultList";
 import DuesAdd from "./Pages/Dues/DuesAdd";
 import DuesList from "./Pages/Dues/DuesList";
 import DuesPay from "./Pages/Dues/DuesPay";
+import AppointmentAdd from "./Pages/Appointment/AppointmentAdd";
+import AppointmentList from "./Pages/Appointment/AppointmentList";
 import CrediPaymentTest from "./Pages/CrediCart/CrediPaymentTest";
 class App extends Component {
   render() {
@@ -58,7 +60,8 @@ class App extends Component {
           <Route export path="/duesadd" component={DuesAdd}/>
           <Route export path="/duespay" component={DuesPay}/>
           <Route export path="/dueslist" component={DuesList}/>
-
+          <Route export path="/apporegister" component={AppointmentAdd}/>
+          <Route export path="/appointmentlist" component={AppointmentList}/>
           <Route exact component={Notfound} />
         </Switch>
       </Router>

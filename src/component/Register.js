@@ -80,15 +80,42 @@ class Register extends Component {
     e.preventDefault();
     if (this.handleValidation()) {
       if (this.state.password == this.state.replay_password) {
-        const newUser = {
-          first_name: this.state.first_name,
-          last_name: this.state.last_name,
-          email: this.state.email,
-          password: this.state.password,
-          phone_no: this.state.phone_no,
-          status:this.state.status
+        var newUser = {
+          first_name: "",
+          last_name: "",
+          email: "",
+          password: "",
+          phone_no: "",
+          status:false
          
         };
+
+        axios.get("users/adminprofile").then((res) => {
+          if(res.data.length==0){
+             newUser = {
+              first_name: this.state.first_name,
+              last_name: this.state.last_name,
+              email: this.state.email,
+              password: this.state.password,
+              phone_no: this.state.phone_no,
+              status:true
+             
+            };
+
+          }
+          else{
+            newUser = {
+              first_name: this.state.first_name,
+              last_name: this.state.last_name,
+              email: this.state.email,
+              password: this.state.password,
+              phone_no: this.state.phone_no,
+              status:false
+             
+            };
+          }
+      
+       
 
         axios
           .post("users/register", newUser
@@ -106,7 +133,7 @@ class Register extends Component {
               toast.error("Hata! Eposta Sisteme Kayıtlı! ");
             }
           })
-         
+        }) 
       } else {
         toast.error("Hata!Şifreler Uyuşmuyor !");
       }

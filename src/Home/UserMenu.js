@@ -66,6 +66,18 @@ class Menu extends Component {
                             <p className="text text-lg">Aidat Ödeme</p>
                           </Link>
                         </li>
+                        <li className="nav-item ">
+                        <Link to="/carpark" className="nav-link ">
+                        <i className="nav-icon fas fa-car" />
+                            <p className="text text-lg">Araç Ekle</p>
+                              </Link>
+                        </li>
+                        <li className="nav-item ">
+                          <Link to="/apporegister" className="nav-link ">
+                            <i className="nav-icon fas fa-calendar-plus" />
+                            <p className="text text-lg">Randevu Talep</p>
+                          </Link>
+                        </li>
                         <li className="nav-item">
                           <Link
                             to="/adminprofile"

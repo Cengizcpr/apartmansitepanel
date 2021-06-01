@@ -1,14 +1,13 @@
-# Other Apartman Yonetim System
+# Apartman Site Panel MERN
 
-## Used Architecture
 |İsim            |Teknoloji                      |Port                         |
 |----------------|-------------------------------|-----------------------------|
-|Backend		 |`'Isn't this fun?'`            |'Isn't this fun?'            |
-|Frontend		 |`'Isn't this fun?'`            |'Isn't this fun?'            |
-
-The architectural structures used above are mentioned. **thanks!**
+|Backend		 |`React`            |5000            |
+|Frontend		 |`Node.js`            |3000            |
+|Database		 |`MongoDB`            |27017            |
 
 ## Installing Web Application
 
 > npm install
 > npm start
+> node server.js
